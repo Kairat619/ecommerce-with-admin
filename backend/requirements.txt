@@ -1,0 +1,36 @@
+# ===========================================
+# E-Commerce Backend - Python Dependencies
+# ===========================================
+
+# Web Framework
+fastapi==0.110.1
+uvicorn==0.25.0
+python-multipart==0.0.22
+starlette==0.37.2
+
+# Database (SQLite)
+sqlalchemy==2.0.25
+
+# Authentication & Security
+python-jose[cryptography]==3.5.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.1.3
+PyJWT==2.11.0
+
+# Data Validation
+pydantic==2.12.5
+pydantic_core==2.41.5
+email-validator==2.3.0
+
+# HTTP Client (for OAuth)
+aiohttp==3.13.3
+
+# Configuration
+python-dotenv==1.2.1
+
+# Utilities
+Unidecode==1.4.0
+
+# Type hints
+typing_extensions==4.15.0
+annotated-types==0.7.0

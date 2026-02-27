@@ -1,0 +1,177 @@
+{
+  "identity": {
+    "name": "E1",
+    "role": "Creative Designer",
+    "tone": "Modern, Clean, Trustworthy, Professional with a Creative Twist",
+    "principles": [
+      "Fusion over Imitation",
+      "Emotion First",
+      "Content is King",
+      "Zoom In",
+      "Negative Space",
+      "Contrast"
+    ]
+  },
+  "typography": {
+    "font_family": {
+      "headings": "Outfit, sans-serif",
+      "body": "Inter, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "scale": {
+      "h1": "text-4xl md:text-6xl font-bold tracking-tight leading-tight",
+      "h2": "text-3xl md:text-5xl font-semibold tracking-tight",
+      "h3": "text-2xl md:text-3xl font-medium",
+      "body_lg": "text-lg leading-relaxed text-slate-700",
+      "body_base": "text-base leading-normal text-slate-600",
+      "caption": "text-sm text-slate-500 uppercase tracking-wide"
+    },
+    "installation": "Add <link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap' rel='stylesheet'> to public/index.html"
+  },
+  "colors": {
+    "palette": {
+      "primary": {
+        "DEFAULT": "#1e3a8a",
+        "foreground": "#ffffff",
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "500": "#3b82f6",
+        "900": "#1e3a8a"
+      },
+      "secondary": {
+        "DEFAULT": "#f1f5f9",
+        "foreground": "#0f172a"
+      },
+      "accent": {
+        "DEFAULT": "#10b981",
+        "foreground": "#ffffff"
+      },
+      "background": "#ffffff",
+      "foreground": "#020617",
+      "card": "#ffffff",
+      "card_foreground": "#020617",
+      "border": "#e2e8f0",
+      "input": "#e2e8f0",
+      "muted": "#f8fafc",
+      "muted_foreground": "#64748b"
+    },
+    "admin_theme": {
+      "sidebar_bg": "#0f172a",
+      "sidebar_text": "#f8fafc",
+      "active_item_bg": "#1e293b",
+      "active_item_text": "#ffffff"
+    }
+  },
+  "layout_strategies": {
+    "storefront": {
+      "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+      "grid_style": "Bento Grid (Mode A)",
+      "spacing": "Generous (p-8 to p-24)",
+      "alignment": "Left aligned text for readability, Centered Hero"
+    },
+    "admin_dashboard": {
+      "container": "w-full p-6",
+      "grid_style": "High Density (Mode B)",
+      "spacing": "Compact (gap-4, p-4)",
+      "alignment": "Fluid width, Sidebar layout"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 font-medium transition-all shadow-lg shadow-primary/20",
+      "secondary": "bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-full px-6 py-2 font-medium",
+      "outline": "border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-full"
+    },
+    "cards": {
+      "store_product": "group relative overflow-hidden rounded-xl border-none bg-transparent hover:shadow-none transition-all",
+      "admin_widget": "rounded-lg border bg-card text-card-foreground shadow-sm"
+    },
+    "inputs": {
+      "style": "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+    }
+  },
+  "visual_enhancers": {
+    "shadows": {
+      "soft": "shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)]",
+      "card_hover": "shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)]"
+    },
+    "radius": "rounded-lg",
+    "glassmorphism": "bg-white/70 backdrop-blur-xl border border-white/20 shadow-sm"
+  },
+  "image_urls": {
+    "hero_banners": [
+      {
+        "url": "https://images.unsplash.com/photo-1560073210-1eb8ea89d4cc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwZS1jb21tZXJjZSUyMGhlcm8lMjBiYW5uZXIlMjBzaG9wcGluZyUyMGxpZmVzdHlsZXxlbnwwfHx8fDE3NzE3MzY4NTZ8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Clean white paper bag near window, minimalist vibe for Hero",
+        "category": "hero"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1633414654227-2b5ea828b3ef?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHwzfHxtaW5pbWFsaXN0JTIwZS1jb21tZXJjZSUyMGhlcm8lMjBiYW5uZXIlMjBzaG9wcGluZyUyMGxpZmVzdHlsZXxlbnwwfHx8fDE3NzE3MzY4NTZ8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Brown bag on marble, premium texture",
+        "category": "hero_secondary"
+      }
+    ],
+    "products_tech": [
+      {
+        "url": "https://images.unsplash.com/photo-1662348316783-74c476374fcb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA4Mzl8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjB0ZWNoJTIwZ2FkZ2V0JTIwcHJvZHVjdCUyMHBob3RvZ3JhcGh5JTIwbWluaW1hbGlzdHxlbnwwfHx8fDE3NzE3MzY4NTd8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Black and silver laptop",
+        "category": "electronics"
+      },
+      {
+        "url": "https://images.pexels.com/photos/35147149/pexels-photo-35147149.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Modern smartphone with 100MP camera",
+        "category": "electronics"
+      }
+    ],
+    "products_fashion": [
+      {
+        "url": "https://images.unsplash.com/photo-1562046433-dd0db5baddcd?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MTN8MHwxfHNlYXJjaHwyfHxmYXNoaW9uJTIwc25lYWtlcnMlMjBwcm9kdWN0JTIwcGhvdG9ncmFwaHklMjBzdHVkaW8lMjBsaWdodGluZ3xlbnwwfHx8fDE3NzE3MzY4NTh8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Purple mesh running shoes",
+        "category": "clothing"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1763013373740-9a860ee61543?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MTN8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwc25lYWtlcnMlMjBwcm9kdWN0JTIwcGhvdG9ncmFwaHklMjBzdHVkaW8lMjBsaWdodGluZ3xlbnwwfHx8fDE3NzE3MzY4NTh8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Person wearing sandals",
+        "category": "clothing"
+      }
+    ],
+    "products_home": [
+      {
+        "url": "https://images.unsplash.com/photo-1756474215958-f0c2a31eddc1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBob21lJTIwZGVjb3IlMjBwcm9kdWN0JTIwbWluaW1hbGlzdCUyMGludGVyaW9yfGVufDB8fHx8MTc3MTczNjg1OHww&ixlib=rb-4.1.0&q=85",
+        "description": "Yellow desk lamp",
+        "category": "home"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1762856490803-8e200418973a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBob21lJTIwZGVjb3IlMjBwcm9kdWN0JTIwbWluaW1hbGlzdCUyMGludGVyaW9yfGVufDB8fHx8MTc3MTczNjg1OHww&ixlib=rb-4.1.0&q=85",
+        "description": "Modern nightstand",
+        "category": "home"
+      }
+    ]
+  },
+  "universal_guidelines": {
+    "general": [
+      "Avoid 'AI slop' - no generic centered layouts.",
+      "Use 'Outfit' font for all headings to give character.",
+      "Storefront should feel airy (white space), Admin should feel dense (data).",
+      "Use sonner for toasts.",
+      "Use lucid-react for icons."
+    ],
+    "interactions": [
+      "Buttons must have a subtle scale effect on hover (scale-105).",
+      "Inputs must have a clear focus ring (ring-2 ring-primary).",
+      "Page transitions: simple fade-in (opacity-0 to opacity-100 duration-500)."
+    ],
+    "accessibility": [
+      "Ensure text contrast ratio >= 4.5:1.",
+      "All interactive elements must have aria-labels if icon-only.",
+      "Use data-testid attributes for all key elements."
+    ]
+  },
+  "instructions_to_main_agent": [
+    "1. Update tailwind.config.js to match the 'colors' and 'font_family' defined here.",
+    "2. Install 'Outfit' and 'Inter' fonts via Google Fonts in index.html.",
+    "3. Build the Store Layout using the 'Storefront' strategy.",
+    "4. Build the Admin Layout using the 'Admin Dashboard' strategy (Sidebar + Header).",
+    "5. Use the provided image URLs for seeding the database or mocking the UI."
+  ]
+}
