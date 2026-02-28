@@ -37,14 +37,14 @@ async def get_dashboard_stats(request: Request, db: Session = Depends(get_db)):
     total_orders = db.query(Order).count()
     
     total_revenue = db.query(func.sum(Order.total)).filter(
-        Order.status.in_(["confirmed", "processing", "shipped", "delivered"])
+        Order.status.in_(["CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED"])
     ).scalar() or 0
     
-    total_customers = db.query(User).filter(User.role == "customer", User.is_deleted == False).count()
+    total_customers = db.query(User).filter(User.role == "CUSTOMER", User.is_deleted == False).count()
     
     total_products = db.query(Product).filter(Product.is_deleted == False).count()
     
-    pending_orders = db.query(Order).filter(Order.status == "pending").count()
+    pending_orders = db.query(Order).filter(Order.status == "PENDING").count()
     
     low_stock_products = db.query(Product).filter(
         Product.is_deleted == False,
@@ -62,11 +62,35 @@ async def get_dashboard_stats(request: Request, db: Session = Depends(get_db)):
             "order_number": order.order_number,
             "user_id": order.user_id,
             "status": order.status.value if hasattr(order.status, 'value') else order.status,
+            "subtotal": order.subtotal,
+            "tax_amount": order.tax_amount,
+            "shipping_amount": order.shipping_amount,
+            "discount_amount": order.discount_amount,
             "total": order.total,
-            "customer_name": order.customer_name,
+            "shipping_address": order.shipping_address,
+            "billing_address": order.billing_address,
             "customer_email": order.customer_email,
+            "customer_phone": order.customer_phone,
+            "customer_name": order.customer_name,
+            "notes": order.notes,
+            "payment_status": order.payment_status,
+            "payment_method": order.payment_method,
             "created_at": order.created_at.isoformat() if order.created_at else None,
-            "items": [{"product_name": item.product_name, "quantity": item.quantity} for item in items]
+            "updated_at": order.updated_at.isoformat() if order.updated_at else None,
+            "items": [
+                {
+                    "id": item.id,
+                    "product_id": item.product_id,
+                    "product_name": item.product_name,
+                    "product_sku": item.product_sku,
+                    "product_image": item.product_image,
+                    "quantity": item.quantity,
+                    "unit_price": item.unit_price,
+                    "total_price": item.total_price,
+                    "created_at": item.created_at.isoformat() if item.created_at else None
+                }
+                for item in items
+            ]
         })
     
     return DashboardStats(

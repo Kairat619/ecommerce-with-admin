@@ -68,8 +68,8 @@ yarn start
 
 | Field | Value |
 |-------|-------|
-| Email | `admin@shop.com` |
-| Password | `admin123` |
+| Email | `admin@google.com` |
+| Password | `admin` |
 
 > The admin account is automatically created on first startup. You can change these credentials in `backend/.env`.
 

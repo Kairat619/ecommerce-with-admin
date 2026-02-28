@@ -84,3 +84,26 @@ frontend/node_modules/.cache/default-development/0.pack
 # Environment files
 *.env
 *.env.*
+
+# Backend
+backend/env/
+backend/ecommerce.db
+backend/nul
+*.db
+
+# Python
+__pycache__/
+*pyc*
+venv/
+.venv/
+
+# Test files
+backend_test.py
+test_reports/
+test_result.md
+tests/
+.emergent/
+memory/
+nul
+start.bat
+.gitconfig
