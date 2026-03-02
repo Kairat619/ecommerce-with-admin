@@ -238,31 +238,38 @@ async def refresh_token_endpoint(
         raise HTTPException(status_code=401, detail="Invalid refresh token")
 
 
-@router.post("/session")
-async def exchange_session(
+@router.post("/google")
+async def google_oauth(
     request: Request,
     response: Response,
     db: Session = Depends(get_db)
 ):
-    """Exchange Emergent OAuth session_id for app session."""
+    """Exchange Google OAuth code for app session."""
+    from google.oauth2 import id_token
+    from google.auth.transport import requests as google_requests
+    
     body = await request.json()
-    session_id = body.get("session_id")
+    code = body.get("code")
     
-    if not session_id:
-        raise HTTPException(status_code=400, detail="session_id required")
+    if not code:
+        raise HTTPException(status_code=400, detail="code required")
     
-    async with aiohttp.ClientSession() as client:
-        async with client.get(
-            "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
-            headers={"X-Session-ID": session_id}
-        ) as resp:
-            if resp.status != 200:
-                raise HTTPException(status_code=401, detail="Invalid session")
-            session_data = await resp.json()
+    try:
+        token_response = await exchange_code_for_tokens(code, settings.GOOGLE_CLIENT_ID, settings.GOOGLE_CLIENT_SECRET, settings.GOOGLE_REDIRECT_URI)
+        id_token_verified = id_token.verify_oauth2_token(
+            token_response['id_token'],
+            google_requests.Request(),
+            settings.GOOGLE_CLIENT_ID
+        )
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Invalid Google token: {str(e)}")
     
-    email = session_data.get("email")
-    name = session_data.get("name")
-    picture = session_data.get("picture")
+    email = id_token_verified.get("email")
+    name = id_token_verified.get("name")
+    picture = id_token_verified.get("picture")
+    
+    if not email:
+        raise HTTPException(status_code=401, detail="Email not provided by Google")
     
     user = get_user_by_email(db, email)
     
@@ -293,14 +300,14 @@ async def exchange_session(
     access_token = create_access_token({"sub": user_id})
     refresh_token, expires_at = create_refresh_token({"sub": user_id})
     
-    refresh_token_obj = RefreshToken(
+    refresh_token_obj_db = RefreshToken(
         id=str(uuid.uuid4()),
         user_id=user_id,
         token=refresh_token,
         expires_at=expires_at,
         is_revoked=False
     )
-    db.add(refresh_token_obj)
+    db.add(refresh_token_obj_db)
     db.commit()
     
     set_session_cookie(response, access_token)
@@ -311,6 +318,24 @@ async def exchange_session(
         "token_type": "bearer",
         "user": user_to_dict(user)
     }
+
+
+async def exchange_code_for_tokens(code: str, client_id: str, client_secret: str, redirect_uri: str) -> dict:
+    """Exchange authorization code for access and ID tokens."""
+    token_url = "https://oauth2.googleapis.com/token"
+    
+    async with aiohttp.ClientSession() as client:
+        async with client.post(token_url, data={
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "code": code,
+            "grant_type": "authorization_code",
+            "redirect_uri": redirect_uri,
+        }) as resp:
+            if resp.status != 200:
+                text = await resp.text()
+                raise HTTPException(status_code=401, detail=f"Failed to exchange code: {text}")
+            return await resp.json()
 
 
 @router.get("/me", response_model=UserResponse)

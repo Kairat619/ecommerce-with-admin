@@ -20,8 +20,9 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = useCallback(async () => {
     // CRITICAL: If returning from OAuth callback, skip the /me check.
-    // AuthCallback will exchange the session_id and establish the session first.
-    if (window.location.hash?.includes('session_id=')) {
+    // AuthCallback will exchange the code and establish the session first.
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('code')) {
       setLoading(false);
       return;
     }
@@ -66,13 +67,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   const loginWithGoogle = () => {
-    // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
-    const redirectUrl = window.location.origin + '/auth/callback';
-    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    const redirectUri = 'http://localhost:3000/auth/callback';
+    const scope = 'openid email profile';
+    
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&access_type=offline`;
+    
+    window.location.href = googleAuthUrl;
   };
 
-  const handleOAuthCallback = async (sessionId) => {
-    const response = await authAPI.exchangeSession(sessionId);
+  const handleOAuthCallback = async (code) => {
+    const response = await authAPI.exchangeGoogleCode(code);
     localStorage.setItem('access_token', response.data.access_token);
     localStorage.setItem('refresh_token', response.data.refresh_token);
     setUser(response.data.user);

@@ -24,6 +24,8 @@ email-validator==2.3.0
 
 # HTTP Client (for OAuth)
 aiohttp==3.13.3
+google-auth==2.36.0
+google-auth-oauthlib==1.2.1
 
 # Configuration
 python-dotenv==1.2.1

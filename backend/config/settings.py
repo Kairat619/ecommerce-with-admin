@@ -24,6 +24,11 @@ class Settings:
     ADMIN_EMAIL: str = os.environ.get('ADMIN_EMAIL', 'admin@shop.com')
     ADMIN_PASSWORD: str = os.environ.get('ADMIN_PASSWORD', 'admin123')
     
+    # Google OAuth
+    GOOGLE_CLIENT_ID: str = os.environ.get('GOOGLE_CLIENT_ID', '')
+    GOOGLE_CLIENT_SECRET: str = os.environ.get('GOOGLE_CLIENT_SECRET', '')
+    GOOGLE_REDIRECT_URI: str = os.environ.get('GOOGLE_REDIRECT_URI', 'http://localhost:5173/auth/callback')
+    
     # App settings
     APP_NAME: str = "E-Commerce API"
     DEBUG: bool = os.environ.get('DEBUG', 'false').lower() == 'true'

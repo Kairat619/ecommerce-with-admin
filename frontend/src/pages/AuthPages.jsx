@@ -291,13 +291,12 @@ export const AuthCallback = () => {
     hasProcessed.current = true;
 
     const processCallback = async () => {
-      const hash = window.location.hash;
-      const sessionIdMatch = hash.match(/session_id=([^&]+)/);
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
       
-      if (sessionIdMatch) {
-        const sessionId = sessionIdMatch[1];
+      if (code) {
         try {
-          await handleOAuthCallback(sessionId);
+          await handleOAuthCallback(code);
           toast.success('Welcome!');
           navigate('/');
         } catch (error) {

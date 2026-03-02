@@ -52,9 +52,10 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
 // App Router with OAuth handling
 function AppRouter() {
   const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
 
-  // Check URL fragment for session_id (OAuth callback)
-  if (location.hash?.includes('session_id=')) {
+  // Check query params for code (Google OAuth callback)
+  if (searchParams.get('code')) {
     return <AuthCallback />;
   }
 
