@@ -8,8 +8,9 @@ uvicorn==0.25.0
 python-multipart==0.0.22
 starlette==0.37.2
 
-# Database (SQLite)
+# Database (SQLite + PostgreSQL)
 sqlalchemy==2.0.25
+psycopg2-binary==2.9.9
 
 # Authentication & Security
 python-jose[cryptography]==3.5.0
