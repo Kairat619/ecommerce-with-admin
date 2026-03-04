@@ -10,7 +10,7 @@ starlette==0.37.2
 
 # Database (SQLite + PostgreSQL)
 sqlalchemy==2.0.36
-psycopg==3.2.3
+psycopg[binary]==3.2.3
 
 # Authentication & Security
 python-jose[cryptography]==3.5.0
