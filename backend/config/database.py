@@ -11,13 +11,22 @@ ROOT_DIR = Path(__file__).parent.parent
 DATABASE_URL = os.environ.get('DATABASE_URL', f"sqlite:///{ROOT_DIR}/ecommerce.db")
 
 connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
+pool_class = StaticPool if "sqlite" in DATABASE_URL else None
 
-engine = create_engine(
-    DATABASE_URL,
-    connect_args=connect_args,
-    poolclass=StaticPool if "sqlite" in DATABASE_URL else None,
-    echo=False
-)
+if "postgresql" in DATABASE_URL:
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args={"timeout": 30},
+        poolclass=pool_class,
+        echo=False
+    )
+else:
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args=connect_args,
+        poolclass=pool_class,
+        echo=False
+    )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
