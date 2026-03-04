@@ -68,7 +68,11 @@ export const AuthProvider = ({ children }) => {
 
   const loginWithGoogle = () => {
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    const redirectUri = 'http://localhost:3000/auth/callback';
+    if (!clientId) {
+      alert('Google login is not configured. Please use email/password login.');
+      return;
+    }
+    const redirectUri = `${window.location.origin}/auth/callback`;
     const scope = 'openid email profile';
     
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&access_type=offline`;
