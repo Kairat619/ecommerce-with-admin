@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
 
   const loginWithGoogle = () => {
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    if (!clientId) {
+    if (!clientId || clientId === 'YOUR_GOOGLE_CLIENT_ID') {
       alert('Google login is not configured. Please use email/password login.');
       return;
     }
