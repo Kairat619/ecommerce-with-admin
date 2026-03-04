@@ -13,7 +13,7 @@ DATABASE_URL = os.environ.get('DATABASE_URL', f"sqlite:///{ROOT_DIR}/ecommerce.d
 if "postgresql" in DATABASE_URL and "psycopg" not in DATABASE_URL:
     DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
 
-connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL else {"timeout": 30}
+connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
 pool_class = StaticPool if "sqlite" in DATABASE_URL else None
 
 engine = create_engine(
