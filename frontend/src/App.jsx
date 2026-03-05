@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from './components/ui/sonner';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
@@ -127,14 +127,14 @@ function AppRouter() {
 
 function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <AuthProvider>
         <CartProvider>
           <AppRouter />
           <Toaster position="top-right" richColors />
         </CartProvider>
       </AuthProvider>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 
