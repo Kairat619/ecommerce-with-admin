@@ -291,11 +291,12 @@ export const AuthCallback = () => {
     hasProcessed.current = true;
 
     const processCallback = async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get('code');
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const code = hashParams.get('code');
       
       console.log('AuthCallback: code =', code);
       console.log('AuthCallback: full URL =', window.location.href);
+      console.log('AuthCallback: hash =', window.location.hash);
       
       if (code) {
         try {

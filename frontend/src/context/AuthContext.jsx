@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
       alert('Google login is not configured. Please use email/password login.');
       return;
     }
-    const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI || `${window.location.origin}/auth/callback`;
+    const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI || `${window.location.origin}/#/auth/callback`;
     console.log('Redirect URI:', redirectUri);
     const scope = 'openid email profile';
     
