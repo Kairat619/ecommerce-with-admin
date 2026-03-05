@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
       alert('Google login is not configured. Please use email/password login.');
       return;
     }
-    const redirectUri = `${window.location.origin}/auth/callback`;
+    const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI || `${window.location.origin}/auth/callback`;
     const scope = 'openid email profile';
     
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&access_type=offline`;

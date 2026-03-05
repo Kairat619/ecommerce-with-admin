@@ -294,16 +294,22 @@ export const AuthCallback = () => {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
       
+      console.log('AuthCallback: code =', code);
+      console.log('AuthCallback: full URL =', window.location.href);
+      
       if (code) {
         try {
+          console.log('Calling handleOAuthCallback with code:', code.substring(0, 20) + '...');
           await handleOAuthCallback(code);
           toast.success('Welcome!');
           navigate('/');
         } catch (error) {
-          toast.error('Authentication failed');
+          console.error('AuthCallback error:', error);
+          toast.error('Authentication failed: ' + (error?.message || error?.response?.data?.detail || 'Unknown error'));
           navigate('/login');
         }
       } else {
+        console.log('No code found, redirecting to login');
         navigate('/login');
       }
     };
