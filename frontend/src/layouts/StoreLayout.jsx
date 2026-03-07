@@ -1,12 +1,10 @@
-/**
- * Store Layout - Main layout for the storefront
- */
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-import { ShoppingCart, User, Menu, X, Search, LogOut, Package, Settings } from 'lucide-react';
+import { useWishlist } from '../context/WishlistContext';
+import { ShoppingCart, User, Menu, X, Search, LogOut, Package, Settings, Heart, ChevronDown } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import {
   DropdownMenu,
@@ -17,14 +15,30 @@ import {
 } from '../components/ui/dropdown-menu';
 import { Input } from '../components/ui/input';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
+import { cn } from '../lib/utils';
 
 export const StoreLayout = ({ children }) => {
   const { t } = useTranslation();
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const { itemsCount } = useCart();
+  const { wishlistCount } = useWishlist();
   const navigate = useNavigate();
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -39,74 +53,94 @@ export const StoreLayout = ({ children }) => {
     navigate('/');
   };
 
+  const navLinks = [
+    { href: '/products', label: t('nav.products') },
+    { href: '/products?category=electronics', label: t('nav.electronics') },
+    { href: '/products?category=fashion', label: t('nav.fashion') },
+    { href: '/products?category=home-living', label: t('nav.home') },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col bg-background" data-testid="store-layout">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-border">
+      <header 
+        className={cn(
+          "sticky top-0 z-50 transition-all duration-300",
+          scrolled 
+            ? "bg-white/95 backdrop-blur-md shadow-sm py-3" 
+            : "bg-transparent py-4"
+        )}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between gap-4">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2" data-testid="logo-link">
-              <span className="text-2xl font-bold tracking-tight text-primary font-outfit">
+            <Link to="/" className="flex items-center gap-2 shrink-0" data-testid="logo-link">
+              <span className="text-2xl font-bold tracking-tight text-gray-900 font-outfit">
                 {t('common.shop')}
               </span>
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-8">
-              <Link 
-                to="/products" 
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-                data-testid="nav-products"
-              >
-                {t('nav.products')}
-              </Link>
-              <Link 
-                to="/products?category=electronics" 
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                {t('nav.electronics')}
-              </Link>
-              <Link 
-                to="/products?category=fashion" 
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                {t('nav.fashion')}
-              </Link>
-              <Link 
-                to="/products?category=home-living" 
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                {t('nav.home')}
-              </Link>
+            <nav className="hidden lg:flex items-center gap-6">
+              {navLinks.map((link) => (
+                <Link 
+                  key={link.href}
+                  to={link.href}
+                  className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors relative group"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-900 transition-all group-hover:w-full" />
+                </Link>
+              ))}
             </nav>
 
-            {/* Search */}
-            <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-md mx-8">
+            {/* Search Bar */}
+            <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-xl">
               <div className="relative w-full">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   type="search"
-                  placeholder={t('common.search')}
+                  placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 w-full"
-                  data-testid="search-input"
+                  className="pl-11 pr-4 h-11 bg-gray-50 border-gray-200 rounded-full focus:bg-white focus:border-gray-300 focus:ring-0 transition-all"
                 />
               </div>
             </form>
 
             {/* Actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               {/* Language Switcher */}
-              <LanguageSwitcher />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="hidden md:flex gap-1 text-gray-600">
+                    <span className="text-sm">EN</span>
+                    <ChevronDown className="h-3 w-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <LanguageSwitcher />
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Wishlist */}
+              <Link to="/wishlist" className="relative hidden sm:block">
+                <Button variant="ghost" size="icon" className="text-gray-600 hover:text-gray-900">
+                  <Heart className="h-5 w-5" />
+                  {wishlistCount > 0 && (
+                    <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-[10px] font-medium rounded-full flex items-center justify-center">
+                      {wishlistCount}
+                    </span>
+                  )}
+                </Button>
+              </Link>
 
               {/* Cart */}
-              <Link to="/cart" className="relative" data-testid="cart-link">
-                <Button variant="ghost" size="icon" className="relative">
+              <Link to="/cart" className="relative">
+                <Button variant="ghost" size="icon" className="text-gray-600 hover:text-gray-900">
                   <ShoppingCart className="h-5 w-5" />
                   {itemsCount > 0 && (
-                    <span className="absolute -top-1 -right-1 h-5 w-5 bg-primary text-primary-foreground text-xs font-medium rounded-full flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 h-5 w-5 bg-gray-900 text-white text-xs font-medium rounded-full flex items-center justify-center">
                       {itemsCount}
                     </span>
                   )}
@@ -117,7 +151,7 @@ export const StoreLayout = ({ children }) => {
               {isAuthenticated ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" data-testid="user-menu-trigger">
+                    <Button variant="ghost" size="icon" className="text-gray-600 hover:text-gray-900" data-testid="user-menu-trigger">
                       {user?.picture ? (
                         <img 
                           src={user.picture} 
@@ -158,7 +192,7 @@ export const StoreLayout = ({ children }) => {
                 </DropdownMenu>
               ) : (
                 <Link to="/login">
-                  <Button variant="outline" size="sm" data-testid="login-btn">
+                  <Button variant="outline" size="sm" className="rounded-full border-gray-300 text-gray-700 hover:bg-gray-900 hover:text-white" data-testid="login-btn">
                     {t('common.signIn')}
                   </Button>
                 </Link>
@@ -168,7 +202,7 @@ export const StoreLayout = ({ children }) => {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="md:hidden"
+                className="lg:hidden"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -179,49 +213,30 @@ export const StoreLayout = ({ children }) => {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-border">
+          <div className="lg:hidden border-t border-gray-100 bg-white">
             <div className="px-4 py-4 space-y-4">
               <form onSubmit={handleSearch}>
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     type="search"
-                    placeholder={t('common.search')}
+                    placeholder="Search products..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 w-full"
+                    className="pl-10 w-full bg-gray-50"
                   />
                 </div>
               </form>
-              <nav className="flex flex-col gap-2">
-                <Link 
-                  to="/products" 
-                  className="px-3 py-2 text-sm font-medium rounded-md hover:bg-muted"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {t('nav.allProducts')}
-                </Link>
-                <Link 
-                  to="/products?category=electronics" 
-                  className="px-3 py-2 text-sm font-medium rounded-md hover:bg-muted"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {t('nav.electronics')}
-                </Link>
-                <Link 
-                  to="/products?category=fashion" 
-                  className="px-3 py-2 text-sm font-medium rounded-md hover:bg-muted"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {t('nav.fashion')}
-                </Link>
-                <Link 
-                  to="/products?category=home-living" 
-                  className="px-3 py-2 text-sm font-medium rounded-md hover:bg-muted"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {t('nav.homeLiving')}
-                </Link>
+              <nav className="flex flex-col gap-1">
+                {navLinks.map((link) => (
+                  <Link 
+                    key={link.href}
+                    to={link.href}
+                    className="px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
               </nav>
             </div>
           </div>
@@ -234,43 +249,60 @@ export const StoreLayout = ({ children }) => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-white mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
+      <footer className="bg-gray-900 text-white mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
+            {/* Brand */}
+            <div className="col-span-2 md:col-span-1">
               <span className="text-2xl font-bold font-outfit">{t('common.shop')}</span>
-              <p className="mt-4 text-slate-400 text-sm">
-                {t('footer.description')}
+              <p className="mt-4 text-gray-400 text-sm leading-relaxed">
+                Your one-stop shop for quality products at amazing prices.
               </p>
             </div>
+            
+            {/* Shop Links */}
             <div>
-              <h4 className="font-semibold mb-4">{t('footer.shop')}</h4>
-              <ul className="space-y-2 text-sm text-slate-400">
-                <li><Link to="/products" className="hover:text-white transition-colors">{t('nav.allProducts')}</Link></li>
-                <li><Link to="/products?category=electronics" className="hover:text-white transition-colors">{t('nav.electronics')}</Link></li>
-                <li><Link to="/products?category=fashion" className="hover:text-white transition-colors">{t('nav.fashion')}</Link></li>
-                <li><Link to="/products?category=home-living" className="hover:text-white transition-colors">{t('nav.homeLiving')}</Link></li>
+              <h4 className="font-semibold mb-4 text-white">Shop</h4>
+              <ul className="space-y-3 text-sm text-gray-400">
+                <li><Link to="/products" className="hover:text-white transition-colors">All Products</Link></li>
+                <li><Link to="/products?category=electronics" className="hover:text-white transition-colors">Electronics</Link></li>
+                <li><Link to="/products?category=fashion" className="hover:text-white transition-colors">Fashion</Link></li>
+                <li><Link to="/products?category=home-living" className="hover:text-white transition-colors">Home & Living</Link></li>
               </ul>
             </div>
+            
+            {/* Account Links */}
             <div>
-              <h4 className="font-semibold mb-4">{t('footer.account')}</h4>
-              <ul className="space-y-2 text-sm text-slate-400">
-                <li><Link to="/login" className="hover:text-white transition-colors">{t('common.signIn')}</Link></li>
-                <li><Link to="/register" className="hover:text-white transition-colors">{t('auth.createAccount')}</Link></li>
-                <li><Link to="/orders" className="hover:text-white transition-colors">{t('footer.trackOrder')}</Link></li>
+              <h4 className="font-semibold mb-4 text-white">Account</h4>
+              <ul className="space-y-3 text-sm text-gray-400">
+                <li><Link to="/login" className="hover:text-white transition-colors">Sign In</Link></li>
+                <li><Link to="/register" className="hover:text-white transition-colors">Create Account</Link></li>
+                <li><Link to="/orders" className="hover:text-white transition-colors">My Orders</Link></li>
+                <li><Link to="/cart" className="hover:text-white transition-colors">Shopping Cart</Link></li>
               </ul>
             </div>
+            
+            {/* Support Links */}
             <div>
-              <h4 className="font-semibold mb-4">{t('footer.support')}</h4>
-              <ul className="space-y-2 text-sm text-slate-400">
-                <li><span className="hover:text-white transition-colors cursor-pointer">{t('footer.helpCenter')}</span></li>
-                <li><span className="hover:text-white transition-colors cursor-pointer">{t('footer.shippingInfo')}</span></li>
-                <li><span className="hover:text-white transition-colors cursor-pointer">{t('footer.returns')}</span></li>
+              <h4 className="font-semibold mb-4 text-white">Support</h4>
+              <ul className="space-y-3 text-sm text-gray-400">
+                <li><span className="hover:text-white transition-colors cursor-pointer">Help Center</span></li>
+                <li><span className="hover:text-white transition-colors cursor-pointer">Shipping Info</span></li>
+                <li><span className="hover:text-white transition-colors cursor-pointer">Returns</span></li>
+                <li><span className="hover:text-white transition-colors cursor-pointer">Contact Us</span></li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-slate-800 mt-8 pt-8 text-center text-sm text-slate-400">
-            {t('footer.copyright')}
+          
+          {/* Bottom Bar */}
+          <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-gray-400">
+              © {new Date().getFullYear()} {t('common.shop')}. All rights reserved.
+            </p>
+            <div className="flex items-center gap-6 text-sm text-gray-400">
+              <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>
+              <span className="hover:text-white transition-colors cursor-pointer">Terms of Service</span>
+            </div>
           </div>
         </div>
       </footer>

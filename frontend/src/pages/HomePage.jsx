@@ -1,88 +1,188 @@
-/**
- * Home Page - Main landing page
- */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { productsAPI, categoriesAPI } from '../lib/api';
+import { ArrowRight, Star, Heart, ShoppingBag, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { ArrowRight, Truck, Shield, RefreshCw } from 'lucide-react';
+import { productsAPI, categoriesAPI } from '../lib/api';
+import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
+import { cn } from '../lib/utils';
 
-const ProductCard = ({ product }) => {
-  const { t } = useTranslation();
-  
+const ProductCard = ({ product, index }) => {
+  const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const inWishlist = isInWishlist(product.id);
+
+  const handleWishlist = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (inWishlist) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
+  };
+
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart(product.id, 1);
+  };
+
   return (
     <Link 
-      to={`/products/${product.slug}`} 
+      to={`/products/${product.slug}`}
       className="group block"
-      data-testid={`product-card-${product.id}`}
+      style={{ animationDelay: `${index * 100}ms` }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative aspect-square overflow-hidden rounded-xl bg-muted mb-4">
+      <div className="relative aspect-square overflow-hidden rounded-2xl bg-gray-100 mb-4">
         <img
           src={product.thumbnail || product.images?.[0] || '/placeholder.jpg'}
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className={cn(
+            "w-full h-full object-cover transition-all duration-500",
+            isHovered && "scale-110"
+          )}
           loading="lazy"
+          onLoad={() => setImageLoaded(true)}
         />
+        
+        <button
+          onClick={handleWishlist}
+          className={cn(
+            "absolute top-3 right-3 p-2 rounded-full transition-all duration-300",
+            inWishlist 
+              ? "bg-red-500 text-white" 
+              : "bg-white/90 text-gray-600 hover:bg-white",
+            isHovered && "opacity-100 translate-y-0" || "opacity-0 -translate-y-2"
+          )}
+        >
+          <Heart className={cn("h-4 w-4", inWishlist && "fill-current")} />
+        </button>
+
         {product.compare_at_price && (
-          <span className="absolute top-3 left-3 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full">
-            {t('products.sale')}
+          <span className="absolute top-3 left-3 bg-red-500 text-white text-xs font-medium px-3 py-1 rounded-full">
+            Sale
           </span>
         )}
+
+        <div 
+          className={cn(
+            "absolute bottom-3 left-3 right-3 transition-all duration-300",
+            isHovered && "opacity-100 translate-y-0" || "opacity-0 translate-y-4"
+          )}
+        >
+          <Button 
+            onClick={handleAddToCart}
+            className="w-full bg-white text-gray-900 hover:bg-gray-900 hover:text-white rounded-full h-10"
+          >
+            <ShoppingBag className="h-4 w-4 mr-2" />
+            Quick Add
+          </Button>
+        </div>
       </div>
-      <h3 className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
-        {product.name}
-      </h3>
-      <div className="flex items-center gap-2 mt-1">
-        <span className="font-semibold">${product.price.toFixed(2)}</span>
-        {product.compare_at_price && (
-          <span className="text-sm text-muted-foreground line-through">
-            ${product.compare_at_price.toFixed(2)}
-          </span>
-        )}
+
+      <div className="space-y-1">
+        <h3 className="font-medium text-gray-900 group-hover:text-gray-600 transition-colors line-clamp-1">
+          {product.name}
+        </h3>
+        <div className="flex items-center gap-2">
+          <span className="font-semibold text-lg">${product.price.toFixed(2)}</span>
+          {product.compare_at_price && (
+            <span className="text-sm text-gray-400 line-through">
+              ${product.compare_at_price.toFixed(2)}
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-1">
+          {[...Array(5)].map((_, i) => (
+            <Star 
+              key={i} 
+              className={cn(
+                "h-3 w-3", 
+                i < 4 ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"
+              )} 
+            />
+          ))}
+          <span className="text-xs text-gray-400 ml-1">(12)</span>
+        </div>
       </div>
     </Link>
   );
 };
 
-const CategoryCard = ({ category }) => (
-  <Link 
-    to={`/products?category=${category.slug}`}
-    className="group relative overflow-hidden rounded-2xl aspect-[4/3]"
-    data-testid={`category-card-${category.id}`}
-  >
-    <img
-      src={category.image_url || '/placeholder.jpg'}
-      alt={category.name}
-      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-      loading="lazy"
-    />
-    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-    <div className="absolute bottom-0 left-0 right-0 p-6">
-      <h3 className="text-xl font-semibold text-white">{category.name}</h3>
-      <p className="text-sm text-white/80 mt-1">{category.description}</p>
-    </div>
-  </Link>
-);
+const CategoryCard = ({ category, index }) => {
+  return (
+    <Link 
+      to={`/products?category=${category.slug}`}
+      className="group relative overflow-hidden rounded-2xl aspect-[4/5]"
+      style={{ animationDelay: `${index * 100}ms` }}
+    >
+      <img
+        src={category.image_url || '/placeholder.jpg'}
+        alt={category.name}
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 p-6">
+        <h3 className="text-xl font-bold text-white mb-1">{category.name}</h3>
+        <p className="text-white/80 text-sm line-clamp-2">{category.description}</p>
+        <span className="inline-flex items-center gap-1 text-white text-sm mt-3 group-hover:underline">
+          Shop Now <ArrowRight className="h-4 w-4" />
+        </span>
+      </div>
+    </Link>
+  );
+};
 
 export const HomePage = () => {
-  const { t } = useTranslation();
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [newArrivals, setNewArrivals] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const heroSlides = [
+    {
+      title: "Summer Collection 2024",
+      subtitle: "New Arrivals",
+      description: "Discover the latest trends in fashion and electronics",
+      cta: "Shop Now",
+      ctaLink: "/products",
+      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200",
+    },
+    {
+      title: "Electronics Sale",
+      subtitle: "Up to 40% Off",
+      description: "Premium gadgets at unbeatable prices",
+      cta: "Explore Deals",
+      ctaLink: "/products?category=electronics",
+      image: "https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=1200",
+    },
+    {
+      title: "Home & Living",
+      subtitle: "Fresh Designs",
+      description: "Transform your space with modern decor",
+      cta: "Browse Collection",
+      ctaLink: "/products?category=home-living",
+      image: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=1200",
+    },
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [featuredRes, newRes, catRes] = await Promise.all([
-          productsAPI.getFeatured(6),
-          productsAPI.getNewArrivals(4),
-          categoriesAPI.list(),
+        const [featuredRes, newArrivalsRes, categoriesRes] = await Promise.all([
+          productsAPI.getFeatured(8),
+          productsAPI.getNewArrivals(8),
+          categoriesAPI.list(true),
         ]);
         setFeaturedProducts(featuredRes.data);
-        setNewArrivals(newRes.data);
-        setCategories(catRes.data);
+        setNewArrivals(newArrivalsRes.data);
+        setCategories(categoriesRes.data.slice(0, 4));
       } catch (error) {
         console.error('Failed to load home data:', error);
       } finally {
@@ -92,74 +192,98 @@ export const HomePage = () => {
     fetchData();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
-      </div>
-    );
-  }
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [heroSlides.length]);
+
+  const benefits = [
+    { icon: "🚚", title: "Free Shipping", desc: "On orders over $50" },
+    { icon: "↩️", title: "Easy Returns", desc: "30-day return policy" },
+    { icon: "🔒", title: "Secure Payment", desc: "100% secure checkout" },
+    { icon: "💬", title: "24/7 Support", desc: "Dedicated support team" },
+  ];
 
   return (
-    <div data-testid="home-page">
+    <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1560073210-1eb8ea89d4cc?w=1600')] bg-cover bg-center opacity-20" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
-          <div className="max-w-2xl">
-            <span className="inline-block text-sm font-medium text-emerald-400 mb-4 tracking-wide uppercase">
-              {t('home.newCollection')}
-            </span>
-            <h1 className="text-4xl md:text-6xl font-bold text-white font-outfit tracking-tight leading-tight">
-              {t('home.heroTitle')} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-                {t('home.heroTitleHighlight')}
-              </span>
-            </h1>
-            <p className="mt-6 text-lg text-slate-300 leading-relaxed max-w-xl">
-              {t('home.heroDescription')}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Link to="/products">
-                <Button 
-                  size="lg" 
-                  className="bg-white text-slate-900 hover:bg-slate-100 rounded-full px-8"
-                  data-testid="shop-now-btn"
-                >
-                  {t('home.shopNow')}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-              <Link to="/products?is_featured=true">
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  className="border-white/30 text-white hover:bg-white/10 rounded-full px-8"
-                >
-                  {t('home.viewFeatured')}
-                </Button>
-              </Link>
+      <section className="relative h-[70vh] md:h-[80vh] overflow-hidden">
+        {heroSlides.map((slide, index) => (
+          <div
+            key={index}
+            className={cn(
+              "absolute inset-0 transition-opacity duration-700",
+              index === currentSlide ? "opacity-100" : "opacity-0"
+            )}
+          >
+            <div className="absolute inset-0 bg-black/30 z-10" />
+            <img
+              src={slide.image}
+              alt={slide.title}
+              className="w-full h-full object-cover"
+            />
+            <div className="relative z-20 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+              <div className="max-w-xl">
+                <span className="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-sm text-white text-sm font-medium rounded-full mb-4">
+                  {slide.subtitle}
+                </span>
+                <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
+                  {slide.title}
+                </h1>
+                <p className="text-lg text-white/90 mb-8">
+                  {slide.description}
+                </p>
+                <Link to={slide.ctaLink}>
+                  <Button size="lg" className="rounded-full px-8 h-12 text-base bg-white text-gray-900 hover:bg-gray-100">
+                    {slide.cta}
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
+        ))}
+
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-4">
+          <button
+            onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
+            className="p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <div className="flex items-center gap-2">
+            {heroSlides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={cn(
+                  "w-2 h-2 rounded-full transition-all",
+                  index === currentSlide ? "bg-white w-8" : "bg-white/50"
+                )}
+              />
+            ))}
+          </div>
+          <button
+            onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
+            className="p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="py-12 border-b border-border">
+      {/* Benefits Bar */}
+      <section className="bg-gray-50 py-8 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: Truck, title: t('home.freeShipping'), desc: t('home.freeShippingDesc') },
-              { icon: Shield, title: t('home.securePayment'), desc: t('home.securePaymentDesc') },
-              { icon: RefreshCw, title: t('home.easyReturns'), desc: t('home.easyReturnsDesc') },
-            ].map((feature, i) => (
-              <div key={i} className="flex items-center gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-                  <feature.icon className="h-6 w-6 text-primary" />
-                </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {benefits.map((benefit, index) => (
+              <div key={index} className="flex items-center gap-3">
+                <span className="text-2xl">{benefit.icon}</span>
                 <div>
-                  <h3 className="font-medium">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground">{feature.desc}</p>
+                  <h4 className="font-semibold text-gray-900 text-sm">{benefit.title}</h4>
+                  <p className="text-xs text-gray-500">{benefit.desc}</p>
                 </div>
               </div>
             ))}
@@ -167,46 +291,60 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* Categories */}
+      {/* Categories Section */}
       <section className="py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between mb-10">
+          <div className="flex items-end justify-between mb-8">
             <div>
-              <span className="text-sm font-medium text-primary uppercase tracking-wide">{t('home.browse')}</span>
-              <h2 className="text-3xl md:text-4xl font-bold font-outfit mt-2">{t('home.shopByCategory')}</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Shop by Category</h2>
+              <p className="text-gray-500 mt-2">Explore our curated collections</p>
             </div>
-            <Link to="/products">
-              <Button variant="ghost" className="hidden sm:flex">
-                {t('home.viewAll')} <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+            <Link to="/products" className="hidden md:inline-flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-gray-900">
+              View All <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {categories.map((category) => (
-              <CategoryCard key={category.id} category={category} />
-            ))}
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {loading ? (
+              [...Array(4)].map((_, i) => (
+                <div key={i} className="aspect-[4/5] rounded-2xl bg-gray-100 animate-pulse" />
+              ))
+            ) : (
+              categories.map((category, index) => (
+                <CategoryCard key={category.id} category={category} index={index} />
+              ))
+            )}
           </div>
         </div>
       </section>
 
       {/* Featured Products */}
-      <section className="py-16 md:py-24 bg-muted/30">
+      <section className="py-16 md:py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between mb-10">
+          <div className="flex items-end justify-between mb-8">
             <div>
-              <span className="text-sm font-medium text-primary uppercase tracking-wide">{t('home.featured')}</span>
-              <h2 className="text-3xl md:text-4xl font-bold font-outfit mt-2">{t('home.bestSellers')}</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Featured Products</h2>
+              <p className="text-gray-500 mt-2">Handpicked favorites just for you</p>
             </div>
-            <Link to="/products?is_featured=true">
-              <Button variant="ghost" className="hidden sm:flex">
-                {t('home.viewAll')} <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+            <Link to="/products?is_featured=true" className="hidden md:inline-flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-gray-900">
+              View All <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {loading ? (
+              [...Array(8)].map((_, i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="aspect-square bg-gray-200 rounded-2xl mb-4" />
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
+                  <div className="h-4 bg-gray-200 rounded w-1/4" />
+                </div>
+              ))
+            ) : (
+              featuredProducts.map((product, index) => (
+                <ProductCard key={product.id} product={product} index={index} />
+              ))
+            )}
           </div>
         </div>
       </section>
@@ -214,44 +352,55 @@ export const HomePage = () => {
       {/* New Arrivals */}
       <section className="py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between mb-10">
+          <div className="flex items-end justify-between mb-8">
             <div>
-              <span className="text-sm font-medium text-primary uppercase tracking-wide">{t('home.latest')}</span>
-              <h2 className="text-3xl md:text-4xl font-bold font-outfit mt-2">{t('home.newArrivals')}</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">New Arrivals</h2>
+              <p className="text-gray-500 mt-2">Be the first to shop our latest drops</p>
             </div>
-            <Link to="/products">
-              <Button variant="ghost" className="hidden sm:flex">
-                {t('home.viewAll')} <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+            <Link to="/products" className="hidden md:inline-flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-gray-900">
+              View All <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {newArrivals.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {loading ? (
+              [...Array(8)].map((_, i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="aspect-square bg-gray-200 rounded-2xl mb-4" />
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
+                  <div className="h-4 bg-gray-200 rounded w-1/4" />
+                </div>
+              ))
+            ) : (
+              newArrivals.map((product, index) => (
+                <ProductCard key={product.id} product={product} index={index} />
+              ))
+            )}
           </div>
         </div>
       </section>
 
       {/* CTA Banner */}
-      <section className="py-16 md:py-24 bg-primary">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white font-outfit">
-            {t('home.ctaTitle')}
-          </h2>
-          <p className="mt-4 text-lg text-primary-foreground/80 max-w-2xl mx-auto">
-            {t('home.ctaDescription')}
-          </p>
-          <Link to="/products" className="mt-8 inline-block">
-            <Button 
-              size="lg" 
-              variant="secondary" 
-              className="rounded-full px-8"
-            >
-              {t('home.startShopping')}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
+      <section className="py-16 md:py-24 bg-gray-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Start Shopping?</h2>
+            <p className="text-gray-400 mb-8 text-lg">
+              Join thousands of happy customers and discover amazing products at great prices.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link to="/products">
+                <Button size="lg" className="rounded-full px-8 h-12 text-base bg-white text-gray-900 hover:bg-gray-100">
+                  Shop Now
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-base border-white text-white hover:bg-white hover:text-gray-900">
+                  Create Account
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </div>

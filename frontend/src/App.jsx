@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { Toaster } from './components/ui/sonner';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
 import './i18n';
 
 // Layouts
@@ -130,8 +131,10 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <CartProvider>
-          <AppRouter />
-          <Toaster position="top-right" richColors />
+          <WishlistProvider>
+            <AppRouter />
+            <Toaster position="top-right" richColors />
+          </WishlistProvider>
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>
