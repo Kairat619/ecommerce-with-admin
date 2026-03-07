@@ -66,7 +66,7 @@ export const LanguageSwitcher = ({ variant = 'default' }) => {
         <Button 
           variant="ghost" 
           size="icon" 
-          className="relative"
+          className="text-gray-600 hover:text-gray-900"
           data-testid="language-switcher"
         >
           <Globe className="h-5 w-5" />

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
-import { ShoppingCart, User, Menu, X, Search, LogOut, Package, Settings, Heart, ChevronDown } from 'lucide-react';
+import { ShoppingCart, User, Menu, X, Search, LogOut, Package, Settings, Heart, Globe } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import {
   DropdownMenu,
@@ -111,17 +111,7 @@ export const StoreLayout = ({ children }) => {
             {/* Actions */}
             <div className="flex items-center gap-1">
               {/* Language Switcher */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="hidden md:flex gap-1 text-gray-600">
-                    <span className="text-sm">EN</span>
-                    <ChevronDown className="h-3 w-3" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <LanguageSwitcher />
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <LanguageSwitcher />
 
               {/* Wishlist */}
               <Link to="/wishlist" className="relative hidden sm:block">
