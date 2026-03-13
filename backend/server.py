@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 async def seed_admin():
-    """Seed admin user if not exists."""
+    """Seed admin user if not exists, or update password if changed."""
     db = SessionLocal()
     try:
         from models.models import User
@@ -44,6 +44,17 @@ async def seed_admin():
             db.add(admin)
             db.commit()
             logger.info(f"Admin user created: {settings.ADMIN_EMAIL}")
+        else:
+            # Always update password for local auth users on startup
+            if existing.auth_provider == "local":
+                new_hash = hash_password(settings.ADMIN_PASSWORD)
+                if existing.password_hash != new_hash:
+                    existing.password_hash = new_hash
+                    db.flush()  # Force SQLAlchemy to detect the change
+                    db.commit()
+                    logger.info(f"Admin password updated: {settings.ADMIN_EMAIL}")
+                else:
+                    logger.info(f"Admin password unchanged: {settings.ADMIN_EMAIL}")
     finally:
         db.close()
 

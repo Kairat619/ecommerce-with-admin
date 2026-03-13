@@ -358,6 +358,12 @@ async def update_me(
     if not user:
         raise HTTPException(status_code=401, detail="Not authenticated")
     
+    if data.email is not None and data.email != user.email:
+        existing = get_user_by_email(db, data.email)
+        if existing and existing.id != user.id:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        user.email = data.email
+    
     if data.name is not None:
         user.name = data.name
     if data.phone is not None:
