@@ -15,6 +15,7 @@ import { HomePage } from './pages/HomePage';
 import { ProductsPage } from './pages/ProductsPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
 import { CartPage } from './pages/CartPage';
+import { WishlistPage } from './pages/WishlistPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { LoginPage, RegisterPage, AuthCallback } from './pages/AuthPages';
 import { OrdersPage, OrderDetailPage } from './pages/OrdersPage';
@@ -67,6 +68,7 @@ function AppRouter() {
       <Route path="/products" element={<StoreLayout><ProductsPage /></StoreLayout>} />
       <Route path="/products/:slug" element={<StoreLayout><ProductDetailPage /></StoreLayout>} />
       <Route path="/cart" element={<StoreLayout><CartPage /></StoreLayout>} />
+      <Route path="/wishlist" element={<StoreLayout><WishlistPage /></StoreLayout>} />
       <Route path="/checkout" element={
         <ProtectedRoute>
           <StoreLayout><CheckoutPage /></StoreLayout>

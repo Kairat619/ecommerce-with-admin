@@ -69,7 +69,10 @@ export const CartPage = () => {
     );
   }
 
-  const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const subtotal = cart.items.reduce((sum, item) => {
+    const price = item.product?.price ?? item.price ?? 0;
+    return sum + price * item.quantity;
+  }, 0);
   const shipping = subtotal > 50 ? 0 : 9.99;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
@@ -140,9 +143,9 @@ export const CartPage = () => {
                     </div>
                     
                     <div className="text-right">
-                      <p className="font-semibold text-lg">${(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="font-semibold text-lg">${((item.product?.price ?? item.price ?? 0) * item.quantity).toFixed(2)}</p>
                       {item.quantity > 1 && (
-                        <p className="text-xs text-gray-500">${item.price.toFixed(2)} each</p>
+                        <p className="text-xs text-gray-500">${(item.product?.price ?? item.price ?? 0).toFixed(2)} each</p>
                       )}
                     </div>
                   </div>
