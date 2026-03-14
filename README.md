@@ -69,7 +69,7 @@ yarn start
 | Field | Value |
 |-------|-------|
 | Email | `admin@google.com` |
-| Password | `admin` |
+| Password | `*******` |
 
 > The admin account is automatically created on first startup. You can change these credentials in `backend/.env`.
 
@@ -91,7 +91,7 @@ CORS_ORIGINS=http://localhost:3000
 
 # Admin Seed Account
 ADMIN_EMAIL=admin@shop.com
-ADMIN_PASSWORD=admin123
+ADMIN_PASSWORD=*******
 
 # Debug Mode
 DEBUG=true

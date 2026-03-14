@@ -73,11 +73,13 @@ export const AuthProvider = ({ children }) => {
       alert('Google login is not configured. Please use email/password login.');
       return;
     }
-    const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI || `${window.location.origin}/auth/callback`;
+    let redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI || `${window.location.origin}/auth/callback`;
+    redirectUri = redirectUri.replace(/\/$/, '');
     console.log('Redirect URI:', redirectUri);
     const scope = 'openid email profile';
+    const state = btoa(JSON.stringify({ redirect: '/' }));
     
-    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&access_type=offline`;
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&access_type=offline&state=${state}`;
     console.log('Google Auth URL:', googleAuthUrl);
     
     window.location.href = googleAuthUrl;
