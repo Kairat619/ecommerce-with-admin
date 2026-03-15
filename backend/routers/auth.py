@@ -250,12 +250,13 @@ async def google_oauth(
     
     body = await request.json()
     code = body.get("code")
+    redirect_uri = body.get("redirect_uri", settings.GOOGLE_REDIRECT_URI)
     
     if not code:
         raise HTTPException(status_code=400, detail="code required")
     
     try:
-        token_response = await exchange_code_for_tokens(code, settings.GOOGLE_CLIENT_ID, settings.GOOGLE_CLIENT_SECRET, settings.GOOGLE_REDIRECT_URI)
+        token_response = await exchange_code_for_tokens(code, settings.GOOGLE_CLIENT_ID, settings.GOOGLE_CLIENT_SECRET, redirect_uri)
         id_token_verified = id_token.verify_oauth2_token(
             token_response['id_token'],
             google_requests.Request(),
@@ -322,18 +323,28 @@ async def google_oauth(
 
 async def exchange_code_for_tokens(code: str, client_id: str, client_secret: str, redirect_uri: str) -> dict:
     """Exchange authorization code for access and ID tokens."""
+    import logging
+    logger = logging.getLogger(__name__)
+    
     token_url = "https://oauth2.googleapis.com/token"
+    logger.info(f"Exchanging code with redirect_uri: {redirect_uri}")
+    logger.info(f"Client ID: {client_id}")
+    logger.info(f"Client Secret present: {bool(client_secret)}")
+    
+    token_data = {
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "code": code,
+        "grant_type": "authorization_code",
+        "redirect_uri": redirect_uri,
+    }
+    logger.info(f"Token request data: {token_data}")
     
     async with aiohttp.ClientSession() as client:
-        async with client.post(token_url, data={
-            "client_id": client_id,
-            "client_secret": client_secret,
-            "code": code,
-            "grant_type": "authorization_code",
-            "redirect_uri": redirect_uri,
-        }) as resp:
+        async with client.post(token_url, data=token_data) as resp:
             if resp.status != 200:
                 text = await resp.text()
+                logger.error(f"Token exchange failed: {text}")
                 raise HTTPException(status_code=401, detail=f"Failed to exchange code: {text}")
             return await resp.json()
 

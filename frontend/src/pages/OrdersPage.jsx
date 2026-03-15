@@ -217,7 +217,7 @@ export const OrderDetailPage = () => {
   const status = statusConfig[order.status] || statusConfig.pending;
   const StatusIcon = status.icon;
 
-  const subtotal = order.items?.reduce((sum, item) => sum + item.price * item.quantity, 0) || 0;
+  const subtotal = order.items?.reduce((sum, item) => sum + (item.total_price || 0), 0) || 0;
   const shipping = order.shipping_cost || 0;
   const tax = order.tax || subtotal * 0.08;
   const total = order.total || subtotal + shipping + tax;
@@ -264,7 +264,7 @@ export const OrderDetailPage = () => {
                     <Link to={`/products/${item.product_slug}`} className="shrink-0">
                       <div className="w-20 h-20 rounded-xl overflow-hidden bg-gray-100">
                         <img 
-                          src={item.thumbnail || '/placeholder.jpg'} 
+                          src={item.product_image || '/placeholder.jpg'} 
                           alt={item.product_name}
                           className="w-full h-full object-cover"
                         />
@@ -278,7 +278,7 @@ export const OrderDetailPage = () => {
                         {item.product_name}
                       </Link>
                       <p className="text-sm text-gray-500 mt-1">Qty: {item.quantity}</p>
-                      <p className="font-semibold mt-2">${(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="font-semibold mt-2">${(item.total_price || 0).toFixed(2)}</p>
                     </div>
                   </div>
                 ))}

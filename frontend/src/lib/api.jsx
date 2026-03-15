@@ -59,7 +59,7 @@ export const authAPI = {
   logout: () => api.post('/auth/logout'),
   getMe: () => api.get('/auth/me'),
   updateMe: (data) => api.put('/auth/me', data),
-  exchangeGoogleCode: (code) => api.post('/auth/google', { code }),
+  exchangeGoogleCode: (code, redirectUri) => api.post('/auth/google', { code, redirect_uri: redirectUri }),
   changePassword: (data) => api.post('/auth/change-password', data),
 };
 

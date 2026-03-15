@@ -55,14 +55,15 @@ export const CheckoutPage = () => {
       return;
     }
 
+    // Fake payment gateway - always succeeds for testing
     setLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate payment processing
+    
     try {
       const orderData = {
-        items: cart.items.map(item => ({
-          product_id: item.product_id || item.id,
-          quantity: item.quantity,
-          price: item.price,
-        })),
+        customer_name: formData.customer_name,
+        customer_email: formData.customer_email,
+        customer_phone: formData.customer_phone,
         shipping_address: {
           name: formData.customer_name,
           street: formData.street,
@@ -72,6 +73,7 @@ export const CheckoutPage = () => {
           country: formData.country,
           phone: formData.customer_phone,
         },
+        payment_method: paymentMethod,
       };
 
       const response = await ordersAPI.create(orderData);
@@ -99,7 +101,7 @@ export const CheckoutPage = () => {
     );
   }
 
-  const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const subtotal = cart.items.reduce((sum, item) => sum + (item.product?.price || 0) * item.quantity, 0);
   const shipping = subtotal > 50 ? 0 : 9.99;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
@@ -407,7 +409,7 @@ export const CheckoutPage = () => {
                       <p className="text-sm font-medium line-clamp-1">{item.product_name || item.name}</p>
                       <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
                     </div>
-                    <p className="text-sm font-medium">${(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="text-sm font-medium">${((item.product?.price || 0) * item.quantity).toFixed(2)}</p>
                   </div>
                 ))}
               </div>

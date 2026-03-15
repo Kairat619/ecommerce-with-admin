@@ -86,7 +86,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const handleOAuthCallback = async (code) => {
-    const response = await authAPI.exchangeGoogleCode(code);
+    let redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI || `${window.location.origin}/auth/callback`;
+    redirectUri = redirectUri.replace(/\/$/, '');
+    const response = await authAPI.exchangeGoogleCode(code, redirectUri);
     localStorage.setItem('access_token', response.data.access_token);
     localStorage.setItem('refresh_token', response.data.refresh_token);
     setUser(response.data.user);
