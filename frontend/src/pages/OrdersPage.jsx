@@ -50,7 +50,7 @@ const OrderCard = ({ order }) => {
                   className="w-10 h-10 rounded-lg border-2 border-white bg-gray-100 overflow-hidden"
                 >
                   <img 
-                    src={item.thumbnail || '/placeholder.jpg'} 
+                    src={item.product_image || '/placeholder.jpg'} 
                     alt=""
                     className="w-full h-full object-cover"
                   />
