@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { ordersAPI } from '../lib/api';
@@ -10,6 +11,7 @@ import { ShoppingBag, CreditCard, Truck, Check, Lock, ArrowLeft, ArrowRight, Che
 import { cn } from '../lib/utils';
 
 export const CheckoutPage = () => {
+  const { t } = useTranslation();
   const { cart, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -107,8 +109,8 @@ export const CheckoutPage = () => {
   const total = subtotal + shipping + tax;
 
   const steps = [
-    { num: 1, label: 'Shipping', icon: Truck },
-    { num: 2, label: 'Payment', icon: CreditCard },
+    { num: 1, label: t('checkout.shipping'), icon: Truck },
+    { num: 2, label: t('checkout.payment'), icon: CreditCard },
   ];
 
   return (
@@ -118,9 +120,9 @@ export const CheckoutPage = () => {
         <div className="flex items-center justify-between mb-8">
           <Link to="/cart" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900">
             <ArrowLeft className="h-4 w-4" />
-            Back to Cart
+            {t('cart.continueShopping')}
           </Link>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Checkout</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{t('checkout.title')}</h1>
         </div>
 
         {/* Progress Steps */}
@@ -161,12 +163,12 @@ export const CheckoutPage = () => {
                 <div className="space-y-6">
                   <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
                     <Truck className="h-5 w-5" />
-                    Shipping Information
+                    {t('checkout.shippingInfo')}
                   </h2>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="md:col-span-2">
-                      <label className="text-sm font-medium mb-2 block">Full Name</label>
+                      <label className="text-sm font-medium mb-2 block">{t('checkout.fullName')}</label>
                       <Input
                         name="customer_name"
                         value={formData.customer_name}
@@ -177,7 +179,7 @@ export const CheckoutPage = () => {
                       />
                     </div>
                     <div className="md:col-span-2">
-                      <label className="text-sm font-medium mb-2 block">Email</label>
+                      <label className="text-sm font-medium mb-2 block">{t('checkout.email')}</label>
                       <Input
                         name="customer_email"
                         type="email"
@@ -189,7 +191,7 @@ export const CheckoutPage = () => {
                       />
                     </div>
                     <div className="md:col-span-2">
-                      <label className="text-sm font-medium mb-2 block">Phone</label>
+                      <label className="text-sm font-medium mb-2 block">{t('checkout.phone')}</label>
                       <Input
                         name="customer_phone"
                         type="tel"
@@ -200,7 +202,7 @@ export const CheckoutPage = () => {
                       />
                     </div>
                     <div className="md:col-span-2">
-                      <label className="text-sm font-medium mb-2 block">Street Address</label>
+                      <label className="text-sm font-medium mb-2 block">{t('checkout.streetAddress')}</label>
                       <Input
                         name="street"
                         value={formData.street}
@@ -211,7 +213,7 @@ export const CheckoutPage = () => {
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium mb-2 block">City</label>
+                      <label className="text-sm font-medium mb-2 block">{t('checkout.city')}</label>
                       <Input
                         name="city"
                         value={formData.city}
@@ -222,7 +224,7 @@ export const CheckoutPage = () => {
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium mb-2 block">State</label>
+                      <label className="text-sm font-medium mb-2 block">{t('checkout.state')}</label>
                       <Input
                         name="state"
                         value={formData.state}
@@ -233,7 +235,7 @@ export const CheckoutPage = () => {
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium mb-2 block">Postal Code</label>
+                      <label className="text-sm font-medium mb-2 block">{t('checkout.postalCode')}</label>
                       <Input
                         name="postal_code"
                         value={formData.postal_code}
@@ -244,7 +246,7 @@ export const CheckoutPage = () => {
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium mb-2 block">Country</label>
+                      <label className="text-sm font-medium mb-2 block">{t('checkout.country')}</label>
                       <Input
                         name="country"
                         value={formData.country}
@@ -260,7 +262,7 @@ export const CheckoutPage = () => {
                     type="submit"
                     className="w-full h-12 rounded-full text-base"
                   >
-                    Continue to Payment
+                    {t('checkout.continueToPayment')}
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </div>
@@ -270,7 +272,7 @@ export const CheckoutPage = () => {
                 <div className="space-y-6">
                   <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
                     <CreditCard className="h-5 w-5" />
-                    Payment Method
+                    {t('checkout.paymentInfo')}
                   </h2>
 
                   {/* Payment Method Selection */}
@@ -365,7 +367,7 @@ export const CheckoutPage = () => {
                       className="flex-1 h-12 rounded-full"
                     >
                       <ArrowLeft className="mr-2 h-5 w-5" />
-                      Back
+                      {t('checkout.back')}
                     </Button>
                     <Button 
                       type="submit"
@@ -375,12 +377,12 @@ export const CheckoutPage = () => {
                       {loading ? (
                         <span className="flex items-center">
                           <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2" />
-                          Processing...
+                          {t('checkout.processing')}
                         </span>
                       ) : (
                         <>
                           <Lock className="mr-2 h-4 w-4" />
-                          Pay ${total.toFixed(2)}
+                          {t('checkout.placeOrder')} ${total.toFixed(2)}
                         </>
                       )}
                     </Button>
@@ -416,27 +418,27 @@ export const CheckoutPage = () => {
 
               <div className="space-y-3 py-4 border-t border-b border-gray-100">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Subtotal</span>
+                  <span className="text-gray-500">{t('cart.subtotal').replace('{{count}}', cart.items.length)}</span>
                   <span className="font-medium">${subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Shipping</span>
+                  <span className="text-gray-500">{t('cart.shipping')}</span>
                   <span className="font-medium">
                     {shipping === 0 ? (
-                      <span className="text-green-600">Free</span>
+                      <span className="text-green-600">{t('cart.free')}</span>
                     ) : (
                       `$${shipping.toFixed(2)}`
                     )}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Tax</span>
+                  <span className="text-gray-500">{t('cart.tax')}</span>
                   <span className="font-medium">${tax.toFixed(2)}</span>
                 </div>
               </div>
 
               <div className="flex justify-between items-center pt-4">
-                <span className="font-semibold">Total</span>
+                <span className="font-semibold">{t('cart.total')}</span>
                 <span className="text-2xl font-bold">${total.toFixed(2)}</span>
               </div>
             </div>

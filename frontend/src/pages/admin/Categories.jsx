@@ -2,6 +2,7 @@
  * Admin Categories Page
  */
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { adminAPI } from '../../lib/api';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
@@ -19,6 +20,7 @@ import { toast } from 'sonner';
 import { Plus, Edit, Trash2 } from 'lucide-react';
 
 export const AdminCategories = () => {
+  const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -120,10 +122,10 @@ export const AdminCategories = () => {
   return (
     <div className="space-y-6" data-testid="admin-categories">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Categories</h1>
-        <Button onClick={openCreateDialog} data-testid="add-category-btn">
+<h1 className="text-2xl font-bold">{t('admin.categories')}</h1>
+        <Button onClick={openCreateDialog}>
           <Plus className="h-4 w-4 mr-2" />
-          Add Category
+          {t('admin.addCategory')}
         </Button>
       </div>
 
@@ -212,7 +214,7 @@ export const AdminCategories = () => {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editingCategory ? 'Edit Category' : 'Add Category'}</DialogTitle>
+            <DialogTitle>{editingCategory ? t('admin.editCategory') : t('admin.addCategory')}</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -258,7 +260,7 @@ export const AdminCategories = () => {
                 Cancel
               </Button>
               <Button type="submit">
-                {editingCategory ? 'Update' : 'Create'}
+                {editingCategory ? t('admin.update') : t('admin.create')}
               </Button>
             </DialogFooter>
           </form>
@@ -269,7 +271,7 @@ export const AdminCategories = () => {
       <Dialog open={!!deleteConfirm} onOpenChange={() => setDeleteConfirm(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Category</DialogTitle>
+            <DialogTitle>{t('admin.deleteCategory')}</DialogTitle>
           </DialogHeader>
           <p>Are you sure you want to delete "{deleteConfirm?.name}"? This action cannot be undone.</p>
           <DialogFooter>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowRight, Star, Heart, ShoppingBag, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { productsAPI, categoriesAPI } from '../lib/api';
@@ -8,6 +9,7 @@ import { useWishlist } from '../context/WishlistContext';
 import { cn } from '../lib/utils';
 
 const ProductCard = ({ product, index }) => {
+  const { t } = useTranslation();
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -65,7 +67,7 @@ const ProductCard = ({ product, index }) => {
 
         {product.compare_at_price && (
           <span className="absolute top-3 left-3 bg-red-500 text-white text-xs font-medium px-3 py-1 rounded-full">
-            Sale
+            {t('products.sale')}
           </span>
         )}
 
@@ -80,7 +82,7 @@ const ProductCard = ({ product, index }) => {
             className="w-full bg-white text-gray-900 hover:bg-gray-900 hover:text-white rounded-full h-10"
           >
             <ShoppingBag className="h-4 w-4 mr-2" />
-            Quick Add
+            {t('product.addToCart')}
           </Button>
         </div>
       </div>
@@ -115,6 +117,7 @@ const ProductCard = ({ product, index }) => {
 };
 
 const CategoryCard = ({ category, index }) => {
+  const { t } = useTranslation();
   return (
     <Link 
       to={`/products?category=${category.slug}`}
@@ -131,7 +134,7 @@ const CategoryCard = ({ category, index }) => {
         <h3 className="text-xl font-bold text-white mb-1">{category.name}</h3>
         <p className="text-white/80 text-sm line-clamp-2">{category.description}</p>
         <span className="inline-flex items-center gap-1 text-white text-sm mt-3 group-hover:underline">
-          Shop Now <ArrowRight className="h-4 w-4" />
+          {t('home.shopNow')} <ArrowRight className="h-4 w-4" />
         </span>
       </div>
     </Link>
@@ -139,6 +142,7 @@ const CategoryCard = ({ category, index }) => {
 };
 
 export const HomePage = () => {
+  const { t } = useTranslation();
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [newArrivals, setNewArrivals] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -147,29 +151,36 @@ export const HomePage = () => {
 
   const heroSlides = [
     {
-      title: "Summer Collection 2024",
-      subtitle: "New Arrivals",
-      description: "Discover the latest trends in fashion and electronics",
-      cta: "Shop Now",
+      title: t('home.heroTitle') + " " + t('home.heroTitleHighlight'),
+      subtitle: t('home.newCollection'),
+      description: t('home.heroDescription'),
+      cta: t('home.shopNow'),
       ctaLink: "/products",
       image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200",
     },
     {
-      title: "Electronics Sale",
-      subtitle: "Up to 40% Off",
-      description: "Premium gadgets at unbeatable prices",
-      cta: "Explore Deals",
+      title: t('nav.electronics'),
+      subtitle: t('products.sale'),
+      description: t('home.ctaDescription'),
+      cta: t('home.viewFeatured'),
       ctaLink: "/products?category=electronics",
       image: "https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=1200",
     },
     {
-      title: "Home & Living",
-      subtitle: "Fresh Designs",
-      description: "Transform your space with modern decor",
-      cta: "Browse Collection",
+      title: t('nav.homeLiving'),
+      subtitle: t('home.latest'),
+      description: t('home.ctaDescription'),
+      cta: t('home.browse'),
       ctaLink: "/products?category=home-living",
       image: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=1200",
     },
+  ];
+
+  const benefits = [
+    { icon: "🚚", title: t('home.freeShipping'), desc: t('home.freeShippingDesc') },
+    { icon: "↩️", title: t('home.easyReturns'), desc: t('home.easyReturnsDesc') },
+    { icon: "🔒", title: t('home.securePayment'), desc: t('home.securePaymentDesc') },
+    { icon: "💬", title: t('footer.support'), desc: t('footer.helpCenter') },
   ];
 
   useEffect(() => {
@@ -198,13 +209,6 @@ export const HomePage = () => {
     }, 5000);
     return () => clearInterval(timer);
   }, [heroSlides.length]);
-
-  const benefits = [
-    { icon: "🚚", title: "Free Shipping", desc: "On orders over $50" },
-    { icon: "↩️", title: "Easy Returns", desc: "30-day return policy" },
-    { icon: "🔒", title: "Secure Payment", desc: "100% secure checkout" },
-    { icon: "💬", title: "24/7 Support", desc: "Dedicated support team" },
-  ];
 
   return (
     <div className="min-h-screen">
@@ -296,11 +300,11 @@ export const HomePage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Shop by Category</h2>
-              <p className="text-gray-500 mt-2">Explore our curated collections</p>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{t('home.shopByCategory')}</h2>
+              <p className="text-gray-500 mt-2">{t('home.ctaDescription')}</p>
             </div>
             <Link to="/products" className="hidden md:inline-flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-gray-900">
-              View All <ArrowRight className="h-4 w-4" />
+              {t('home.viewAll')} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           
@@ -323,11 +327,11 @@ export const HomePage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Featured Products</h2>
-              <p className="text-gray-500 mt-2">Handpicked favorites just for you</p>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{t('home.featured')}</h2>
+              <p className="text-gray-500 mt-2">{t('home.ctaDescription')}</p>
             </div>
             <Link to="/products?is_featured=true" className="hidden md:inline-flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-gray-900">
-              View All <ArrowRight className="h-4 w-4" />
+              {t('home.viewAll')} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           
@@ -354,11 +358,11 @@ export const HomePage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">New Arrivals</h2>
-              <p className="text-gray-500 mt-2">Be the first to shop our latest drops</p>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{t('home.newArrivals')}</h2>
+              <p className="text-gray-500 mt-2">{t('home.ctaDescription')}</p>
             </div>
             <Link to="/products" className="hidden md:inline-flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-gray-900">
-              View All <ArrowRight className="h-4 w-4" />
+              {t('home.viewAll')} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           
@@ -384,19 +388,19 @@ export const HomePage = () => {
       <section className="py-16 md:py-24 bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Start Shopping?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('home.ctaTitle')}</h2>
             <p className="text-gray-400 mb-8 text-lg">
-              Join thousands of happy customers and discover amazing products at great prices.
+              {t('home.ctaDescription')}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link to="/products">
                 <Button size="lg" className="rounded-full px-8 h-12 text-base bg-white text-gray-900 hover:bg-gray-100">
-                  Shop Now
+                  {t('home.shopNow')}
                 </Button>
               </Link>
               <Link to="/register">
                 <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-base border-white text-white hover:bg-white hover:text-gray-900">
-                  Create Account
+                  {t('auth.createAccount')}
                 </Button>
               </Link>
             </div>

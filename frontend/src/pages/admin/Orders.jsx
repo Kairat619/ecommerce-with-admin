@@ -3,6 +3,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { adminAPI } from '../../lib/api';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
@@ -21,21 +22,22 @@ import {
 import { toast } from 'sonner';
 import { Search, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 
-const statusConfig = {
-  pending: { label: 'Pending', color: 'bg-yellow-100 text-yellow-800' },
-  confirmed: { label: 'Confirmed', color: 'bg-blue-100 text-blue-800' },
-  processing: { label: 'Processing', color: 'bg-purple-100 text-purple-800' },
-  shipped: { label: 'Shipped', color: 'bg-indigo-100 text-indigo-800' },
-  delivered: { label: 'Delivered', color: 'bg-green-100 text-green-800' },
-  cancelled: { label: 'Cancelled', color: 'bg-red-100 text-red-800' },
-};
-
 export const AdminOrders = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
   const [statusDialog, setStatusDialog] = useState(null);
+
+  const statusConfig = {
+    pending: { label: t('orders.status.pending'), color: 'bg-yellow-100 text-yellow-800' },
+    confirmed: { label: t('orders.status.confirmed'), color: 'bg-blue-100 text-blue-800' },
+    processing: { label: t('orders.status.processing'), color: 'bg-purple-100 text-purple-800' },
+    shipped: { label: t('orders.status.shipped'), color: 'bg-indigo-100 text-indigo-800' },
+    delivered: { label: t('orders.status.delivered'), color: 'bg-green-100 text-green-800' },
+    cancelled: { label: t('orders.status.cancelled'), color: 'bg-red-100 text-red-800' },
+  };
   const [newStatus, setNewStatus] = useState('');
   const [adminNotes, setAdminNotes] = useState('');
 
@@ -89,7 +91,7 @@ export const AdminOrders = () => {
 
   return (
     <div className="space-y-6" data-testid="admin-orders">
-      <h1 className="text-2xl font-bold">Orders</h1>
+      <h1 className="text-2xl font-bold">{t('admin.orders')}</h1>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-4">

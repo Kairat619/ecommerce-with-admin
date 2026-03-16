@@ -246,40 +246,40 @@ export const StoreLayout = ({ children }) => {
             <div className="col-span-2 md:col-span-1">
               <span className="text-2xl font-bold font-outfit">{t('common.shop')}</span>
               <p className="mt-4 text-gray-400 text-sm leading-relaxed">
-                Your one-stop shop for quality products at amazing prices.
+                {t('footer.description')}
               </p>
             </div>
             
             {/* Shop Links */}
             <div>
-              <h4 className="font-semibold mb-4 text-white">Shop</h4>
+              <h4 className="font-semibold mb-4 text-white">{t('footer.shop')}</h4>
               <ul className="space-y-3 text-sm text-gray-400">
-                <li><Link to="/products" className="hover:text-white transition-colors">All Products</Link></li>
-                <li><Link to="/products?category=electronics" className="hover:text-white transition-colors">Electronics</Link></li>
-                <li><Link to="/products?category=fashion" className="hover:text-white transition-colors">Fashion</Link></li>
-                <li><Link to="/products?category=home-living" className="hover:text-white transition-colors">Home & Living</Link></li>
+                <li><Link to="/products" className="hover:text-white transition-colors">{t('nav.allProducts')}</Link></li>
+                <li><Link to="/products?category=electronics" className="hover:text-white transition-colors">{t('nav.electronics')}</Link></li>
+                <li><Link to="/products?category=fashion" className="hover:text-white transition-colors">{t('nav.fashion')}</Link></li>
+                <li><Link to="/products?category=home-living" className="hover:text-white transition-colors">{t('nav.homeLiving')}</Link></li>
               </ul>
             </div>
             
             {/* Account Links */}
             <div>
-              <h4 className="font-semibold mb-4 text-white">Account</h4>
+              <h4 className="font-semibold mb-4 text-white">{t('footer.account')}</h4>
               <ul className="space-y-3 text-sm text-gray-400">
-                <li><Link to="/login" className="hover:text-white transition-colors">Sign In</Link></li>
-                <li><Link to="/register" className="hover:text-white transition-colors">Create Account</Link></li>
-                <li><Link to="/orders" className="hover:text-white transition-colors">My Orders</Link></li>
-                <li><Link to="/cart" className="hover:text-white transition-colors">Shopping Cart</Link></li>
+                <li><Link to="/login" className="hover:text-white transition-colors">{t('common.signIn')}</Link></li>
+                <li><Link to="/register" className="hover:text-white transition-colors">{t('auth.createAccount')}</Link></li>
+                <li><Link to="/orders" className="hover:text-white transition-colors">{t('common.myOrders')}</Link></li>
+                <li><Link to="/cart" className="hover:text-white transition-colors">{t('common.cart')}</Link></li>
               </ul>
             </div>
             
             {/* Support Links */}
             <div>
-              <h4 className="font-semibold mb-4 text-white">Support</h4>
+              <h4 className="font-semibold mb-4 text-white">{t('footer.support')}</h4>
               <ul className="space-y-3 text-sm text-gray-400">
-                <li><span className="hover:text-white transition-colors cursor-pointer">Help Center</span></li>
-                <li><span className="hover:text-white transition-colors cursor-pointer">Shipping Info</span></li>
-                <li><span className="hover:text-white transition-colors cursor-pointer">Returns</span></li>
-                <li><span className="hover:text-white transition-colors cursor-pointer">Contact Us</span></li>
+                <li><span className="hover:text-white transition-colors cursor-pointer">{t('footer.helpCenter')}</span></li>
+                <li><span className="hover:text-white transition-colors cursor-pointer">{t('footer.shippingInfo')}</span></li>
+                <li><span className="hover:text-white transition-colors cursor-pointer">{t('footer.returns')}</span></li>
+                <li><span className="hover:text-white transition-colors cursor-pointer">{t('footer.support')}</span></li>
               </ul>
             </div>
           </div>
@@ -287,7 +287,7 @@ export const StoreLayout = ({ children }) => {
           {/* Bottom Bar */}
           <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-gray-400">
-              © {new Date().getFullYear()} {t('common.shop')}. All rights reserved.
+              {t('footer.copyright')}
             </p>
             <div className="flex items-center gap-6 text-sm text-gray-400">
               <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>

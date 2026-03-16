@@ -96,7 +96,8 @@
     "freeShippingMessage": "Добавьте еще ${{amount}} для бесплатной доставки",
     "total": "Итого",
     "proceedToCheckout": "Перейти к оформлению",
-    "itemRemoved": "Товар удален из корзины"
+    "itemRemoved": "Товар удален из корзины",
+    "couponCode": "Применить купон"
   },
   "checkout": {
     "title": "Оформление заказа",

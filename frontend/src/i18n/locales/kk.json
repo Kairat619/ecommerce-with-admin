@@ -96,7 +96,8 @@
     "freeShippingMessage": "Тегін жеткізу үшін тағы ${{amount}} қосыңыз",
     "total": "Барлығы",
     "proceedToCheckout": "Төлемге өту",
-    "itemRemoved": "Өнім себеттен алынды"
+    "itemRemoved": "Өнім себеттен алынды",
+    "couponCode": "Купон кодын қолдану"
   },
   "checkout": {
     "title": "Төлем",

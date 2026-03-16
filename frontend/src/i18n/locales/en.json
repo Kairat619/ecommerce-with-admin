@@ -96,7 +96,8 @@
     "freeShippingMessage": "Add ${{amount}} more for free shipping",
     "total": "Total",
     "proceedToCheckout": "Proceed to Checkout",
-    "itemRemoved": "Item removed from cart"
+    "itemRemoved": "Item removed from cart",
+    "couponCode": "Apply coupon code"
   },
   "checkout": {
     "title": "Checkout",

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { productsAPI, categoriesAPI } from '../lib/api';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -14,6 +15,7 @@ import { useWishlist } from '../context/WishlistContext';
 import { cn } from '../lib/utils';
 
 const ProductCard = ({ product, viewMode }) => {
+  const { t } = useTranslation();
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [isHovered, setIsHovered] = useState(false);
@@ -52,7 +54,7 @@ const ProductCard = ({ product, viewMode }) => {
             />
             {product.compare_at_price && (
               <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full">
-                Sale
+                {t('products.sale')}
               </span>
             )}
           </div>
@@ -83,7 +85,7 @@ const ProductCard = ({ product, viewMode }) => {
                 </Button>
                 <Button size="sm" onClick={handleAddToCart} className="rounded-full px-6">
                   <ShoppingBag className="h-4 w-4 mr-2" />
-                  Add to Cart
+                  {t('product.addToCart')}
                 </Button>
               </div>
             </div>
@@ -123,13 +125,13 @@ const ProductCard = ({ product, viewMode }) => {
 
         {product.compare_at_price && (
           <span className="absolute top-3 left-3 bg-red-500 text-white text-xs font-medium px-3 py-1 rounded-full">
-            Sale
+            {t('products.sale')}
           </span>
         )}
 
         {product.stock_quantity === 0 && (
           <span className="absolute top-3 right-3 bg-gray-900 text-white text-xs font-medium px-3 py-1 rounded-full">
-            Sold Out
+            {t('products.soldOut')}
           </span>
         )}
 
@@ -145,7 +147,7 @@ const ProductCard = ({ product, viewMode }) => {
             disabled={product.stock_quantity === 0}
           >
             <ShoppingBag className="h-4 w-4 mr-2" />
-            Quick Add
+            {t('product.addToCart')}
           </Button>
         </div>
       </div>
@@ -163,9 +165,9 @@ const ProductCard = ({ product, viewMode }) => {
           )}
         </div>
         {product.stock_quantity > 0 ? (
-          <span className="text-xs text-green-600">In Stock</span>
+          <span className="text-xs text-green-600">{t('product.inStock').replace('{{count}}', product.stock_quantity)}</span>
         ) : (
-          <span className="text-xs text-gray-400">Out of Stock</span>
+          <span className="text-xs text-gray-400">{t('product.outOfStock')}</span>
         )}
       </div>
     </Link>
@@ -173,6 +175,7 @@ const ProductCard = ({ product, viewMode }) => {
 };
 
 export const ProductsPage = () => {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -304,12 +307,12 @@ export const ProductsPage = () => {
   ].filter(Boolean).length;
 
   const sortOptions = [
-    { value: 'created_at-desc', label: 'Newest First' },
-    { value: 'created_at-asc', label: 'Oldest First' },
-    { value: 'price-asc', label: 'Price: Low to High' },
-    { value: 'price-desc', label: 'Price: High to Low' },
-    { value: 'name-asc', label: 'Name: A-Z' },
-    { value: 'name-desc', label: 'Name: Z-A' },
+    { value: 'created_at-desc', label: t('products.newest') },
+    { value: 'created_at-asc', label: t('products.oldest') },
+    { value: 'price-asc', label: t('products.priceLowHigh') },
+    { value: 'price-desc', label: t('products.priceHighLow') },
+    { value: 'name-asc', label: t('products.nameAZ') },
+    { value: 'name-desc', label: t('products.nameZA') },
   ];
 
   return (
@@ -317,9 +320,9 @@ export const ProductsPage = () => {
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900">All Products</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900">{t('products.title')}</h1>
           <p className="text-gray-500 mt-2">
-            {loading ? 'Loading...' : `${products.length} products found`}
+            {loading ? t('products.loading') : t('products.showing').replace('{{count}}', products.length)}
           </p>
         </div>
       </div>
@@ -332,7 +335,7 @@ export const ProductsPage = () => {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               type="search"
-              placeholder="Search products..."
+              placeholder={t('common.search')}
               value={filters.q}
               onChange={(e) => handleSearchChange(e.target.value)}
               onFocus={() => filters.q.length > 1 && setShowSuggestions(true)}
@@ -407,7 +410,7 @@ export const ProductsPage = () => {
               )}
             >
               <Filter className="h-4 w-4 mr-2" />
-              Filters
+              {t('products.filters')}
               {activeFilterCount > 0 && (
                 <span className="ml-2 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                   {activeFilterCount}
@@ -421,10 +424,10 @@ export const ProductsPage = () => {
         {showFilters && (
           <div className="bg-white rounded-2xl p-6 mb-8 border border-gray-100">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="font-semibold text-lg">Filters</h3>
+              <h3 className="font-semibold text-lg">{t('products.filters')}</h3>
               {activeFilterCount > 0 && (
                 <Button variant="ghost" size="sm" onClick={clearFilters} className="text-red-500 hover:text-red-600">
-                  Clear All
+                  {t('products.clearAll')}
                   <X className="ml-2 h-4 w-4" />
                 </Button>
               )}
@@ -432,7 +435,7 @@ export const ProductsPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {/* Category */}
               <div>
-                <label className="text-sm font-medium mb-3 block">Category</label>
+                <label className="text-sm font-medium mb-3 block">{t('products.category')}</label>
                 <div className="space-y-2">
                   <button
                     onClick={() => updateFilter('category', 'all')}
@@ -441,7 +444,7 @@ export const ProductsPage = () => {
                       filters.category === 'all' ? "bg-gray-900 text-white" : "bg-gray-50 hover:bg-gray-100"
                     )}
                   >
-                    All Categories
+                    {t('products.allCategories')}
                   </button>
                   {categories.map((cat) => (
                     <button
@@ -461,7 +464,7 @@ export const ProductsPage = () => {
               {/* Price Range */}
               <div className="md:col-span-2">
                 <label className="text-sm font-medium mb-3 block">
-                  Price Range: ${filters.minPrice} - ${filters.maxPrice}
+                  {t('products.priceRange')}: ${filters.minPrice} - ${filters.maxPrice}
                 </label>
                 <Slider
                   value={[filters.minPrice, filters.maxPrice]}
@@ -477,14 +480,14 @@ export const ProductsPage = () => {
 
               {/* Checkboxes */}
               <div className="space-y-3">
-                <label className="text-sm font-medium block">Availability</label>
+                <label className="text-sm font-medium block">{t('products.category')}</label>
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                   <Checkbox
                     id="inStock"
                     checked={filters.inStock}
                     onCheckedChange={(checked) => updateFilter('inStock', checked)}
                   />
-                  <label htmlFor="inStock" className="text-sm cursor-pointer">In Stock Only</label>
+                  <label htmlFor="inStock" className="text-sm cursor-pointer">{t('products.inStockOnly')}</label>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                   <Checkbox
@@ -492,7 +495,7 @@ export const ProductsPage = () => {
                     checked={filters.isFeatured}
                     onCheckedChange={(checked) => updateFilter('isFeatured', checked)}
                   />
-                  <label htmlFor="isFeatured" className="text-sm cursor-pointer">Featured Only</label>
+                  <label htmlFor="isFeatured" className="text-sm cursor-pointer">{t('products.featuredOnly')}</label>
                 </div>
               </div>
             </div>
@@ -504,25 +507,25 @@ export const ProductsPage = () => {
           <div className="flex flex-wrap items-center gap-2 mb-6">
             {filters.q && (
               <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm">
-                Search: {filters.q}
+                {t('common.search')}: {filters.q}
                 <button onClick={() => updateFilter('q', '')}><X className="h-3 w-3" /></button>
               </span>
             )}
             {filters.category && filters.category !== 'all' && (
               <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm">
-                Category: {categories.find(c => c.slug === filters.category)?.name || filters.category}
+                {t('products.category')}: {categories.find(c => c.slug === filters.category)?.name || filters.category}
                 <button onClick={() => updateFilter('category', 'all')}><X className="h-3 w-3" /></button>
               </span>
             )}
             {filters.inStock && (
               <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm">
-                In Stock
+                {t('products.inStockOnly')}
                 <button onClick={() => updateFilter('inStock', false)}><X className="h-3 w-3" /></button>
               </span>
             )}
             {filters.isFeatured && (
               <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm">
-                Featured
+                {t('products.featuredOnly')}
                 <button onClick={() => updateFilter('isFeatured', false)}><X className="h-3 w-3" /></button>
               </span>
             )}
@@ -548,10 +551,10 @@ export const ProductsPage = () => {
             <div className="w-20 h-20 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
               <Search className="h-8 w-8 text-gray-400" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No products found</h3>
-            <p className="text-gray-500 mb-6">Try adjusting your filters or search terms</p>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('products.noProducts')}</h3>
+            <p className="text-gray-500 mb-6">{t('products.clearFilters')}</p>
             <Button onClick={clearFilters} variant="outline" className="rounded-full">
-              Clear Filters
+              {t('products.clearFilters')}
             </Button>
           </div>
         ) : (

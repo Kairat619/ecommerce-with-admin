@@ -2,6 +2,7 @@
  * Admin Settings Page
  */
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { authAPI } from '../../lib/api';
 import { Button } from '../../components/ui/button';
@@ -12,6 +13,7 @@ import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 
 export const AdminSettings = () => {
+  const { t } = useTranslation();
   const { user, checkAuth } = useAuth();
   const [profileLoading, setProfileLoading] = useState(false);
   const [passwordLoading, setPasswordLoading] = useState(false);
@@ -103,8 +105,8 @@ export const AdminSettings = () => {
   return (
     <div className="max-w-2xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Settings</h1>
-        <p className="text-muted-foreground">Manage your account settings</p>
+        <h1 className="text-2xl font-bold">{t('admin.settings')}</h1>
+        <p className="text-muted-foreground">{t('admin.settings')}</p>
       </div>
 
       <Card>

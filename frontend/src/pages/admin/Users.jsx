@@ -2,6 +2,7 @@
  * Admin Users Page
  */
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { adminAPI } from '../../lib/api';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
@@ -21,6 +22,7 @@ import { toast } from 'sonner';
 import { Search, Edit, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const AdminUsers = () => {
+  const { t } = useTranslation();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
@@ -77,7 +79,7 @@ export const AdminUsers = () => {
 
   return (
     <div className="space-y-6" data-testid="admin-users">
-      <h1 className="text-2xl font-bold">Users</h1>
+      <h1 className="text-2xl font-bold">{t('admin.users')}</h1>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-4">

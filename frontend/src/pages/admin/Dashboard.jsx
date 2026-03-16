@@ -3,6 +3,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { adminAPI } from '../../lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
@@ -21,6 +22,7 @@ const statusColors = {
 };
 
 export const AdminDashboard = () => {
+  const { t } = useTranslation();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -41,7 +43,7 @@ export const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
+        <h1 className="text-2xl font-bold">{t('admin.dashboard')}</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
             <Card key={i}>
@@ -57,7 +59,7 @@ export const AdminDashboard = () => {
 
   return (
     <div className="space-y-6" data-testid="admin-dashboard">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
+      <h1 className="text-2xl font-bold">{t('admin.dashboard')}</h1>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -65,7 +67,7 @@ export const AdminDashboard = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Total Revenue</p>
+                <p className="text-sm text-muted-foreground">{t('admin.totalRevenue')}</p>
                 <p className="text-2xl font-bold mt-1">
                   ${stats?.total_revenue?.toFixed(2) || '0.00'}
                 </p>
@@ -81,7 +83,7 @@ export const AdminDashboard = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Total Orders</p>
+                <p className="text-sm text-muted-foreground">{t('admin.totalOrders')}</p>
                 <p className="text-2xl font-bold mt-1">{stats?.total_orders || 0}</p>
               </div>
               <div className="h-12 w-12 bg-blue-100 rounded-xl flex items-center justify-center">
@@ -95,7 +97,7 @@ export const AdminDashboard = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Customers</p>
+                <p className="text-sm text-muted-foreground">{t('admin.customers')}</p>
                 <p className="text-2xl font-bold mt-1">{stats?.total_customers || 0}</p>
               </div>
               <div className="h-12 w-12 bg-purple-100 rounded-xl flex items-center justify-center">
@@ -109,7 +111,7 @@ export const AdminDashboard = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Products</p>
+                <p className="text-sm text-muted-foreground">{t('admin.products')}</p>
                 <p className="text-2xl font-bold mt-1">{stats?.total_products || 0}</p>
               </div>
               <div className="h-12 w-12 bg-orange-100 rounded-xl flex items-center justify-center">
@@ -127,9 +129,9 @@ export const AdminDashboard = () => {
             <div className="flex items-center gap-3">
               <AlertTriangle className="h-5 w-5 text-yellow-600" />
               <div>
-                <p className="font-medium">Pending Orders</p>
+                <p className="font-medium">{t('admin.pendingOrders')}</p>
                 <p className="text-sm text-muted-foreground">
-                  {stats?.pending_orders || 0} orders awaiting processing
+                  {t('admin.ordersAwaiting').replace('{{count}}', stats?.pending_orders || 0)}
                 </p>
               </div>
               <Link 
@@ -147,9 +149,9 @@ export const AdminDashboard = () => {
             <div className="flex items-center gap-3">
               <AlertTriangle className="h-5 w-5 text-red-600" />
               <div>
-                <p className="font-medium">Low Stock Alert</p>
+                <p className="font-medium">{t('admin.lowStockAlert')}</p>
                 <p className="text-sm text-muted-foreground">
-                  {stats?.low_stock_products || 0} products below threshold
+                  {t('admin.productsBelow').replace('{{count}}', stats?.low_stock_products || 0)}
                 </p>
               </div>
               <Link 
@@ -166,9 +168,9 @@ export const AdminDashboard = () => {
       {/* Recent Orders */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Recent Orders</CardTitle>
+          <CardTitle>{t('admin.recentOrders')}</CardTitle>
           <Link to="/admin/orders" className="text-sm text-primary hover:underline">
-            View All
+            {t('home.viewAll')}
           </Link>
         </CardHeader>
         <CardContent>
@@ -196,7 +198,7 @@ export const AdminDashboard = () => {
               ))}
             </div>
           ) : (
-            <p className="text-center text-muted-foreground py-8">No recent orders</p>
+            <p className="text-center text-muted-foreground py-8">{t('admin.noResults')}</p>
           )}
         </CardContent>
       </Card>

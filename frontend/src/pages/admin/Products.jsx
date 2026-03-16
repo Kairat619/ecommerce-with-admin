@@ -3,6 +3,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { adminAPI, categoriesAPI } from '../../lib/api';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
@@ -23,6 +24,7 @@ import { toast } from 'sonner';
 import { Plus, Search, Edit, Trash2, ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-react';
 
 export const AdminProducts = () => {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -166,10 +168,10 @@ export const AdminProducts = () => {
   return (
     <div className="space-y-6" data-testid="admin-products">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Products</h1>
+        <h1 className="text-2xl font-bold">{t('admin.products')}</h1>
         <Button onClick={openCreateDialog} data-testid="add-product-btn">
           <Plus className="h-4 w-4 mr-2" />
-          Add Product
+          {t('admin.addProduct')}
         </Button>
       </div>
 
@@ -178,7 +180,7 @@ export const AdminProducts = () => {
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search products..."
+            placeholder={t('admin.search')}
             value={filters.q}
             onChange={(e) => setFilters({ ...filters, q: e.target.value, page: 1 })}
             className="pl-10"
@@ -189,7 +191,7 @@ export const AdminProducts = () => {
           onValueChange={(value) => setFilters({ ...filters, category_id: value, page: 1 })}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="All Categories" />
+            <SelectValue placeholder={t('products.allCategories')} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Categories</SelectItem>
@@ -218,8 +220,8 @@ export const AdminProducts = () => {
               <TableHead>SKU</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Stock</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="w-[100px]">Actions</TableHead>
+              <TableHead>{t('admin.status')}</TableHead>
+              <TableHead className="w-[100px]">{t('admin.actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -391,7 +393,7 @@ export const AdminProducts = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="category">Category</Label>
+                <Label htmlFor="category">{t('products.category')}</Label>
                 <Select
                   value={formData.category_id}
                   onValueChange={(value) => setFormData({ ...formData, category_id: value })}
