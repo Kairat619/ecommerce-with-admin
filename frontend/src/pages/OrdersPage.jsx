@@ -86,10 +86,11 @@ export const OrdersPage = () => {
     const fetchOrders = async () => {
       try {
         const response = await ordersAPI.list(page, 10);
-        setOrders(response.data.items);
-        setTotalPages(response.data.total_pages);
+        setOrders(Array.isArray(response.data?.items) ? response.data.items : []);
+        setTotalPages(response.data?.total_pages || 1);
       } catch (error) {
         console.error('Failed to load orders:', error);
+        setOrders([]);
       } finally {
         setLoading(false);
       }

@@ -204,9 +204,10 @@ export const ProductsPage = () => {
     const fetchCategories = async () => {
       try {
         const response = await categoriesAPI.list(true);
-        setCategories(response.data);
+        setCategories(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error('Failed to load categories:', error);
+        setCategories([]);
       }
     };
     fetchCategories();
@@ -230,10 +231,11 @@ export const ProductsPage = () => {
         if (filters.isFeatured) params.is_featured = true;
 
         const response = await productsAPI.list(params);
-        setProducts(response.data.items);
-        setTotalPages(response.data.total_pages);
+        setProducts(Array.isArray(response.data?.items) ? response.data.items : []);
+        setTotalPages(response.data?.total_pages || 1);
       } catch (error) {
         console.error('Failed to load products:', error);
+        setProducts([]);
       } finally {
         setLoading(false);
       }

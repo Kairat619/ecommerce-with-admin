@@ -191,11 +191,14 @@ export const HomePage = () => {
           productsAPI.getNewArrivals(8),
           categoriesAPI.list(true),
         ]);
-        setFeaturedProducts(featuredRes.data);
-        setNewArrivals(newArrivalsRes.data);
-        setCategories(categoriesRes.data.slice(0, 4));
+        setFeaturedProducts(Array.isArray(featuredRes.data) ? featuredRes.data : []);
+        setNewArrivals(Array.isArray(newArrivalsRes.data) ? newArrivalsRes.data : []);
+        setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data.slice(0, 4) : []);
       } catch (error) {
         console.error('Failed to load home data:', error);
+        setFeaturedProducts([]);
+        setNewArrivals([]);
+        setCategories([]);
       } finally {
         setLoading(false);
       }
