@@ -126,6 +126,38 @@ async def register(
     )
 
 
+@router.post("/setup-admin")
+async def setup_admin(
+    response: Response,
+    db: Session = Depends(get_db)
+):
+    """Create or update admin user. Remove in production!"""
+    user = get_user_by_email(db, settings.ADMIN_EMAIL)
+    
+    if user:
+        user.password_hash = hash_password(settings.ADMIN_PASSWORD)
+        user.role = "admin"
+        user.is_active = True
+        db.commit()
+        return {"message": "Admin updated", "email": settings.ADMIN_EMAIL}
+    else:
+        admin = User(
+            id=str(uuid.uuid4()),
+            email=settings.ADMIN_EMAIL,
+            password_hash=hash_password(settings.ADMIN_PASSWORD),
+            name="Admin",
+            picture=None,
+            phone=None,
+            role="admin",
+            is_active=True,
+            is_deleted=False,
+            auth_provider="local"
+        )
+        db.add(admin)
+        db.commit()
+        return {"message": "Admin created", "email": settings.ADMIN_EMAIL}
+
+
 @router.post("/login", response_model=TokenResponse)
 async def login(
     data: UserLogin,
