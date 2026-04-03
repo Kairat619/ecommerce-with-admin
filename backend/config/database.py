@@ -39,8 +39,12 @@ def get_db():
 
 def init_db():
     """Initialize database tables."""
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.info("Initializing database...")
     from models.models import User, Category, Product, CartItem, Order, OrderItem, Address, RefreshToken
     Base.metadata.create_all(bind=engine)
+    logger.info("Database tables created")
     migrate_schema()
 
 
@@ -48,11 +52,14 @@ def migrate_schema():
     """Add missing columns to existing tables."""
     import logging
     logger = logging.getLogger(__name__)
+    logger.info(f"Starting schema migration, DATABASE_URL contains postgresql: {'postgresql' in DATABASE_URL}")
     
     if "postgresql" in DATABASE_URL:
         db = SessionLocal()
         try:
             from sqlalchemy import text
+            
+            logger.info("Running PostgreSQL migrations...")
             
             tables_to_migrate = {
                 'products': [
@@ -88,17 +95,23 @@ def migrate_schema():
                         WHERE table_name = '{table_name}'
                     """))
                     existing_cols = {row[0] for row in result.fetchall()}
+                    logger.info(f"Table {table_name} has columns: {existing_cols}")
                     
                     for col_name, col_def in columns:
                         if col_name not in existing_cols:
                             db.execute(text(f"ALTER TABLE {table_name} ADD COLUMN {col_name} {col_def}"))
                             logger.info(f"Added column {col_name} to {table_name}")
+                        else:
+                            logger.info(f"Column {col_name} already exists in {table_name}")
                 except Exception as e:
                     logger.warning(f"Could not migrate table {table_name}: {e}")
             
             db.commit()
+            logger.info("Schema migration completed")
         except Exception as e:
             logger.error(f"Migration error: {e}")
             db.rollback()
         finally:
             db.close()
+    else:
+        logger.info("Not PostgreSQL, skipping migrations")
