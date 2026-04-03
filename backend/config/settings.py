@@ -18,7 +18,15 @@ class Settings:
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
     
     # CORS
-    CORS_ORIGINS: list = os.environ.get('CORS_ORIGINS', '*').split(',')
+    CORS_ORIGINS: list = (
+        os.environ.get('CORS_ORIGINS', '*').split(',') 
+        if os.environ.get('CORS_ORIGINS') 
+        else [
+            "http://localhost:5173", 
+            "https://builda-ecommerce1.netlify.app",
+            "https://*.netlify.app",
+        ]
+    )
     
     # Admin seed
     ADMIN_EMAIL: str = os.environ.get('ADMIN_EMAIL', 'admin@shop.com')
