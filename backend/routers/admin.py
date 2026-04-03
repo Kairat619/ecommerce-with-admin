@@ -347,7 +347,14 @@ async def create_product(
             slug = f"{base_slug}-{counter}"
             counter += 1
         
-        sku = data.sku or f"SKU-{uuid.uuid4().hex[:8].upper()}"
+        if data.sku:
+            existing_sku = db.query(Product).filter(Product.sku == data.sku).first()
+            if existing_sku:
+                sku = f"{data.sku}-{uuid.uuid4().hex[:4].upper()}"
+            else:
+                sku = data.sku
+        else:
+            sku = f"SKU-{uuid.uuid4().hex[:8].upper()}"
         
         product = Product(
             id=str(uuid.uuid4()),
