@@ -6,6 +6,7 @@ import { Button } from '../components/ui/button';
 import { productsAPI, categoriesAPI } from '../lib/api';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
+import { useProductUpdates } from '../context/ProductUpdateContext';
 import { cn } from '../lib/utils';
 
 const ProductCard = ({ product, index }) => {
@@ -143,6 +144,7 @@ const CategoryCard = ({ category, index }) => {
 
 export const HomePage = () => {
   const { t } = useTranslation();
+  const { updateTrigger } = useProductUpdates();
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [newArrivals, setNewArrivals] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -206,7 +208,7 @@ export const HomePage = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [updateTrigger]);
 
   useEffect(() => {
     const refreshData = () => fetchData();

@@ -22,9 +22,11 @@ import {
 } from '../../components/ui/table';
 import { toast } from 'sonner';
 import { Plus, Search, Edit, Trash2, ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-react';
+import { useProductUpdates } from '../../context/ProductUpdateContext';
 
 export const AdminProducts = () => {
   const { t } = useTranslation();
+  const { notifyProductUpdate } = useProductUpdates();
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -140,9 +142,11 @@ export const AdminProducts = () => {
       if (editingProduct) {
         await adminAPI.updateProduct(editingProduct.id, data);
         toast.success('Product updated');
+        notifyProductUpdate();
       } else {
         await adminAPI.createProduct(data);
         toast.success('Product created');
+        notifyProductUpdate();
       }
 
       setDialogOpen(false);
@@ -158,6 +162,7 @@ export const AdminProducts = () => {
     try {
       await adminAPI.deleteProduct(deleteConfirm.id);
       toast.success('Product deleted');
+      notifyProductUpdate();
       setDeleteConfirm(null);
       setFilters({ ...filters });
     } catch (error) {

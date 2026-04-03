@@ -4,6 +4,7 @@ import { Toaster } from './components/ui/sonner';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
+import { ProductUpdateProvider } from './context/ProductUpdateContext';
 import './i18n';
 
 // Layouts
@@ -138,12 +139,14 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <CartProvider>
-          <WishlistProvider>
-            <AppRouter />
-            <Toaster position="top-right" richColors />
-          </WishlistProvider>
-        </CartProvider>
+        <ProductUpdateProvider>
+          <CartProvider>
+            <WishlistProvider>
+              <AppRouter />
+              <Toaster position="top-right" richColors />
+            </WishlistProvider>
+          </CartProvider>
+        </ProductUpdateProvider>
       </AuthProvider>
     </BrowserRouter>
   );
