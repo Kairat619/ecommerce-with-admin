@@ -50,54 +50,55 @@ def migrate_schema():
     logger = logging.getLogger(__name__)
     
     if "postgresql" in DATABASE_URL:
+        db = SessionLocal()
         try:
             from sqlalchemy import text
-            db = SessionLocal()
-            try:
-                tables_to_migrate = {
-                    'products': [
-                        ('images', 'JSON DEFAULT \'[]\''),
-                        ('thumbnail', 'VARCHAR(500)'),
-                        ('short_description', 'VARCHAR(500)'),
-                        ('cost_price', 'FLOAT'),
-                        ('barcode', 'VARCHAR(100)'),
-                        ('low_stock_threshold', 'INTEGER DEFAULT 10'),
-                        ('track_inventory', 'BOOLEAN DEFAULT TRUE'),
-                        ('allow_backorder', 'BOOLEAN DEFAULT FALSE'),
-                        ('weight', 'FLOAT'),
-                        ('dimensions', 'JSON'),
-                        ('attributes', 'JSON DEFAULT \'{}\''),
-                        ('is_deleted', 'BOOLEAN DEFAULT FALSE'),
-                    ],
-                    'users': [
-                        ('auth_provider', 'VARCHAR(50) DEFAULT \'local\''),
-                        ('is_deleted', 'BOOLEAN DEFAULT FALSE'),
-                    ],
-                    'orders': [
-                        ('is_deleted', 'BOOLEAN DEFAULT FALSE'),
-                    ],
-                    'categories': [
-                        ('is_deleted', 'BOOLEAN DEFAULT FALSE'),
-                    ],
-                }
-                
-                for table_name, columns in tables_to_migrate.items():
-                    try:
-                        result = db.execute(text(f"""
-                            SELECT column_name FROM information_schema.columns 
-                            WHERE table_name = '{table_name}'
-                        """))
-                        existing_cols = {row[0] for row in result.fetchall()}
-                        
-                        for col_name, col_def in columns:
-                            if col_name not in existing_cols:
-                                db.execute(text(f"ALTER TABLE {table_name} ADD COLUMN IF NOT EXISTS {col_name} {col_def}"))
-                                logger.info(f"Added column {col_name} to {table_name}")
-                    except Exception as e:
-                        logger.warning(f"Could not migrate table {table_name}: {e}")
-                
-                db.commit()
-            finally:
-                db.close()
+            
+            tables_to_migrate = {
+                'products': [
+                    ('images', 'JSON DEFAULT \'[]\''),
+                    ('thumbnail', 'VARCHAR(500)'),
+                    ('short_description', 'VARCHAR(500)'),
+                    ('cost_price', 'FLOAT'),
+                    ('barcode', 'VARCHAR(100)'),
+                    ('low_stock_threshold', 'INTEGER DEFAULT 10'),
+                    ('track_inventory', 'BOOLEAN DEFAULT TRUE'),
+                    ('allow_backorder', 'BOOLEAN DEFAULT FALSE'),
+                    ('weight', 'FLOAT'),
+                    ('dimensions', 'JSON'),
+                    ('attributes', 'JSON DEFAULT \'{}\''),
+                    ('is_deleted', 'BOOLEAN DEFAULT FALSE'),
+                ],
+                'users': [
+                    ('auth_provider', 'VARCHAR(50) DEFAULT \'local\''),
+                    ('is_deleted', 'BOOLEAN DEFAULT FALSE'),
+                ],
+                'orders': [
+                    ('is_deleted', 'BOOLEAN DEFAULT FALSE'),
+                ],
+                'categories': [
+                    ('is_deleted', 'BOOLEAN DEFAULT FALSE'),
+                ],
+            }
+            
+            for table_name, columns in tables_to_migrate.items():
+                try:
+                    result = db.execute(text(f"""
+                        SELECT column_name FROM information_schema.columns 
+                        WHERE table_name = '{table_name}'
+                    """))
+                    existing_cols = {row[0] for row in result.fetchall()}
+                    
+                    for col_name, col_def in columns:
+                        if col_name not in existing_cols:
+                            db.execute(text(f"ALTER TABLE {table_name} ADD COLUMN {col_name} {col_def}"))
+                            logger.info(f"Added column {col_name} to {table_name}")
+                except Exception as e:
+                    logger.warning(f"Could not migrate table {table_name}: {e}")
+            
+            db.commit()
         except Exception as e:
             logger.error(f"Migration error: {e}")
+            db.rollback()
+        finally:
+            db.close()

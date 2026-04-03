@@ -284,3 +284,11 @@ async def root():
 async def health_check():
     """Health check endpoint."""
     return {"status": "healthy"}
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    """Log all unhandled exceptions."""
+    import traceback
+    logger.error(f"Unhandled exception: {exc}\n{traceback.format_exc()}")
+    return {"detail": str(exc) if hasattr(exc, 'detail') else "Internal server error"}
