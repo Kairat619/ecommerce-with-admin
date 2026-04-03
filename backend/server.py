@@ -21,6 +21,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+logger.info(f"CORS Origins configured: {settings.CORS_ORIGINS}")
+
 
 async def seed_admin():
     """Seed admin user if not exists, or update password if changed."""
@@ -284,6 +286,22 @@ async def root():
 async def health_check():
     """Health check endpoint."""
     return {"status": "healthy"}
+
+
+@app.get("/api/debug/db")
+async def debug_db():
+    """Debug endpoint to check database."""
+    try:
+        from sqlalchemy import text
+        db = SessionLocal()
+        try:
+            result = db.execute(text("SELECT column_name FROM information_schema.columns WHERE table_name = 'products'"))
+            columns = [row[0] for row in result.fetchall()]
+            return {"status": "ok", "product_columns": columns}
+        finally:
+            db.close()
+    except Exception as e:
+        return {"status": "error", "detail": str(e)}
 
 
 @app.exception_handler(Exception)
