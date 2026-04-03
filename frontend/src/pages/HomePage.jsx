@@ -209,13 +209,19 @@ export const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        fetchData();
-      }
+    const refreshData = () => fetchData();
+    
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) refreshData();
+    });
+    window.addEventListener('focus', refreshData);
+    window.addEventListener('popstate', refreshData);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', refreshData);
+      window.removeEventListener('focus', refreshData);
+      window.removeEventListener('popstate', refreshData);
     };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
   useEffect(() => {
