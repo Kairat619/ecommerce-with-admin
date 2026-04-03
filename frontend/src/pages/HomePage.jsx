@@ -183,27 +183,39 @@ export const HomePage = () => {
     { icon: "💬", title: t('footer.support'), desc: t('footer.helpCenter') },
   ];
 
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [featuredRes, newArrivalsRes, categoriesRes] = await Promise.all([
+        productsAPI.getFeatured(8),
+        productsAPI.getNewArrivals(8),
+        categoriesAPI.list(true),
+      ]);
+      setFeaturedProducts(Array.isArray(featuredRes.data) ? featuredRes.data : []);
+      setNewArrivals(Array.isArray(newArrivalsRes.data) ? newArrivalsRes.data : []);
+      setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data.slice(0, 4) : []);
+    } catch (error) {
+      console.error('Failed to load home data:', error);
+      setFeaturedProducts([]);
+      setNewArrivals([]);
+      setCategories([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [featuredRes, newArrivalsRes, categoriesRes] = await Promise.all([
-          productsAPI.getFeatured(8),
-          productsAPI.getNewArrivals(8),
-          categoriesAPI.list(true),
-        ]);
-        setFeaturedProducts(Array.isArray(featuredRes.data) ? featuredRes.data : []);
-        setNewArrivals(Array.isArray(newArrivalsRes.data) ? newArrivalsRes.data : []);
-        setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data.slice(0, 4) : []);
-      } catch (error) {
-        console.error('Failed to load home data:', error);
-        setFeaturedProducts([]);
-        setNewArrivals([]);
-        setCategories([]);
-      } finally {
-        setLoading(false);
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        fetchData();
       }
     };
-    fetchData();
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
   useEffect(() => {
