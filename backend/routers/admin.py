@@ -332,48 +332,57 @@ async def create_product(
     db: Session = Depends(get_db)
 ):
     """Create a new product."""
-    await require_admin(db, request)
+    import logging
+    logger = logging.getLogger(__name__)
     
-    base_slug = data.name.lower().replace(" ", "-")
-    slug = base_slug
-    counter = 1
-    
-    while db.query(Product).filter(Product.slug == slug).first():
-        slug = f"{base_slug}-{counter}"
-        counter += 1
-    
-    sku = data.sku or f"SKU-{uuid.uuid4().hex[:8].upper()}"
-    
-    product = Product(
-        id=str(uuid.uuid4()),
-        name=data.name,
-        slug=slug,
-        description=data.description,
-        short_description=data.short_description,
-        price=data.price,
-        compare_at_price=data.compare_at_price,
-        cost_price=data.cost_price,
-        sku=sku,
-        barcode=data.barcode,
-        stock_quantity=data.stock_quantity,
-        low_stock_threshold=data.low_stock_threshold,
-        track_inventory=data.track_inventory,
-        allow_backorder=data.allow_backorder,
-        images=data.images or [],
-        thumbnail=data.thumbnail or (data.images[0] if data.images else None),
-        meta_title=data.meta_title,
-        meta_description=data.meta_description,
-        is_active=True,
-        is_featured=data.is_featured,
-        is_deleted=False,
-        weight=data.weight,
-        dimensions=data.dimensions,
-        attributes=data.attributes or {},
-        category_id=data.category_id
-    )
-    db.add(product)
-    db.commit()
-    db.refresh(product)
+    try:
+        user = await require_admin(db, request)
+        logger.info(f"Admin {user.email} creating product: {data.name}")
+        
+        base_slug = data.name.lower().replace(" ", "-")
+        slug = base_slug
+        counter = 1
+        
+        while db.query(Product).filter(Product.slug == slug).first():
+            slug = f"{base_slug}-{counter}"
+            counter += 1
+        
+        sku = data.sku or f"SKU-{uuid.uuid4().hex[:8].upper()}"
+        
+        product = Product(
+            id=str(uuid.uuid4()),
+            name=data.name,
+            slug=slug,
+            description=data.description,
+            short_description=data.short_description,
+            price=data.price,
+            compare_at_price=data.compare_at_price,
+            cost_price=data.cost_price,
+            sku=sku,
+            barcode=data.barcode,
+            stock_quantity=data.stock_quantity,
+            low_stock_threshold=data.low_stock_threshold,
+            track_inventory=data.track_inventory,
+            allow_backorder=data.allow_backorder,
+            images=data.images or [],
+            thumbnail=data.thumbnail or (data.images[0] if data.images else None),
+            meta_title=data.meta_title,
+            meta_description=data.meta_description,
+            is_active=True,
+            is_featured=data.is_featured,
+            is_deleted=False,
+            weight=data.weight,
+            dimensions=data.dimensions,
+            attributes=data.attributes or {},
+            category_id=data.category_id
+        )
+        db.add(product)
+        db.commit()
+        db.refresh(product)
+        logger.info(f"Product created successfully: {product.id}")
+    except Exception as e:
+        logger.error(f"Error creating product: {e}")
+        raise
     
     return {
         "id": product.id,
