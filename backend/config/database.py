@@ -41,3 +41,50 @@ def init_db():
     """Initialize database tables."""
     from models.models import User, Category, Product, CartItem, Order, OrderItem, Address, RefreshToken
     Base.metadata.create_all(bind=engine)
+    migrate_schema()
+
+
+def migrate_schema():
+    """Add missing columns to existing tables."""
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    if "postgresql" in DATABASE_URL:
+        try:
+            from sqlalchemy import text
+            db = SessionLocal()
+            try:
+                existing_columns = db.execute(text("""
+                    SELECT column_name FROM information_schema.columns 
+                    WHERE table_name = 'products'
+                """)).fetchall()
+                existing_cols = {row[0] for row in existing_columns}
+                
+                migrations = {
+                    'products': [
+                        ('images', 'JSON DEFAULT \'[]\''),
+                        ('thumbnail', 'VARCHAR(500)'),
+                        ('short_description', 'VARCHAR(500)'),
+                        ('cost_price', 'FLOAT'),
+                        ('barcode', 'VARCHAR(100)'),
+                        ('low_stock_threshold', 'INTEGER DEFAULT 10'),
+                        ('track_inventory', 'BOOLEAN DEFAULT TRUE'),
+                        ('allow_backorder', 'BOOLEAN DEFAULT FALSE'),
+                        ('weight', 'FLOAT'),
+                        ('dimensions', 'JSON'),
+                        ('attributes', 'JSON DEFAULT \'{}\''),
+                        ('is_deleted', 'BOOLEAN DEFAULT FALSE'),
+                    ]
+                }
+                
+                for table, columns in migrations.items():
+                    for col_name, col_def in columns:
+                        if col_name not in existing_cols:
+                            db.execute(text(f"ALTER TABLE {table} ADD COLUMN {col_name} {col_def}"))
+                            logger.info(f"Added column {col_name} to {table}")
+                
+                db.commit()
+            finally:
+                db.close()
+        except Exception as e:
+            logger.error(f"Migration error: {e}")
