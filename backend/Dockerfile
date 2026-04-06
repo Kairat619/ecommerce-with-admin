@@ -1,8 +1,11 @@
 # Build a fresh deployment
-FROM python:3.13-slim
+FROM python:3.12-slim
 
 RUN apt-get update && apt-get install -y \
     libpq-dev \
+    postgresql-client \
+    libglib2.0-0 \
+    libgomp1 \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
