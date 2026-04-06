@@ -310,3 +310,11 @@ async def global_exception_handler(request, exc):
     import traceback
     logger.error(f"Unhandled exception: {exc}\n{traceback.format_exc()}")
     return {"detail": str(exc) if hasattr(exc, 'detail') else "Internal server error"}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    import os
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("server:app", host="0.0.0.0", port=port)
+
