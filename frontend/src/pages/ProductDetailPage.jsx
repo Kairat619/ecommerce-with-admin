@@ -42,6 +42,7 @@ const ProductCard = ({ product }) => {
 
 export const ProductDetailPage = () => {
   const { slug } = useParams();
+  const { t } = useTranslation();
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [product, setProduct] = useState(null);
@@ -65,7 +66,7 @@ export const ProductDetailPage = () => {
         setRelatedProducts(relatedResponse.data.filter(p => p.id !== response.data.id).slice(0, 4));
       } catch (error) {
         console.error('Failed to load product:', error);
-        toast.error('Product not found');
+        toast.error(t('product.notFound'));
       } finally {
         setLoading(false);
       }
@@ -76,16 +77,16 @@ export const ProductDetailPage = () => {
 
   const handleAddToCart = () => {
     addToCart(product.id, quantity);
-    toast.success(`Added ${quantity} item(s) to cart`);
+    toast.success(t('product.added'));
   };
 
   const handleWishlist = () => {
     if (inWishlist) {
       removeFromWishlist(product.id);
-      toast.info('Removed from wishlist');
+      toast.info(t('product.removedFromWishlist'));
     } else {
       addToWishlist(product);
-      toast.success('Added to wishlist');
+      toast.success(t('product.addedToWishlist'));
     }
   };
 
@@ -106,13 +107,13 @@ export const ProductDetailPage = () => {
     );
   }
 
-  if (!product) {
+    if (!product) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900">Product not found</h2>
+          <h2 className="text-2xl font-bold text-gray-900">{t('product.notFound')}</h2>
           <Link to="/products">
-            <Button className="mt-4 rounded-full">Back to Products</Button>
+            <Button className="mt-4 rounded-full">{t('product.backToProducts')}</Button>
           </Link>
         </div>
       </div>
@@ -130,9 +131,9 @@ export const ProductDetailPage = () => {
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <nav className="flex items-center gap-2 text-sm text-gray-500">
-            <Link to="/" className="hover:text-gray-900">Home</Link>
+            <Link to="/" className="hover:text-gray-900">{t('breadcrumb.home')}</Link>
             <ChevronLeft className="h-4 w-4 rotate-90" />
-            <Link to="/products" className="hover:text-gray-900">Products</Link>
+            <Link to="/products" className="hover:text-gray-900">{t('breadcrumb.products')}</Link>
             <ChevronLeft className="h-4 w-4 rotate-90" />
             {product.category && (
               <>
@@ -159,7 +160,7 @@ export const ProductDetailPage = () => {
               />
               {discount > 0 && (
                 <span className="absolute top-4 left-4 bg-red-500 text-white text-sm font-medium px-4 py-1.5 rounded-full">
-                  -{discount}% OFF
+                  {t('product.off', { percent: discount })}
                 </span>
               )}
             </div>
@@ -210,7 +211,7 @@ export const ProductDetailPage = () => {
                     />
                   ))}
                 </div>
-                <span className="text-sm text-gray-500">4.2 (128 reviews)</span>
+                <span className="text-sm text-gray-500">4.2 ({t('product.reviewsCount', { count: 128 })})</span>
               </div>
             </div>
 
@@ -222,7 +223,7 @@ export const ProductDetailPage = () => {
                   <span className="text-xl text-gray-400 line-through">
                     ${product.compare_at_price.toFixed(2)}
                   </span>
-                  <span className="text-sm font-medium text-green-600">Save ${(product.compare_at_price - product.price).toFixed(2)}</span>
+                  <span className="text-sm font-medium text-green-600">{t('product.save', { amount: (product.compare_at_price - product.price).toFixed(2) })}</span>
                 </>
               )}
             </div>
@@ -232,12 +233,11 @@ export const ProductDetailPage = () => {
               {product.stock_quantity > 0 ? (
                 <>
                   <Check className="h-5 w-5 text-green-500" />
-                  <span className="text-green-600 font-medium">In Stock</span>
-                  <span className="text-gray-400">({product.stock_quantity} available)</span>
+                  <span className="text-green-600 font-medium">{t('product.inStock', { count: product.stock_quantity })}</span>
                 </>
               ) : (
                 <>
-                  <span className="text-red-500 font-medium">Out of Stock</span>
+                  <span className="text-red-500 font-medium">{t('product.outOfStock')}</span>
                 </>
               )}
             </div>
@@ -266,7 +266,7 @@ export const ProductDetailPage = () => {
                 className="flex-1 h-14 rounded-full text-base"
               >
                 <ShoppingBag className="h-5 w-5 mr-2" />
-                Add to Cart
+                {t('product.addToCart')}
               </Button>
               
               <Button 
@@ -287,7 +287,7 @@ export const ProductDetailPage = () => {
                 className="h-14 w-14 rounded-full shrink-0"
                 onClick={() => {
                   navigator.clipboard.writeText(window.location.href);
-                  toast.success('Link copied to clipboard');
+                  toast.success(t('product.linkCopied'));
                 }}
               >
                 <Share2 className="h-5 w-5" />
@@ -298,18 +298,18 @@ export const ProductDetailPage = () => {
             <div className="grid grid-cols-3 gap-4 pt-6 border-t border-gray-200">
               <div className="text-center">
                 <Truck className="h-6 w-6 mx-auto text-gray-400 mb-2" />
-                <p className="text-xs font-medium">Free Shipping</p>
-                <p className="text-xs text-gray-400">On orders $50+</p>
+                <p className="text-xs font-medium">{t('product.freeShipping')}</p>
+                <p className="text-xs text-gray-400">{t('product.freeShippingDesc')}</p>
               </div>
               <div className="text-center">
                 <RefreshCw className="h-6 w-6 mx-auto text-gray-400 mb-2" />
-                <p className="text-xs font-medium">Easy Returns</p>
-                <p className="text-xs text-gray-400">30-day policy</p>
+                <p className="text-xs font-medium">{t('product.easyReturnsText')}</p>
+                <p className="text-xs text-gray-400">{t('product.easyReturnsDesc')}</p>
               </div>
               <div className="text-center">
                 <Shield className="h-6 w-6 mx-auto text-gray-400 mb-2" />
-                <p className="text-xs font-medium">Secure Payment</p>
-                <p className="text-xs text-gray-400">100% protected</p>
+                <p className="text-xs font-medium">{t('product.securePaymentText')}</p>
+                <p className="text-xs text-gray-400">{t('product.securePaymentDesc')}</p>
               </div>
             </div>
 
@@ -325,7 +325,7 @@ export const ProductDetailPage = () => {
                       : "border-transparent text-gray-500 hover:text-gray-700"
                   )}
                 >
-                  Description
+                  {t('product.description')}
                 </button>
                 <button
                   onClick={() => setActiveTab('details')}
@@ -336,7 +336,7 @@ export const ProductDetailPage = () => {
                       : "border-transparent text-gray-500 hover:text-gray-700"
                   )}
                 >
-                  Details
+                  {t('product.details')}
                 </button>
                 <button
                   onClick={() => setActiveTab('reviews')}
@@ -347,7 +347,7 @@ export const ProductDetailPage = () => {
                       : "border-transparent text-gray-500 hover:text-gray-700"
                   )}
                 >
-                  Reviews (128)
+                  {t('product.reviews')} (128)
                 </button>
               </div>
 
@@ -365,25 +365,25 @@ export const ProductDetailPage = () => {
                   <div className="space-y-3">
                     {product.sku && (
                       <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-gray-500">SKU</span>
+                        <span className="text-gray-500">{t('product.sku')}</span>
                         <span className="font-medium">{product.sku}</span>
                       </div>
                     )}
                     {product.category && (
                       <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-gray-500">Category</span>
+                        <span className="text-gray-500">{t('product.category')}</span>
                         <span className="font-medium">{product.category.name}</span>
                       </div>
                     )}
                     {product.weight && (
                       <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-gray-500">Weight</span>
+                        <span className="text-gray-500">{t('product.weight')}</span>
                         <span className="font-medium">{product.weight}</span>
                       </div>
                     )}
                     {product.dimensions && (
                       <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-gray-500">Dimensions</span>
+                        <span className="text-gray-500">{t('product.dimensions')}</span>
                         <span className="font-medium">{product.dimensions}</span>
                       </div>
                     )}
@@ -401,7 +401,7 @@ export const ProductDetailPage = () => {
                             <Star key={i} className={cn("h-4 w-4", i < 4 ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200")} />
                           ))}
                         </div>
-                        <p className="text-sm text-gray-500">128 reviews</p>
+                        <p className="text-sm text-gray-500">{t('product.reviewsCount', { count: 128 })}</p>
                       </div>
                       <div className="flex-1 space-y-2">
                         {[5, 4, 3, 2, 1].map(stars => (
@@ -461,7 +461,7 @@ export const ProductDetailPage = () => {
         {/* Related Products */}
         {relatedProducts.length > 0 && (
           <div className="mt-16 md:mt-24">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8">You May Also Like</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-8">{t('product.youMayLike')}</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {relatedProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
