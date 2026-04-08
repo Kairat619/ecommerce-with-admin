@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, Star, Heart, ShoppingBag, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { productsAPI, categoriesAPI } from '../lib/api';
+import { productsAPI, categoriesAPI, adminAPI } from '../lib/api';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useProductUpdates } from '../context/ProductUpdateContext';
@@ -150,8 +150,9 @@ export const HomePage = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [siteSettings, setSiteSettings] = useState({ logo_url: null, hero_slides: [] });
 
-  const heroSlides = [
+  const defaultHeroSlides = [
     {
       title: t('home.heroTitle') + " " + t('home.heroTitleHighlight'),
       subtitle: t('home.newCollection'),
@@ -178,6 +179,17 @@ export const HomePage = () => {
     },
   ];
 
+  const heroSlides = siteSettings.hero_slides?.length > 0
+    ? siteSettings.hero_slides.map(slide => ({
+        title: slide.title || t('home.heroTitle'),
+        subtitle: slide.subtitle || '',
+        description: '',
+        cta: slide.link ? 'Shop Now' : '',
+        ctaLink: slide.link || '/products',
+        image: slide.image_url,
+      }))
+    : defaultHeroSlides;
+
   const benefits = [
     { icon: "🚚", title: t('home.freeShipping'), desc: t('home.freeShippingDesc') },
     { icon: "↩️", title: t('home.easyReturns'), desc: t('home.easyReturnsDesc') },
@@ -188,14 +200,18 @@ export const HomePage = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [featuredRes, newArrivalsRes, categoriesRes] = await Promise.all([
+      const [featuredRes, newArrivalsRes, categoriesRes, settingsRes] = await Promise.all([
         productsAPI.getFeatured(8),
         productsAPI.getNewArrivals(8),
         categoriesAPI.list(true),
+        adminAPI.getSiteSettings().catch(() => ({ data: { logo_url: null, hero_slides: [] } })),
       ]);
       setFeaturedProducts(Array.isArray(featuredRes.data) ? featuredRes.data : []);
       setNewArrivals(Array.isArray(newArrivalsRes.data) ? newArrivalsRes.data : []);
       setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data.slice(0, 4) : []);
+      if (settingsRes?.data) {
+        setSiteSettings(settingsRes.data);
+      }
     } catch (error) {
       console.error('Failed to load home data:', error);
       setFeaturedProducts([]);
