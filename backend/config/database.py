@@ -42,7 +42,7 @@ def init_db():
     import logging
     logger = logging.getLogger(__name__)
     logger.info("Initializing database...")
-    from models.models import User, Category, Product, CartItem, Order, OrderItem, Address, RefreshToken
+    from models.models import User, Category, Product, CartItem, Order, OrderItem, Address, RefreshToken, SiteSettings
     Base.metadata.create_all(bind=engine)
     logger.info("Database tables created")
     migrate_schema()
@@ -105,6 +105,27 @@ def migrate_schema():
                             logger.info(f"Column {col_name} already exists in {table_name}")
                 except Exception as e:
                     logger.warning(f"Could not migrate table {table_name}: {e}")
+            
+            try:
+                result = db.execute(text("""
+                    SELECT table_name FROM information_schema.tables 
+                    WHERE table_name = 'site_settings'
+                """))
+                if not result.fetchone():
+                    db.execute(text("""
+                        CREATE TABLE site_settings (
+                            id VARCHAR(36) PRIMARY KEY,
+                            logo_url VARCHAR(500),
+                            hero_slides JSON DEFAULT '[]',
+                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                        )
+                    """))
+                    logger.info("Created site_settings table")
+                else:
+                    logger.info("Table site_settings already exists")
+            except Exception as e:
+                logger.warning(f"Could not migrate site_settings table: {e}")
             
             db.commit()
             logger.info("Schema migration completed")
