@@ -1,5 +1,5 @@
 """User reviews router."""
-from fastapi import APIRouter, HTTPException, Depends, Request
+from fastapi import APIRouter, HTTPException, Depends, Request, Query
 from sqlalchemy.orm import Session
 from typing import Optional
 
