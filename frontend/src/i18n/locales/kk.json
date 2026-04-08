@@ -86,7 +86,7 @@
     "relatedProducts": "Ұқсас өнімдер",
     "notFound": "Өнім табылмады",
     "backToProducts": "Өнімдерге оралу",
-    "save": "Құтқару ${{amount}}",
+    "save": "Үнемдеу ${{amount}}",
     "available": "{{count}} қол жетімді",
     "freeShipping": "Тегін жеткізу",
     "freeShippingDesc": "$50-ден асатын тапсырыстар үшін",
