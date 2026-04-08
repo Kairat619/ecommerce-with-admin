@@ -187,6 +187,8 @@ class ProductResponse(ProductBase):
     id: str
     slug: str
     is_active: bool
+    average_rating: float = 0.0
+    review_count: int = 0
     created_at: datetime
     updated_at: datetime
 
@@ -204,6 +206,8 @@ class ProductListResponse(BaseModel):
     stock_quantity: int
     is_active: bool
     is_featured: bool
+    average_rating: float = 0.0
+    review_count: int = 0
     category_id: Optional[str] = None
 
 
@@ -365,3 +369,41 @@ class SiteSettingsResponse(BaseModel):
     hero_slides: List[Dict[str, Any]] = []
     created_at: datetime
     updated_at: datetime
+
+
+# =============== REVIEW SCHEMAS ===============
+class ReviewCreate(BaseModel):
+    rating: int = Field(ge=1, le=5, description="Rating from 1 to 5 stars")
+    comment: Optional[str] = Field(None, max_length=500, description="Review comment (max 500 characters)")
+
+
+class ReviewUpdate(BaseModel):
+    rating: Optional[int] = Field(None, ge=1, le=5)
+    comment: Optional[str] = Field(None, max_length=500)
+
+
+class ReviewResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
+    id: str
+    product_id: str
+    user_id: str
+    rating: int
+    comment: Optional[str]
+    is_approved: bool
+    created_at: datetime
+    updated_at: datetime
+
+
+class ReviewWithUser(ReviewResponse):
+    user_name: str
+    user_picture: Optional[str] = None
+    is_verified_purchase: bool = False
+
+
+class ProductReviewsResponse(BaseModel):
+    reviews: List[ReviewWithUser]
+    average_rating: float
+    review_count: int
+    total_pages: int
+    current_page: int

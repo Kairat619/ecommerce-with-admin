@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import {
   LayoutDashboard, Package, Tag, ShoppingBag, Users,
-  LogOut, Menu, X, ChevronRight, Store, Settings
+  LogOut, Menu, X, ChevronRight, Store, Settings, Star
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
@@ -25,6 +25,7 @@ export const AdminLayout = ({ children }) => {
     { icon: Package, label: t('admin.products'), path: '/admin/products' },
     { icon: Tag, label: t('admin.categories'), path: '/admin/categories' },
     { icon: ShoppingBag, label: t('admin.orders'), path: '/admin/orders' },
+    { icon: Star, label: t('admin.reviewsManagement'), path: '/admin/reviews' },
     { icon: Users, label: t('admin.users'), path: '/admin/users' },
     { icon: Settings, label: t('admin.settings'), path: '/admin/settings' },
   ];

@@ -101,7 +101,18 @@
     "reviewsCount": "{{count}} reviews",
     "addedToWishlist": "Added to wishlist",
     "removedFromWishlist": "Removed from wishlist",
-    "linkCopied": "Link copied to clipboard"
+    "linkCopied": "Link copied to clipboard",
+    "writeReview": "Write a review",
+    "yourRating": "Your rating",
+    "yourReview": "Your review (max 500 characters)",
+    "submitReview": "Submit Review",
+    "reviewSubmitted": "Review submitted! It will appear after moderation.",
+    "editReview": "Edit Review",
+    "deleteReview": "Delete Review",
+    "verifiedPurchase": "Verified Purchase",
+    "alreadyReviewed": "You have already reviewed this product",
+    "characterCount": "{{count}}/500",
+    "submitting": "Submitting..."
   },
   "breadcrumb": {
     "home": "Home",
@@ -296,7 +307,21 @@
     "slideTitle": "Title (optional)",
     "slideSubtitle": "Subtitle (optional)",
     "slideLinkUrl": "Link URL (optional)",
-    "saveChanges": "Save Changes"
+    "saveChanges": "Save Changes",
+    "reviews": "Reviews",
+    "pendingReview": "Pending Review",
+    "approvedReview": "Approved Review",
+    "rejectedReview": "Rejected Review",
+    "allReviews": "All Reviews",
+    "approve": "Approve",
+    "reject": "Reject",
+    "commentLabel": "Comment",
+    "noReviewsYet": "No reviews yet",
+    "productLabel": "Product",
+    "userLabelAdmin": "User",
+    "ratingLabel": "Rating",
+    "reviewActions": "Actions",
+    "reviewsManagement": "Reviews Management"
   },
   "footer": {
     "description": "Premium products for modern living. Quality you can trust.",

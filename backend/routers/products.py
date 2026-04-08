@@ -2,14 +2,15 @@
 from typing import Optional, List
 from fastapi import APIRouter, HTTPException, Query, Depends
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 
 from config.database import get_db
 from schemas.schemas import (
     ProductResponse, ProductListResponse, ProductWithCategory,
-    PaginatedResponse, CategoryResponse
+    PaginatedResponse, CategoryResponse, ReviewCreate, ReviewWithUser,
+    ProductReviewsResponse
 )
-from models.models import Product, Category
+from models.models import Product, Category, ProductReview, User
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
@@ -42,6 +43,8 @@ def product_to_dict(product: Product, include_category: bool = False):
         "dimensions": product.dimensions,
         "attributes": product.attributes or {},
         "category_id": product.category_id,
+        "average_rating": product.average_rating or 0.0,
+        "review_count": product.review_count or 0,
         "created_at": product.created_at.isoformat() if product.created_at else None,
         "updated_at": product.updated_at.isoformat() if product.updated_at else None
     }
@@ -58,6 +61,35 @@ def product_to_dict(product: Product, include_category: bool = False):
             "updated_at": product.category.updated_at.isoformat() if product.category.updated_at else None
         }
     return data
+
+
+def update_product_rating(product_id: str, db: Session):
+    """Update product's average rating and review count based on approved reviews."""
+    result = db.query(
+        func.avg(ProductReview.rating).label('avg_rating'),
+        func.count(ProductReview.id).label('count')
+    ).filter(
+        ProductReview.product_id == product_id,
+        ProductReview.is_approved == True,
+        ProductReview.is_deleted == False
+    ).first()
+    
+    product = db.query(Product).filter(Product.id == product_id).first()
+    if product:
+        product.average_rating = round(result.avg_rating, 1) if result.avg_rating else 0.0
+        product.review_count = result.count if result.count else 0
+        db.commit()
+
+
+def check_verified_purchase(user_id: str, product_id: str, db: Session) -> bool:
+    """Check if user has ordered this product."""
+    from models.models import Order, OrderItem
+    result = db.query(OrderItem).join(Order).filter(
+        Order.user_id == user_id,
+        OrderItem.product_id == product_id,
+        Order.status.in_(['delivered', 'shipped', 'confirmed', 'processing'])
+    ).first()
+    return result is not None
 
 
 @router.get("", response_model=PaginatedResponse)
@@ -184,3 +216,57 @@ async def get_product_by_slug(slug: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Product not found")
     
     return product_to_dict(product, include_category=True)
+
+
+@router.get("/{product_id}/reviews", response_model=ProductReviewsResponse)
+async def get_product_reviews(
+    product_id: str,
+    page: int = Query(1, ge=1),
+    page_size: int = Query(10, ge=1, le=50),
+    db: Session = Depends(get_db)
+):
+    """Get approved reviews for a product."""
+    # Verify product exists
+    product = db.query(Product).filter(Product.id == product_id).first()
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    # Get approved reviews
+    query = db.query(ProductReview).filter(
+        ProductReview.product_id == product_id,
+        ProductReview.is_approved == True,
+        ProductReview.is_deleted == False
+    ).order_by(ProductReview.created_at.desc())
+    
+    total = query.count()
+    total_pages = (total + page_size - 1) // page_size if total > 0 else 1
+    
+    skip = (page - 1) * page_size
+    reviews = query.offset(skip).limit(page_size).all()
+    
+    review_list = []
+    for review in reviews:
+        user = db.query(User).filter(User.id == review.user_id).first()
+        is_verified = check_verified_purchase(review.user_id, product_id, db)
+        
+        review_list.append({
+            "id": review.id,
+            "product_id": review.product_id,
+            "user_id": review.user_id,
+            "rating": review.rating,
+            "comment": review.comment,
+            "is_approved": review.is_approved,
+            "created_at": review.created_at.isoformat() if review.created_at else None,
+            "updated_at": review.updated_at.isoformat() if review.updated_at else None,
+            "user_name": user.name if user else "Unknown",
+            "user_picture": user.picture if user else None,
+            "is_verified_purchase": is_verified
+        })
+    
+    return ProductReviewsResponse(
+        reviews=review_list,
+        average_rating=product.average_rating or 0.0,
+        review_count=product.review_count or 0,
+        total_pages=total_pages,
+        current_page=page
+    )

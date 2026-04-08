@@ -56,6 +56,7 @@ class User(Base):
     orders = relationship("Order", back_populates="user", lazy="selectin")
     cart_items = relationship("CartItem", back_populates="user", lazy="selectin")
     refresh_tokens = relationship("RefreshToken", back_populates="user", lazy="selectin")
+    reviews = relationship("ProductReview", back_populates="user", lazy="selectin")
     
     __table_args__ = (
         Index('ix_users_email_active', 'email', 'is_active'),
@@ -152,6 +153,10 @@ class Product(Base):
     is_featured = Column(Boolean, default=False)
     is_deleted = Column(Boolean, default=False)
     
+    # Rating
+    average_rating = Column(Float, default=0.0)
+    review_count = Column(Integer, default=0)
+    
     # Attributes
     weight = Column(Float, nullable=True)
     dimensions = Column(JSON, nullable=True)  # {length, width, height}
@@ -166,6 +171,7 @@ class Product(Base):
     category = relationship("Category", back_populates="products")
     order_items = relationship("OrderItem", back_populates="product", lazy="selectin")
     cart_items = relationship("CartItem", back_populates="product", lazy="selectin")
+    reviews = relationship("ProductReview", back_populates="product", lazy="selectin", cascade="all, delete-orphan")
     
     __table_args__ = (
         Index('ix_products_category_active', 'category_id', 'is_active'),
@@ -270,3 +276,29 @@ class SiteSettings(Base):
     
     created_at = Column(DateTime(timezone=True), default=utc_now)
     updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now)
+
+
+class ProductReview(Base):
+    __tablename__ = "product_reviews"
+    
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    product_id = Column(String(36), ForeignKey("products.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(String(36), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    
+    rating = Column(Integer, nullable=False)  # 1-5 stars
+    comment = Column(String(500), nullable=True)  # Max 500 characters
+    
+    # Moderation
+    is_approved = Column(Boolean, default=False)
+    is_deleted = Column(Boolean, default=False)
+    
+    created_at = Column(DateTime(timezone=True), default=utc_now)
+    updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now)
+    
+    product = relationship("Product", back_populates="reviews")
+    user = relationship("User", back_populates="reviews")
+    
+    __table_args__ = (
+        Index('ix_reviews_product_approved', 'product_id', 'is_approved'),
+        Index('ix_reviews_user_product', 'user_id', 'product_id', unique=True),
+    )

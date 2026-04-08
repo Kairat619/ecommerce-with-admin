@@ -101,7 +101,18 @@
     "reviewsCount": "{{count}} пікір",
     "addedToWishlist": "Таңдаулыларға қосылды",
     "removedFromWishlist": "Таңдаулылардан алынды",
-    "linkCopied": "Сілтеме буферге көшірілді"
+    "linkCopied": "Сілтеме буферге көшірілді",
+    "writeReview": "Пікір жазу",
+    "yourRating": "Сіздің бағаңыз",
+    "yourReview": "Сіздің пікіріңіз (максимум 500 таңба)",
+    "submitReview": "Пікір жіберу",
+    "reviewSubmitted": "Пікір жіберілді! Ол модерациядан кейін пайда болады.",
+    "editReview": "Пікірді өңдеу",
+    "deleteReview": "Пікірді жою",
+    "verifiedPurchase": "Сатып алу расталды",
+    "alreadyReviewed": "Сіз бұл өнімге қазірдің өзінде пікір жаздыңыз",
+    "characterCount": "{{count}}/500",
+    "submitting": "Жіберілуде..."
   },
   "breadcrumb": {
     "home": "Басты бет",
@@ -296,7 +307,21 @@
     "slideTitle": "Тақырып (міндетті емес)",
     "slideSubtitle": "Қосымша тақырып (міндетті емес)",
     "slideLinkUrl": "Сілтеме URL (міндетті емес)",
-    "saveChanges": "Өзгерістерді сақтау"
+    "saveChanges": "Өзгерістерді сақтау",
+    "reviews": "Пікірлер",
+    "pendingReview": "Күтудегі пікір",
+    "approvedReview": "Бекітілген пікір",
+    "rejectedReview": "Қабылданбаған пікір",
+    "allReviews": "Барлық пікірлер",
+    "approve": "Бекіту",
+    "reject": "Қабылдамау",
+    "commentLabel": "Пікір",
+    "noReviewsYet": "Пікірлер әлі жоқ",
+    "productLabel": "Өнім",
+    "userLabelAdmin": "Пайдаланушы",
+    "ratingLabel": "Баға",
+    "reviewActions": "Әрекеттер",
+    "reviewsManagement": "Пікірлерді басқару"
   },
   "footer": {
     "description": "Заманауи өмірге арналған премиум өнімдер. Сенуге болатын сапа.",

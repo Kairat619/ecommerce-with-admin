@@ -101,7 +101,18 @@
     "reviewsCount": "{{count}} отзывов",
     "addedToWishlist": "Добавлено в избранное",
     "removedFromWishlist": "Удалено из избранного",
-    "linkCopied": "Ссылка скопирована в буфер обмена"
+    "linkCopied": "Ссылка скопирована в буфер обмена",
+    "writeReview": "Написать отзыв",
+    "yourRating": "Ваша оценка",
+    "yourReview": "Ваш отзыв (максимум 500 символов)",
+    "submitReview": "Отправить отзыв",
+    "reviewSubmitted": "Отзыв отправлен! Он появится после модерации.",
+    "editReview": "Редактировать отзыв",
+    "deleteReview": "Удалить отзыв",
+    "verifiedPurchase": "Проверка покупки",
+    "alreadyReviewed": "Вы уже оставили отзыв на этот товар",
+    "characterCount": "{{count}}/500",
+    "submitting": "Отправка..."
   },
   "breadcrumb": {
     "home": "Главная",
@@ -296,7 +307,21 @@
     "slideTitle": "Заголовок (необязательно)",
     "slideSubtitle": "Подзаголовок (необязательно)",
     "slideLinkUrl": "URL ссылки (необязательно)",
-    "saveChanges": "Сохранить изменения"
+    "saveChanges": "Сохранить изменения",
+    "reviews": "Отзывы",
+    "pendingReview": "Ожидающий отзыв",
+    "approvedReview": "Одобренный отзыв",
+    "rejectedReview": "Отклоненный отзыв",
+    "allReviews": "Все отзывы",
+    "approve": "Одобрить",
+    "reject": "Отклонить",
+    "commentLabel": "Комментарий",
+    "noReviewsYet": "Отзывов пока нет",
+    "productLabel": "Товар",
+    "userLabelAdmin": "Пользователь",
+    "ratingLabel": "Оценка",
+    "reviewActions": "Действия",
+    "reviewsManagement": "Управление отзывами"
   },
   "footer": {
     "description": "Премиальные товары для современной жизни. Качество, которому можно доверять.",

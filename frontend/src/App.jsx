@@ -28,6 +28,7 @@ import { AdminCategories } from './pages/admin/Categories';
 import { AdminOrders } from './pages/admin/Orders';
 import { AdminUsers } from './pages/admin/Users';
 import { AdminSettings } from './pages/admin/Settings';
+import { AdminReviews } from './pages/admin/Reviews';
 
 // Protected Route Component
 const ProtectedRoute = ({ children, adminOnly = false }) => {
@@ -121,6 +122,11 @@ function AppRouter() {
       <Route path="/admin/users" element={
         <ProtectedRoute adminOnly>
           <AdminLayout><AdminUsers /></AdminLayout>
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/reviews" element={
+        <ProtectedRoute adminOnly>
+          <AdminLayout><AdminReviews /></AdminLayout>
         </ProtectedRoute>
       } />
       <Route path="/admin/settings" element={

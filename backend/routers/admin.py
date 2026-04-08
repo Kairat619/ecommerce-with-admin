@@ -13,7 +13,7 @@ from schemas.schemas import (
     AdminUserUpdate, UserResponse, DashboardStats, PaginatedResponse,
     UserRole, OrderStatus, SiteSettingsUpdate, SiteSettingsResponse
 )
-from models.models import Category, Product, Order, OrderItem, User, CartItem, SiteSettings
+from models.models import Category, Product, Order, OrderItem, User, CartItem, SiteSettings, ProductReview
 from routers.auth import get_current_user_from_request
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
@@ -898,3 +898,169 @@ async def update_site_settings(
         "created_at": settings.created_at.isoformat() if settings.created_at else None,
         "updated_at": settings.updated_at.isoformat() if settings.updated_at else None
     }
+
+
+# =============== REVIEWS MANAGEMENT ===============
+@router.get("/reviews", response_model=PaginatedResponse)
+async def get_all_reviews(
+    request: Request,
+    status: Optional[str] = Query(None, description="Filter by status: pending, approved, rejected"),
+    product_id: Optional[str] = Query(None),
+    user_id: Optional[str] = Query(None),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
+    db: Session = Depends(get_db)
+):
+    """Get all reviews with optional filtering."""
+    await require_admin(db, request)
+    
+    query = db.query(ProductReview).filter(ProductReview.is_deleted == False)
+    
+    if status == "pending":
+        query = query.filter(ProductReview.is_approved == False)
+    elif status == "approved":
+        query = query.filter(ProductReview.is_approved == True)
+    elif status == "rejected":
+        query = query.filter(ProductReview.is_approved == False)
+    
+    if product_id:
+        query = query.filter(ProductReview.product_id == product_id)
+    
+    if user_id:
+        query = query.filter(ProductReview.user_id == user_id)
+    
+    total = query.count()
+    total_pages = (total + page_size - 1) // page_size if total > 0 else 1
+    
+    skip = (page - 1) * page_size
+    reviews = query.order_by(ProductReview.created_at.desc()).offset(skip).limit(page_size).all()
+    
+    review_list = []
+    for review in reviews:
+        user = db.query(User).filter(User.id == review.user_id).first()
+        product = db.query(Product).filter(Product.id == review.product_id).first()
+        
+        review_list.append({
+            "id": review.id,
+            "product_id": review.product_id,
+            "product_name": product.name if product else "Unknown",
+            "product_slug": product.slug if product else "",
+            "user_id": review.user_id,
+            "user_name": user.name if user else "Unknown",
+            "user_email": user.email if user else "",
+            "rating": review.rating,
+            "comment": review.comment,
+            "is_approved": review.is_approved,
+            "created_at": review.created_at.isoformat() if review.created_at else None,
+            "updated_at": review.updated_at.isoformat() if review.updated_at else None
+        })
+    
+    return PaginatedResponse(
+        items=review_list,
+        total=total,
+        page=page,
+        page_size=page_size,
+        total_pages=total_pages
+    )
+
+
+@router.get("/reviews/{review_id}")
+async def get_review(
+    review_id: str,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """Get a specific review by ID."""
+    await require_admin(db, request)
+    
+    review = db.query(ProductReview).filter(
+        ProductReview.id == review_id,
+        ProductReview.is_deleted == False
+    ).first()
+    
+    if not review:
+        raise HTTPException(status_code=404, detail="Review not found")
+    
+    user = db.query(User).filter(User.id == review.user_id).first()
+    product = db.query(Product).filter(Product.id == review.product_id).first()
+    is_verified = False
+    if user:
+        from routers.products import check_verified_purchase
+        is_verified = check_verified_purchase(user.id, review.product_id, db)
+    
+    return {
+        "id": review.id,
+        "product_id": review.product_id,
+        "product_name": product.name if product else "Unknown",
+        "product_slug": product.slug if product else "",
+        "user_id": review.user_id,
+        "user_name": user.name if user else "Unknown",
+        "user_email": user.email if user else "",
+        "user_picture": user.picture if user else None,
+        "rating": review.rating,
+        "comment": review.comment,
+        "is_approved": review.is_approved,
+        "is_verified_purchase": is_verified,
+        "created_at": review.created_at.isoformat() if review.created_at else None,
+        "updated_at": review.updated_at.isoformat() if review.updated_at else None
+    }
+
+
+@router.put("/reviews/{review_id}")
+async def update_review_status(
+    review_id: str,
+    is_approved: bool = Query(..., description="Set approval status"),
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """Approve or reject a review."""
+    await require_admin(db, request)
+    
+    review = db.query(ProductReview).filter(
+        ProductReview.id == review_id,
+        ProductReview.is_deleted == False
+    ).first()
+    
+    if not review:
+        raise HTTPException(status_code=404, detail="Review not found")
+    
+    review.is_approved = is_approved
+    db.commit()
+    db.refresh(review)
+    
+    from routers.products import update_product_rating
+    update_product_rating(review.product_id, db)
+    
+    return {
+        "id": review.id,
+        "is_approved": review.is_approved,
+        "message": "Review approved" if is_approved else "Review rejected"
+    }
+
+
+@router.delete("/reviews/{review_id}")
+async def delete_review(
+    review_id: str,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """Delete a review (admin can delete any review)."""
+    await require_admin(db, request)
+    
+    review = db.query(ProductReview).filter(
+        ProductReview.id == review_id,
+        ProductReview.is_deleted == False
+    ).first()
+    
+    if not review:
+        raise HTTPException(status_code=404, detail="Review not found")
+    
+    product_id = review.product_id
+    
+    review.is_deleted = True
+    db.commit()
+    
+    from routers.products import update_product_rating
+    update_product_rating(product_id, db)
+    
+    return {"message": "Review deleted successfully"}

@@ -11,7 +11,7 @@ from config.database import init_db, SessionLocal, engine
 from utils.security import hash_password
 from routers import (
     auth_router, categories_router, products_router,
-    cart_router, orders_router, admin_router
+    cart_router, orders_router, admin_router, user_reviews_router
 )
 
 # Configure logging
@@ -274,6 +274,7 @@ app.include_router(products_router, prefix="/api")
 app.include_router(cart_router, prefix="/api")
 app.include_router(orders_router, prefix="/api")
 app.include_router(admin_router, prefix="/api")
+app.include_router(user_reviews_router, prefix="/api")
 
 
 @app.get("/api")

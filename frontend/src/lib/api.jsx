@@ -70,6 +70,18 @@ export const productsAPI = {
   getNewArrivals: (limit = 8) => api.get('/products/new-arrivals', { params: { limit } }),
   getById: (id) => api.get(`/products/${id}`),
   getBySlug: (slug) => api.get(`/products/slug/${slug}`),
+  getReviews: (productId, page = 1, pageSize = 10) => 
+    api.get(`/products/${productId}/reviews`, { params: { page, page_size: pageSize } }),
+};
+
+// User Reviews API
+export const userReviewsAPI = {
+  getMyReviews: (productSlug, page = 1, pageSize = 10) => 
+    api.get('/users/me/reviews', { params: { product_slug: productSlug, page, page_size: pageSize } }),
+  createReview: (productSlug, data) => api.post(`/users/me/reviews?product_slug=${productSlug}`, data),
+  updateReview: (reviewId, data) => api.put(`/users/reviews/${reviewId}`, data),
+  deleteReview: (reviewId) => api.delete(`/users/reviews/${reviewId}`),
+  getReview: (reviewId) => api.get(`/users/reviews/${reviewId}`),
 };
 
 // Categories API
@@ -126,6 +138,12 @@ export const adminAPI = {
   // Site Settings
   getSiteSettings: () => api.get('/admin/site-settings'),
   updateSiteSettings: (data) => api.put('/admin/site-settings', data),
+  
+  // Reviews
+  listReviews: (params) => api.get('/admin/reviews', { params }),
+  getReview: (id) => api.get(`/admin/reviews/${id}`),
+  updateReviewStatus: (id, isApproved) => api.put(`/admin/reviews/${id}`, null, { params: { is_approved: isApproved } }),
+  deleteReview: (id) => api.delete(`/admin/reviews/${id}`),
 };
 
 export default api;
