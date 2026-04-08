@@ -1009,8 +1009,8 @@ async def get_review(
 @router.put("/reviews/{review_id}")
 async def update_review_status(
     review_id: str,
-    is_approved: bool = Query(..., description="Set approval status"),
     request: Request,
+    is_approved: bool = Query(..., description="Set approval status"),
     db: Session = Depends(get_db)
 ):
     """Approve or reject a review."""
