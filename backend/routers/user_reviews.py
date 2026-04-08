@@ -1,5 +1,5 @@
 """User reviews router."""
-from fastapi import APIRouter, HTTPException, Depends, Query
+from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 from typing import Optional
 
@@ -7,9 +7,17 @@ from config.database import get_db
 from schemas.schemas import ReviewCreate, ReviewUpdate, ReviewResponse, ReviewWithUser, ProductReviewsResponse
 from models.models import ProductReview, Product, User
 from routers.products import update_product_rating, check_verified_purchase
-from utils.security import get_current_user
+from routers.auth import get_current_user_from_request
 
 router = APIRouter(prefix="/users", tags=["User Reviews"])
+
+
+async def get_current_user(request: Request, db: Session = Depends(get_db)) -> Optional[User]:
+    """Dependency to get current user."""
+    user = await get_current_user_from_request(db, request)
+    if not user:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    return user
 
 
 @router.get("/me/reviews", response_model=ProductReviewsResponse)
