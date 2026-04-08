@@ -11,9 +11,9 @@ from schemas.schemas import (
     ProductCreate, ProductUpdate, ProductResponse, ProductListResponse,
     OrderResponse, OrderStatusUpdate,
     AdminUserUpdate, UserResponse, DashboardStats, PaginatedResponse,
-    UserRole, OrderStatus
+    UserRole, OrderStatus, SiteSettingsUpdate, SiteSettingsResponse
 )
-from models.models import Category, Product, Order, OrderItem, User, CartItem
+from models.models import Category, Product, Order, OrderItem, User, CartItem, SiteSettings
 from routers.auth import get_current_user_from_request
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
@@ -837,4 +837,64 @@ async def update_user_admin(
         "auth_provider": user.auth_provider,
         "created_at": user.created_at.isoformat() if user.created_at else None,
         "updated_at": user.updated_at.isoformat() if user.updated_at else None
+    }
+
+
+@router.get("/site-settings", response_model=SiteSettingsResponse)
+async def get_site_settings(request: Request, db: Session = Depends(get_db)):
+    """Get site settings (logo, hero slides)."""
+    await require_admin(db, request)
+    
+    settings = db.query(SiteSettings).first()
+    if not settings:
+        settings = SiteSettings(
+            id=str(uuid.uuid4()),
+            logo_url=None,
+            hero_slides=[]
+        )
+        db.add(settings)
+        db.commit()
+        db.refresh(settings)
+    
+    return {
+        "id": settings.id,
+        "logo_url": settings.logo_url,
+        "hero_slides": settings.hero_slides or [],
+        "created_at": settings.created_at.isoformat() if settings.created_at else None,
+        "updated_at": settings.updated_at.isoformat() if settings.updated_at else None
+    }
+
+
+@router.put("/site-settings", response_model=SiteSettingsResponse)
+async def update_site_settings(
+    data: SiteSettingsUpdate,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """Update site settings (logo, hero slides)."""
+    await require_admin(db, request)
+    
+    settings = db.query(SiteSettings).first()
+    if not settings:
+        settings = SiteSettings(
+            id=str(uuid.uuid4()),
+            logo_url=data.logo_url,
+            hero_slides=[slide.model_dump() for slide in data.hero_slides] if data.hero_slides else []
+        )
+        db.add(settings)
+    else:
+        if data.logo_url is not None:
+            settings.logo_url = data.logo_url
+        if data.hero_slides is not None:
+            settings.hero_slides = [slide.model_dump() for slide in data.hero_slides]
+    
+    db.commit()
+    db.refresh(settings)
+    
+    return {
+        "id": settings.id,
+        "logo_url": settings.logo_url,
+        "hero_slides": settings.hero_slides or [],
+        "created_at": settings.created_at.isoformat() if settings.created_at else None,
+        "updated_at": settings.updated_at.isoformat() if settings.updated_at else None
     }

@@ -337,3 +337,31 @@ class ProductSearchParams(BaseModel):
     sort_order: str = "desc"
     page: int = 1
     page_size: int = 20
+
+
+# =============== SITE SETTINGS SCHEMAS ===============
+class HeroSlide(BaseModel):
+    image_url: str
+    title: Optional[str] = None
+    subtitle: Optional[str] = None
+    link: Optional[str] = None
+
+
+class SiteSettingsBase(BaseModel):
+    logo_url: Optional[str] = None
+    hero_slides: List[HeroSlide] = []
+
+
+class SiteSettingsUpdate(BaseModel):
+    logo_url: Optional[str] = None
+    hero_slides: Optional[List[HeroSlide]] = None
+
+
+class SiteSettingsResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
+    id: str
+    logo_url: Optional[str] = None
+    hero_slides: List[Dict[str, Any]] = []
+    created_at: datetime
+    updated_at: datetime

@@ -4,19 +4,21 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
-import { authAPI } from '../../lib/api';
+import { adminAPI } from '../../lib/api';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
+import { Textarea } from '../../components/ui/textarea';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Plus, Trash2, Image as ImageIcon } from 'lucide-react';
 
 export const AdminSettings = () => {
   const { t } = useTranslation();
   const { user, checkAuth } = useAuth();
   const [profileLoading, setProfileLoading] = useState(false);
   const [passwordLoading, setPasswordLoading] = useState(false);
+  const [siteSettingsLoading, setSiteSettingsLoading] = useState(false);
   
   const [profileData, setProfileData] = useState({
     name: '',
@@ -29,8 +31,14 @@ export const AdminSettings = () => {
     confirm_password: '',
   });
   
+  const [siteSettings, setSiteSettings] = useState({
+    logo_url: '',
+    hero_slides: [],
+  });
+  
   const [profileError, setProfileError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [siteSettingsError, setSiteSettingsError] = useState('');
 
   useEffect(() => {
     if (user) {
@@ -39,7 +47,20 @@ export const AdminSettings = () => {
         email: user.email || '',
       });
     }
+    fetchSiteSettings();
   }, [user]);
+
+  const fetchSiteSettings = async () => {
+    try {
+      const response = await adminAPI.getSiteSettings();
+      setSiteSettings({
+        logo_url: response.data.logo_url || '',
+        hero_slides: response.data.hero_slides || [],
+      });
+    } catch (error) {
+      console.error('Failed to fetch site settings:', error);
+    }
+  };
 
   const handleProfileSubmit = async (e) => {
     e.preventDefault();
@@ -47,6 +68,7 @@ export const AdminSettings = () => {
     setProfileLoading(true);
 
     try {
+      const { authAPI } = await import('../../lib/api');
       await authAPI.updateMe({
         name: profileData.name,
         email: profileData.email,
@@ -83,6 +105,7 @@ export const AdminSettings = () => {
     setPasswordLoading(true);
 
     try {
+      const { authAPI } = await import('../../lib/api');
       await authAPI.changePassword({
         current_password: passwordData.current_password,
         new_password: passwordData.new_password,
@@ -100,6 +123,54 @@ export const AdminSettings = () => {
     } finally {
       setPasswordLoading(false);
     }
+  };
+
+  const handleSiteSettingsSubmit = async (e) => {
+    e.preventDefault();
+    setSiteSettingsError('');
+    setSiteSettingsLoading(true);
+
+    try {
+      const heroSlides = siteSettings.hero_slides.filter(slide => slide.image_url.trim() !== '');
+      await adminAPI.updateSiteSettings({
+        logo_url: siteSettings.logo_url,
+        hero_slides: heroSlides,
+      });
+      toast.success('Site settings updated successfully');
+    } catch (error) {
+      const message = error.response?.data?.detail || 'Failed to update site settings';
+      setSiteSettingsError(message);
+      toast.error(message);
+    } finally {
+      setSiteSettingsLoading(false);
+    }
+  };
+
+  const addHeroSlide = () => {
+    setSiteSettings({
+      ...siteSettings,
+      hero_slides: [
+        ...siteSettings.hero_slides,
+        { image_url: '', title: '', subtitle: '', link: '' }
+      ]
+    });
+  };
+
+  const updateHeroSlide = (index, field, value) => {
+    const newSlides = [...siteSettings.hero_slides];
+    newSlides[index][field] = value;
+    setSiteSettings({
+      ...siteSettings,
+      hero_slides: newSlides
+    });
+  };
+
+  const removeHeroSlide = (index) => {
+    const newSlides = siteSettings.hero_slides.filter((_, i) => i !== index);
+    setSiteSettings({
+      ...siteSettings,
+      hero_slides: newSlides
+    });
   };
 
   return (
@@ -203,6 +274,139 @@ export const AdminSettings = () => {
             <Button type="submit" disabled={passwordLoading}>
               {passwordLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Change Password
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Site Settings</CardTitle>
+          <CardDescription>Update your site logo and homepage hero slides</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSiteSettingsSubmit} className="space-y-4">
+            {siteSettingsError && (
+              <div className="text-sm text-red-500 bg-red-50 p-3 rounded-md">
+                {siteSettingsError}
+              </div>
+            )}
+            
+            <div className="space-y-2">
+              <Label htmlFor="logo_url">Logo URL</Label>
+              <Input
+                id="logo_url"
+                type="url"
+                placeholder="https://example.com/logo.png"
+                value={siteSettings.logo_url}
+                onChange={(e) => setSiteSettings({ ...siteSettings, logo_url: e.target.value })}
+              />
+              {siteSettings.logo_url && (
+                <div className="mt-2">
+                  <img 
+                    src={siteSettings.logo_url} 
+                    alt="Logo preview" 
+                    className="h-12 max-w-[200px] object-contain border rounded-md p-2 bg-white"
+                    onError={(e) => e.target.style.display = 'none'}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label>Hero Slides</Label>
+                <Button type="button" variant="outline" size="sm" onClick={addHeroSlide}>
+                  <Plus className="h-4 w-4 mr-1" /> Add Slide
+                </Button>
+              </div>
+              
+              {siteSettings.hero_slides.length === 0 ? (
+                <div className="text-sm text-muted-foreground border rounded-md p-8 text-center">
+                  <ImageIcon className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  No hero slides yet. Click "Add Slide" to create one.
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {siteSettings.hero_slides.map((slide, index) => (
+                    <div key={index} className="border rounded-lg p-4 space-y-3 bg-muted/30">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Slide {index + 1}</span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeHeroSlide(index)}
+                          className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor={`slide_image_${index}`}>Image URL</Label>
+                        <Input
+                          id={`slide_image_${index}`}
+                          type="url"
+                          placeholder="https://example.com/slide.jpg"
+                          value={slide.image_url}
+                          onChange={(e) => updateHeroSlide(index, 'image_url', e.target.value)}
+                        />
+                        {slide.image_url && (
+                          <div className="mt-2">
+                            <img 
+                              src={slide.image_url} 
+                              alt={`Slide ${index + 1} preview`}
+                              className="h-24 object-cover rounded-md"
+                              onError={(e) => e.target.style.display = 'none'}
+                            />
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-2">
+                          <Label htmlFor={`slide_title_${index}`}>Title (optional)</Label>
+                          <Input
+                            id={`slide_title_${index}`}
+                            type="text"
+                            placeholder="Slide title"
+                            value={slide.title}
+                            onChange={(e) => updateHeroSlide(index, 'title', e.target.value)}
+                          />
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <Label htmlFor={`slide_subtitle_${index}`}>Subtitle (optional)</Label>
+                          <Input
+                            id={`slide_subtitle_${index}`}
+                            type="text"
+                            placeholder="Slide subtitle"
+                            value={slide.subtitle}
+                            onChange={(e) => updateHeroSlide(index, 'subtitle', e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor={`slide_link_${index}`}>Link URL (optional)</Label>
+                        <Input
+                          id={`slide_link_${index}`}
+                          type="url"
+                          placeholder="https://example.com/promo"
+                          value={slide.link}
+                          onChange={(e) => updateHeroSlide(index, 'link', e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            <Button type="submit" disabled={siteSettingsLoading}>
+              {siteSettingsLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Save Site Settings
             </Button>
           </form>
         </CardContent>

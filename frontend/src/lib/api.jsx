@@ -122,6 +122,10 @@ export const adminAPI = {
   // Users
   listUsers: (params) => api.get('/admin/users', { params }),
   updateUser: (id, data) => api.put(`/admin/users/${id}`, data),
+  
+  // Site Settings
+  getSiteSettings: () => api.get('/admin/site-settings'),
+  updateSiteSettings: (data) => api.put('/admin/site-settings', data),
 };
 
 export default api;

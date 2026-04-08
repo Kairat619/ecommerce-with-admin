@@ -259,3 +259,14 @@ class OrderItem(Base):
     
     order = relationship("Order", back_populates="items")
     product = relationship("Product", back_populates="order_items")
+
+
+class SiteSettings(Base):
+    __tablename__ = "site_settings"
+    
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    logo_url = Column(String(500), nullable=True)
+    hero_slides = Column(JSON, default=list)
+    
+    created_at = Column(DateTime(timezone=True), default=utc_now)
+    updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now)
