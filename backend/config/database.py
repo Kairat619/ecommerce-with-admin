@@ -75,6 +75,8 @@ def migrate_schema():
                     ('dimensions', 'JSON'),
                     ('attributes', 'JSON DEFAULT \'{}\''),
                     ('is_deleted', 'BOOLEAN DEFAULT FALSE'),
+                    ('average_rating', 'FLOAT DEFAULT 0'),
+                    ('review_count', 'INTEGER DEFAULT 0'),
                 ],
                 'users': [
                     ('auth_provider', 'VARCHAR(50) DEFAULT \'local\''),
@@ -126,6 +128,38 @@ def migrate_schema():
                     logger.info("Table site_settings already exists")
             except Exception as e:
                 logger.warning(f"Could not migrate site_settings table: {e}")
+            
+            # Create product_reviews table if it doesn't exist
+            try:
+                result = db.execute(text("""
+                    SELECT table_name FROM information_schema.tables 
+                    WHERE table_name = 'product_reviews'
+                """))
+                if not result.fetchone():
+                    db.execute(text("""
+                        CREATE TABLE product_reviews (
+                            id VARCHAR(36) PRIMARY KEY,
+                            product_id VARCHAR(36) NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+                            user_id VARCHAR(36) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                            rating INTEGER NOT NULL,
+                            comment VARCHAR(500),
+                            is_approved BOOLEAN DEFAULT FALSE,
+                            is_deleted BOOLEAN DEFAULT FALSE,
+                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                        )
+                    """))
+                    db.execute(text("""
+                        CREATE INDEX ix_reviews_product_approved ON product_reviews(product_id, is_approved)
+                    """))
+                    db.execute(text("""
+                        CREATE UNIQUE INDEX ix_reviews_user_product ON product_reviews(user_id, product_id)
+                    """))
+                    logger.info("Created product_reviews table")
+                else:
+                    logger.info("Table product_reviews already exists")
+            except Exception as e:
+                logger.warning(f"Could not migrate product_reviews table: {e}")
             
             db.commit()
             logger.info("Schema migration completed")
