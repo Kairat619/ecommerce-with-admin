@@ -182,8 +182,8 @@ export const AdminSettings = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Profile Information</CardTitle>
-          <CardDescription>Update your account details</CardDescription>
+          <CardTitle>{t('admin.profileInfo')}</CardTitle>
+          <CardDescription>{t('admin.updateAccountDetails')}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleProfileSubmit} className="space-y-4">
@@ -194,7 +194,7 @@ export const AdminSettings = () => {
             )}
             
             <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">{t('admin.nameLabelUser')}</Label>
               <Input
                 id="name"
                 type="text"
@@ -205,7 +205,7 @@ export const AdminSettings = () => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('admin.emailLabel')}</Label>
               <Input
                 id="email"
                 type="email"
@@ -217,7 +217,7 @@ export const AdminSettings = () => {
             
             <Button type="submit" disabled={profileLoading}>
               {profileLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Save Changes
+              {t('admin.saveChanges')}
             </Button>
           </form>
         </CardContent>
@@ -225,8 +225,8 @@ export const AdminSettings = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Change Password</CardTitle>
-          <CardDescription>Update your password</CardDescription>
+          <CardTitle>{t('admin.changePasswordTitle')}</CardTitle>
+          <CardDescription>{t('admin.updatePassword')}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
@@ -237,7 +237,7 @@ export const AdminSettings = () => {
             )}
             
             <div className="space-y-2">
-              <Label htmlFor="current_password">Current Password</Label>
+              <Label htmlFor="current_password">{t('admin.currentPassword')}</Label>
               <Input
                 id="current_password"
                 type="password"
@@ -248,7 +248,7 @@ export const AdminSettings = () => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="new_password">New Password</Label>
+              <Label htmlFor="new_password">{t('admin.newPassword')}</Label>
               <Input
                 id="new_password"
                 type="password"
@@ -260,7 +260,7 @@ export const AdminSettings = () => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="confirm_password">Confirm New Password</Label>
+              <Label htmlFor="confirm_password">{t('admin.confirmNewPassword')}</Label>
               <Input
                 id="confirm_password"
                 type="password"
@@ -273,7 +273,7 @@ export const AdminSettings = () => {
             
             <Button type="submit" disabled={passwordLoading}>
               {passwordLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Change Password
+              {t('admin.changePasswordTitle')}
             </Button>
           </form>
         </CardContent>
@@ -281,8 +281,8 @@ export const AdminSettings = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Site Settings</CardTitle>
-          <CardDescription>Update your site logo and homepage hero slides</CardDescription>
+          <CardTitle>{t('admin.siteSettingsTitle')}</CardTitle>
+          <CardDescription>{t('admin.updateSiteLogo')}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSiteSettingsSubmit} className="space-y-4">
@@ -293,7 +293,7 @@ export const AdminSettings = () => {
             )}
             
             <div className="space-y-2">
-              <Label htmlFor="logo_url">Logo URL</Label>
+              <Label htmlFor="logo_url">{t('admin.logoUrl')}</Label>
               <Input
                 id="logo_url"
                 type="url"
@@ -315,16 +315,16 @@ export const AdminSettings = () => {
 
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <Label>Hero Slides</Label>
+                <Label>{t('admin.heroSlides')}</Label>
                 <Button type="button" variant="outline" size="sm" onClick={addHeroSlide}>
-                  <Plus className="h-4 w-4 mr-1" /> Add Slide
+                  <Plus className="h-4 w-4 mr-1" /> {t('admin.addProduct')}
                 </Button>
               </div>
               
               {siteSettings.hero_slides.length === 0 ? (
                 <div className="text-sm text-muted-foreground border rounded-md p-8 text-center">
                   <ImageIcon className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                  No hero slides yet. Click "Add Slide" to create one.
+                  {t('admin.noResults')}
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -344,7 +344,7 @@ export const AdminSettings = () => {
                       </div>
                       
                       <div className="space-y-2">
-                        <Label htmlFor={`slide_image_${index}`}>Image URL</Label>
+                        <Label htmlFor={`slide_image_${index}`}>{t('admin.slideImageUrl')}</Label>
                         <Input
                           id={`slide_image_${index}`}
                           type="url"
@@ -366,7 +366,7 @@ export const AdminSettings = () => {
                       
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-2">
-                          <Label htmlFor={`slide_title_${index}`}>Title (optional)</Label>
+                          <Label htmlFor={`slide_title_${index}`}>{t('admin.slideTitle')}</Label>
                           <Input
                             id={`slide_title_${index}`}
                             type="text"
@@ -377,7 +377,7 @@ export const AdminSettings = () => {
                         </div>
                         
                         <div className="space-y-2">
-                          <Label htmlFor={`slide_subtitle_${index}`}>Subtitle (optional)</Label>
+                          <Label htmlFor={`slide_subtitle_${index}`}>{t('admin.slideSubtitle')}</Label>
                           <Input
                             id={`slide_subtitle_${index}`}
                             type="text"
@@ -389,7 +389,7 @@ export const AdminSettings = () => {
                       </div>
                       
                       <div className="space-y-2">
-                        <Label htmlFor={`slide_link_${index}`}>Link URL (optional)</Label>
+                        <Label htmlFor={`slide_link_${index}`}>{t('admin.slideLinkUrl')}</Label>
                         <Input
                           id={`slide_link_${index}`}
                           type="url"
@@ -406,7 +406,7 @@ export const AdminSettings = () => {
             
             <Button type="submit" disabled={siteSettingsLoading}>
               {siteSettingsLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Save Site Settings
+              {t('admin.saveChanges')}
             </Button>
           </form>
         </CardContent>

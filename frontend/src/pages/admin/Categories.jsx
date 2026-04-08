@@ -134,12 +134,12 @@ export const AdminCategories = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[80px]">Image</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Slug</TableHead>
-              <TableHead>Order</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="w-[100px]">Actions</TableHead>
+              <TableHead className="w-[80px]">{t('admin.imageLabel')}</TableHead>
+              <TableHead>{t('admin.categoryName')}</TableHead>
+              <TableHead>{t('admin.categorySlug')}</TableHead>
+              <TableHead>{t('admin.categoryOrder')}</TableHead>
+              <TableHead>{t('admin.categoryStatus')}</TableHead>
+              <TableHead className="w-[100px]">{t('admin.categoryActions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -154,7 +154,7 @@ export const AdminCategories = () => {
             ) : categories.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                  No categories found
+                  {t('admin.noResults')}
                 </TableCell>
               </TableRow>
             ) : (
@@ -218,7 +218,7 @@ export const AdminCategories = () => {
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="name">Name *</Label>
+              <Label htmlFor="name">{t('admin.nameRequired')}</Label>
               <Input
                 id="name"
                 value={formData.name}
@@ -227,7 +227,7 @@ export const AdminCategories = () => {
               />
             </div>
             <div>
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t('admin.descriptionLabelCategory')}</Label>
               <Textarea
                 id="description"
                 rows={3}
@@ -236,7 +236,7 @@ export const AdminCategories = () => {
               />
             </div>
             <div>
-              <Label htmlFor="image_url">Image URL</Label>
+              <Label htmlFor="image_url">{t('admin.categoryImageUrl')}</Label>
               <Input
                 id="image_url"
                 type="url"
@@ -246,7 +246,7 @@ export const AdminCategories = () => {
               />
             </div>
             <div>
-              <Label htmlFor="sort_order">Sort Order</Label>
+              <Label htmlFor="sort_order">{t('admin.categorySortOrder')}</Label>
               <Input
                 id="sort_order"
                 type="number"
@@ -257,7 +257,7 @@ export const AdminCategories = () => {
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
-                Cancel
+                {t('admin.cancel')}
               </Button>
               <Button type="submit">
                 {editingCategory ? t('admin.update') : t('admin.create')}
@@ -271,12 +271,12 @@ export const AdminCategories = () => {
       <Dialog open={!!deleteConfirm} onOpenChange={() => setDeleteConfirm(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t('admin.deleteCategory')}</DialogTitle>
+            <DialogTitle>{t('admin.deleteCategoryTitle')}</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete "{deleteConfirm?.name}"? This action cannot be undone.</p>
+          <p>{t('admin.confirmDelete', { name: deleteConfirm?.name })}</p>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>Cancel</Button>
-            <Button variant="destructive" onClick={handleDelete}>Delete</Button>
+            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>{t('admin.cancel')}</Button>
+            <Button variant="destructive" onClick={handleDelete}>{t('admin.delete')}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

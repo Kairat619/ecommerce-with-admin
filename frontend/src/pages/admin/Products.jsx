@@ -199,7 +199,7 @@ export const AdminProducts = () => {
             <SelectValue placeholder={t('products.allCategories')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Categories</SelectItem>
+            <SelectItem value="all">{t('admin.allCategories')}</SelectItem>
             {categories.map((cat) => (
               <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
             ))}
@@ -211,7 +211,7 @@ export const AdminProducts = () => {
             checked={filters.low_stock}
             onCheckedChange={(checked) => setFilters({ ...filters, low_stock: checked, page: 1 })}
           />
-          <Label htmlFor="low_stock" className="text-sm cursor-pointer">Low Stock</Label>
+          <Label htmlFor="low_stock" className="text-sm cursor-pointer">{t('admin.lowStockFilter')}</Label>
         </div>
       </div>
 
@@ -220,11 +220,11 @@ export const AdminProducts = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[80px]">Image</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>SKU</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead>Stock</TableHead>
+              <TableHead className="w-[80px]">{t('admin.imageLabel')}</TableHead>
+              <TableHead>{t('admin.nameLabel')}</TableHead>
+              <TableHead>{t('admin.skuLabel')}</TableHead>
+              <TableHead>{t('admin.priceLabel')}</TableHead>
+              <TableHead>{t('admin.stockLabel')}</TableHead>
               <TableHead>{t('admin.status')}</TableHead>
               <TableHead className="w-[100px]">{t('admin.actions')}</TableHead>
             </TableRow>
@@ -241,7 +241,7 @@ export const AdminProducts = () => {
             ) : products.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                  No products found
+                  {t('admin.noResults')}
                 </TableCell>
               </TableRow>
             ) : (
@@ -260,7 +260,7 @@ export const AdminProducts = () => {
                     <div>
                       <p className="font-medium line-clamp-1">{product.name}</p>
                       {product.is_featured && (
-                        <Badge variant="secondary" className="mt-1">Featured</Badge>
+                        <Badge variant="secondary" className="mt-1">{t('admin.featuredBadge')}</Badge>
                       )}
                     </div>
                   </TableCell>
@@ -343,12 +343,12 @@ export const AdminProducts = () => {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingProduct ? 'Edit Product' : 'Add Product'}</DialogTitle>
+            <DialogTitle>{editingProduct ? t('admin.editProductTitle') : t('admin.addProductTitle')}</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2">
-                <Label htmlFor="name">Name *</Label>
+                <Label htmlFor="name">{t('admin.nameRequired')}</Label>
                 <Input
                   id="name"
                   value={formData.name}
@@ -357,7 +357,7 @@ export const AdminProducts = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="price">Price *</Label>
+                <Label htmlFor="price">{t('admin.priceRequired')}</Label>
                 <Input
                   id="price"
                   type="number"
@@ -369,7 +369,7 @@ export const AdminProducts = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="compare_at_price">Compare at Price</Label>
+                <Label htmlFor="compare_at_price">{t('admin.compareAtPriceLabel')}</Label>
                 <Input
                   id="compare_at_price"
                   type="number"
@@ -380,7 +380,7 @@ export const AdminProducts = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="stock">Stock Quantity</Label>
+                <Label htmlFor="stock">{t('admin.stockQuantity')}</Label>
                 <Input
                   id="stock"
                   type="number"
@@ -390,7 +390,7 @@ export const AdminProducts = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="sku">SKU</Label>
+                <Label htmlFor="sku">{t('admin.skuLabel')}</Label>
                 <Input
                   id="sku"
                   value={formData.sku}
@@ -398,7 +398,7 @@ export const AdminProducts = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="category">{t('products.category')}</Label>
+                <Label htmlFor="category">{t('admin.categoryLabel')}</Label>
                 <Select
                   value={formData.category_id}
                   onValueChange={(value) => setFormData({ ...formData, category_id: value })}
@@ -407,7 +407,7 @@ export const AdminProducts = () => {
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="none">None</SelectItem>
+                    <SelectItem value="none">{t('admin.noneCategory')}</SelectItem>
                     {categories.map((cat) => (
                       <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
                     ))}
@@ -420,10 +420,10 @@ export const AdminProducts = () => {
                   checked={formData.is_featured}
                   onCheckedChange={(checked) => setFormData({ ...formData, is_featured: checked })}
                 />
-                <Label htmlFor="is_featured">Featured Product</Label>
+                <Label htmlFor="is_featured">{t('admin.featuredProduct')}</Label>
               </div>
               <div className="col-span-2">
-                <Label htmlFor="short_description">Short Description</Label>
+                <Label htmlFor="short_description">{t('admin.shortDescription')}</Label>
                 <Input
                   id="short_description"
                   value={formData.short_description}
@@ -431,7 +431,7 @@ export const AdminProducts = () => {
                 />
               </div>
               <div className="col-span-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{t('admin.descriptionLabel')}</Label>
                 <Textarea
                   id="description"
                   rows={3}
@@ -440,7 +440,7 @@ export const AdminProducts = () => {
                 />
               </div>
               <div className="col-span-2">
-                <Label htmlFor="images">Image URLs (one per line)</Label>
+                <Label htmlFor="images">{t('admin.imageUrlsHint')}</Label>
                 <Textarea
                   id="images"
                   rows={3}
@@ -452,10 +452,10 @@ export const AdminProducts = () => {
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
-                Cancel
+                {t('admin.cancel')}
               </Button>
               <Button type="submit">
-                {editingProduct ? 'Update' : 'Create'}
+                {editingProduct ? t('admin.update') : t('admin.create')}
               </Button>
             </DialogFooter>
           </form>
@@ -466,12 +466,12 @@ export const AdminProducts = () => {
       <Dialog open={!!deleteConfirm} onOpenChange={() => setDeleteConfirm(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Product</DialogTitle>
+            <DialogTitle>{t('admin.deleteProductTitle')}</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete "{deleteConfirm?.name}"? This action cannot be undone.</p>
+          <p>{t('admin.confirmDelete', { name: deleteConfirm?.name })}</p>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>Cancel</Button>
-            <Button variant="destructive" onClick={handleDelete}>Delete</Button>
+            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>{t('admin.cancel')}</Button>
+            <Button variant="destructive" onClick={handleDelete}>{t('admin.delete')}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

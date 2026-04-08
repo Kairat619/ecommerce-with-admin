@@ -100,9 +100,9 @@ export const AdminUsers = () => {
             <SelectValue placeholder="All Roles" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Roles</SelectItem>
-            <SelectItem value="admin">Admin</SelectItem>
-            <SelectItem value="customer">Customer</SelectItem>
+            <SelectItem value="all">{t('admin.allRoles')}</SelectItem>
+            <SelectItem value="admin">{t('admin.adminRole')}</SelectItem>
+            <SelectItem value="customer">{t('admin.customerRole')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -112,13 +112,13 @@ export const AdminUsers = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>User</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Provider</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Joined</TableHead>
-              <TableHead className="w-[80px]">Actions</TableHead>
+              <TableHead>{t('admin.userLabel')}</TableHead>
+              <TableHead>{t('admin.emailLabel')}</TableHead>
+              <TableHead>{t('admin.roleLabel')}</TableHead>
+              <TableHead>{t('admin.providerLabel')}</TableHead>
+              <TableHead>{t('admin.status')}</TableHead>
+              <TableHead>{t('admin.joinedLabel')}</TableHead>
+              <TableHead className="w-[80px]">{t('admin.actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -133,7 +133,7 @@ export const AdminUsers = () => {
             ) : users.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                  No users found
+                  {t('admin.noResults')}
                 </TableCell>
               </TableRow>
             ) : (
@@ -215,11 +215,11 @@ export const AdminUsers = () => {
       <Dialog open={!!editDialog} onOpenChange={() => setEditDialog(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit User</DialogTitle>
+            <DialogTitle>{t('admin.editUserTitle')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">{t('admin.nameLabelUser')}</Label>
               <Input
                 id="name"
                 value={editData.name}
@@ -227,7 +227,7 @@ export const AdminUsers = () => {
               />
             </div>
             <div>
-              <Label htmlFor="role">Role</Label>
+              <Label htmlFor="role">{t('admin.roleLabel')}</Label>
               <Select
                 value={editData.role}
                 onValueChange={(value) => setEditData({ ...editData, role: value })}
@@ -236,13 +236,13 @@ export const AdminUsers = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="customer">Customer</SelectItem>
-                  <SelectItem value="admin">Admin</SelectItem>
+                  <SelectItem value="customer">{t('admin.customerRole')}</SelectItem>
+                  <SelectItem value="admin">{t('admin.adminRole')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="flex items-center justify-between">
-              <Label htmlFor="is_active">Active</Label>
+              <Label htmlFor="is_active">{t('admin.activeLabel')}</Label>
               <Switch
                 id="is_active"
                 checked={editData.is_active}
@@ -251,8 +251,8 @@ export const AdminUsers = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setEditDialog(null)}>Cancel</Button>
-            <Button onClick={handleUpdate}>Update</Button>
+            <Button variant="outline" onClick={() => setEditDialog(null)}>{t('admin.cancel')}</Button>
+            <Button onClick={handleUpdate}>{t('admin.update')}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

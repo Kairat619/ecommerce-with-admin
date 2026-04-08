@@ -109,10 +109,10 @@ export const AdminOrders = () => {
           onValueChange={(value) => setFilters({ ...filters, status: value, page: 1 })}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="All Statuses" />
+            <SelectValue placeholder={t('admin.allStatuses')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="all">{t('admin.allStatuses')}</SelectItem>
             {Object.entries(statusConfig).map(([key, { label }]) => (
               <SelectItem key={key} value={key}>{label}</SelectItem>
             ))}
@@ -125,13 +125,13 @@ export const AdminOrders = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Order</TableHead>
-              <TableHead>Customer</TableHead>
-              <TableHead>Items</TableHead>
-              <TableHead>Total</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead className="w-[100px]">Actions</TableHead>
+              <TableHead>{t('admin.orderLabel')}</TableHead>
+              <TableHead>{t('admin.customerLabel')}</TableHead>
+              <TableHead>{t('admin.itemsLabel')}</TableHead>
+              <TableHead>{t('admin.totalLabel')}</TableHead>
+              <TableHead>{t('admin.status')}</TableHead>
+              <TableHead>{t('admin.orderDate')}</TableHead>
+              <TableHead className="w-[100px]">{t('admin.orderActions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -146,7 +146,7 @@ export const AdminOrders = () => {
             ) : orders.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                  No orders found
+                  {t('admin.noResults')}
                 </TableCell>
               </TableRow>
             ) : (
@@ -236,14 +236,14 @@ export const AdminOrders = () => {
       <Dialog open={!!statusDialog} onOpenChange={() => setStatusDialog(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Update Order Status</DialogTitle>
+            <DialogTitle>{t('admin.updateOrderStatusTitle')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label>Order: {statusDialog?.order_number}</Label>
+              <Label>{t('admin.orderNumber', { number: statusDialog?.order_number })}</Label>
             </div>
             <div>
-              <Label htmlFor="status">Status</Label>
+              <Label htmlFor="status">{t('admin.selectStatus')}</Label>
               <Select value={newStatus} onValueChange={setNewStatus}>
                 <SelectTrigger>
                   <SelectValue />
@@ -256,7 +256,7 @@ export const AdminOrders = () => {
               </Select>
             </div>
             <div>
-              <Label htmlFor="admin_notes">Admin Notes</Label>
+              <Label htmlFor="admin_notes">{t('admin.adminNotes')}</Label>
               <Textarea
                 id="admin_notes"
                 rows={3}
@@ -267,8 +267,8 @@ export const AdminOrders = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setStatusDialog(null)}>Cancel</Button>
-            <Button onClick={handleStatusUpdate}>Update Status</Button>
+            <Button variant="outline" onClick={() => setStatusDialog(null)}>{t('admin.cancel')}</Button>
+            <Button onClick={handleStatusUpdate}>{t('admin.updateStatus')}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
