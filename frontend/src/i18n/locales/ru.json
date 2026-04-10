@@ -155,6 +155,39 @@
     "placeOrder": "Оформить заказ",
     "processing": "Обработка..."
   },
+
+  "orders": {
+    "title": "Мои заказы",
+    "noOrders": "Заказов пока нет",
+    "noOrdersDescription": "Начните покупки, чтобы увидеть свои заказы здесь",
+    "shopNow": "Купить сейчас",
+    "viewDetails": "Подробнее",
+    "orderItems": "Товары заказа",
+    "shippingAddress": "Адрес доставки",
+    "backToOrders": "← Вернуться к заказам",
+    "placedOn": "Дата заказа",
+    "orderSummary": "Итого заказа",
+    "subtotal": "Подытог",
+    "shipping": "Доставка",
+    "tax": "Налог",
+    "total": "Итого",
+    "free": "Бесплатно",
+    "trackingNumber": "Номер отслеживания",
+    "orderNotFound": "Заказ не найден",
+    "backToOrderList": "Вернуться к заказам",
+    "page": "Страница {{current}} из {{total}}",
+    "items": "{{count}} товар",
+    "items_plural": "{{count}} товаров",
+    "qty": "Кол-во:",
+    "status": {
+      "pending": "Ожидает",
+      "confirmed": "Подтвержден",
+      "processing": "Обрабатывается",
+      "shipped": "Отправлен",
+      "delivered": "Доставлен",
+      "cancelled": "Отменен"
+    }
+  },
   "auth": {
     "welcomeBack": "С возвращением",
     "signInToAccount": "Войдите в свой аккаунт",
@@ -169,25 +202,17 @@
     "noAccount": "Нет аккаунта?",
     "haveAccount": "Уже есть аккаунт?",
     "signUp": "Зарегистрироваться",
-    "signIn": "Войти"
-  },
-  "orders": {
-    "title": "Мои заказы",
-    "noOrders": "Заказов пока нет",
-    "noOrdersDescription": "Начните покупки, чтобы увидеть свои заказы здесь",
-    "viewDetails": "Подробнее",
-    "orderItems": "Товары заказа",
-    "shippingAddress": "Адрес доставки",
-    "backToOrders": "← Вернуться к заказам",
-    "placedOn": "Дата заказа",
-    "status": {
-      "pending": "Ожидает",
-      "confirmed": "Подтвержден",
-      "processing": "Обрабатывается",
-      "shipped": "Отправлен",
-      "delivered": "Доставлен",
-      "cancelled": "Отменен"
-    }
+    "signIn": "Войти",
+    "signingIn": "Вход...",
+    "createAccountLoading": "Создание аккаунта...",
+    "welcomeBackToast": "С возвращением!",
+    "accountCreatedToast": "Аккаунт создан!",
+    "invalidCredentials": "Неверные данные",
+    "registrationFailed": "Ошибка регистрации",
+    "passwordMinChars": "Пароль должен содержать минимум 6 символов",
+    "completingSignIn": "Завершение входа...",
+    "welcomeToast": "Добро пожаловать!",
+    "authFailed": "Ошибка аутентификации"
   },
   "admin": {
     "dashboard": "Панель управления",

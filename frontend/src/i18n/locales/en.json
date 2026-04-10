@@ -155,6 +155,39 @@
     "placeOrder": "Place Order",
     "processing": "Processing..."
   },
+
+  "orders": {
+    "title": "My Orders",
+    "noOrders": "No orders yet",
+    "noOrdersDescription": "Start shopping to see your orders here",
+    "shopNow": "Shop Now",
+    "viewDetails": "View Details",
+    "orderItems": "Order Items",
+    "shippingAddress": "Shipping Address",
+    "backToOrders": "← Back to Orders",
+    "placedOn": "Placed on",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "total": "Total",
+    "free": "Free",
+    "trackingNumber": "Tracking Number",
+    "orderNotFound": "Order not found",
+    "backToOrderList": "Back to Orders",
+    "page": "Page {{current}} of {{total}}",
+    "items": "{{count}} item",
+    "items_plural": "{{count}} items",
+    "qty": "Qty:",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    }
+  },
   "auth": {
     "welcomeBack": "Welcome Back",
     "signInToAccount": "Sign in to your account",
@@ -169,25 +202,17 @@
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
     "signUp": "Sign up",
-    "signIn": "Sign in"
-  },
-  "orders": {
-    "title": "My Orders",
-    "noOrders": "No orders yet",
-    "noOrdersDescription": "Start shopping to see your orders here",
-    "viewDetails": "View Details",
-    "orderItems": "Order Items",
-    "shippingAddress": "Shipping Address",
-    "backToOrders": "← Back to Orders",
-    "placedOn": "Placed on",
-    "status": {
-      "pending": "Pending",
-      "confirmed": "Confirmed",
-      "processing": "Processing",
-      "shipped": "Shipped",
-      "delivered": "Delivered",
-      "cancelled": "Cancelled"
-    }
+    "signIn": "Sign in",
+    "signingIn": "Signing in...",
+    "createAccountLoading": "Creating account...",
+    "welcomeBackToast": "Welcome back!",
+    "accountCreatedToast": "Account created!",
+    "invalidCredentials": "Invalid credentials",
+    "registrationFailed": "Registration failed",
+    "passwordMinChars": "Password must be at least 6 characters",
+    "completingSignIn": "Completing sign in...",
+    "welcomeToast": "Welcome!",
+    "authFailed": "Authentication failed"
   },
   "admin": {
     "dashboard": "Dashboard",

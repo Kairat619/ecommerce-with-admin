@@ -4,17 +4,18 @@ import { ordersAPI } from '../lib/api';
 import { Button } from '../components/ui/button';
 import { Package, ChevronRight, Truck, CheckCircle, Clock, XCircle, ArrowLeft, MapPin, Phone, Mail } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { useTranslation } from 'react-i18next';
 
 const statusConfig = {
-  pending: { label: 'Pending', color: 'bg-yellow-100 text-yellow-800', icon: Clock },
-  confirmed: { label: 'Confirmed', color: 'bg-blue-100 text-blue-800', icon: CheckCircle },
-  processing: { label: 'Processing', color: 'bg-purple-100 text-purple-800', icon: Package },
-  shipped: { label: 'Shipped', color: 'bg-indigo-100 text-indigo-800', icon: Truck },
-  delivered: { label: 'Delivered', color: 'bg-green-100 text-green-800', icon: CheckCircle },
-  cancelled: { label: 'Cancelled', color: 'bg-red-100 text-red-800', icon: XCircle },
+  pending: { color: 'bg-yellow-100 text-yellow-800', icon: Clock },
+  confirmed: { color: 'bg-blue-100 text-blue-800', icon: CheckCircle },
+  processing: { color: 'bg-purple-100 text-purple-800', icon: Package },
+  shipped: { color: 'bg-indigo-100 text-indigo-800', icon: Truck },
+  delivered: { color: 'bg-green-100 text-green-800', icon: CheckCircle },
+  cancelled: { color: 'bg-red-100 text-red-800', icon: XCircle },
 };
 
-const OrderCard = ({ order }) => {
+const OrderCard = ({ order, t }) => {
   const status = statusConfig[order.status] || statusConfig.pending;
   const StatusIcon = status.icon;
 
@@ -37,7 +38,7 @@ const OrderCard = ({ order }) => {
           </div>
           <div className={cn("flex items-center gap-2 px-3 py-1.5 rounded-full", status.color)}>
             <StatusIcon className="h-4 w-4" />
-            <span className="text-sm font-medium">{status.label}</span>
+            <span className="text-sm font-medium">{t(`orders.status.${order.status}`)}</span>
           </div>
         </div>
 
@@ -63,7 +64,7 @@ const OrderCard = ({ order }) => {
               )}
             </div>
             <span className="text-sm text-gray-500">
-              {order.items?.length} item{order.items?.length !== 1 ? 's' : ''}
+              {order.items?.length === 1 ? t('orders.items', { count: order.items?.length }) : t('orders.items_plural', { count: order.items?.length })}
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -77,6 +78,7 @@ const OrderCard = ({ order }) => {
 };
 
 export const OrdersPage = () => {
+  const { t } = useTranslation();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -102,7 +104,7 @@ export const OrdersPage = () => {
     return (
       <div className="min-h-screen bg-gray-50 py-8 md:py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8">My Orders</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8">{t('orders.title')}</h1>
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
               <div key={i} className="bg-white rounded-2xl p-6 animate-pulse">
@@ -119,23 +121,23 @@ export const OrdersPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8 md:py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8">My Orders</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8">{t('orders.title')}</h1>
         
         {orders.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-2xl">
             <div className="w-20 h-20 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
               <Package className="h-10 w-10 text-gray-400" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">No orders yet</h2>
-            <p className="text-gray-500 mb-6">Start shopping to see your orders here</p>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">{t('orders.noOrders')}</h2>
+            <p className="text-gray-500 mb-6">{t('orders.noOrdersDescription')}</p>
             <Link to="/products">
-              <Button className="rounded-full">Shop Now</Button>
+              <Button className="rounded-full">{t('orders.shopNow')}</Button>
             </Link>
           </div>
         ) : (
           <div className="space-y-4">
             {orders.map((order) => (
-              <OrderCard key={order.id} order={order} />
+              <OrderCard key={order.id} order={order} t={t} />
             ))}
           </div>
         )}
@@ -152,7 +154,7 @@ export const OrdersPage = () => {
               <ChevronRight className="h-4 w-4 rotate-180" />
             </Button>
             <span className="text-sm text-gray-500">
-              Page {page} of {totalPages}
+              {t('orders.page', { current: page, total: totalPages })}
             </span>
             <Button
               variant="outline"
@@ -171,6 +173,7 @@ export const OrdersPage = () => {
 };
 
 export const OrderDetailPage = () => {
+  const { t } = useTranslation();
   const { orderId } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -206,9 +209,9 @@ export const OrderDetailPage = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900">Order not found</h2>
+          <h2 className="text-2xl font-bold text-gray-900">{t('orders.orderNotFound')}</h2>
           <Link to="/orders">
-            <Button className="mt-4 rounded-full">Back to Orders</Button>
+            <Button className="mt-4 rounded-full">{t('orders.backToOrderList')}</Button>
           </Link>
         </div>
       </div>
@@ -231,7 +234,7 @@ export const OrderDetailPage = () => {
           className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Orders
+          {t('orders.backToOrders')}
         </Link>
 
         {/* Order Header */}
@@ -249,7 +252,7 @@ export const OrderDetailPage = () => {
             </div>
             <div className={cn("flex items-center gap-2 px-4 py-2 rounded-full w-fit", status.color)}>
               <StatusIcon className="h-5 w-5" />
-              <span className="font-medium">{status.label}</span>
+              <span className="font-medium">{t(`orders.status.${order.status}`)}</span>
             </div>
           </div>
         </div>
@@ -258,7 +261,7 @@ export const OrderDetailPage = () => {
           {/* Order Items */}
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm">
-              <h2 className="text-lg font-bold text-gray-900 mb-6">Order Items</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-6">{t('orders.orderItems')}</h2>
               <div className="space-y-4">
                 {order.items?.map((item) => (
                   <div key={item.id} className="flex gap-4">
@@ -278,7 +281,7 @@ export const OrderDetailPage = () => {
                       >
                         {item.product_name}
                       </Link>
-                      <p className="text-sm text-gray-500 mt-1">Qty: {item.quantity}</p>
+                      <p className="text-sm text-gray-500 mt-1">{t('orders.qty')} {item.quantity}</p>
                       <p className="font-semibold mt-2">${(item.total_price || 0).toFixed(2)}</p>
                     </div>
                   </div>
@@ -291,7 +294,7 @@ export const OrderDetailPage = () => {
               <div className="bg-white rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm">
                 <h2 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
                   <MapPin className="h-5 w-5" />
-                  Shipping Address
+                  {t('orders.shippingAddress')}
                 </h2>
                 <div className="text-gray-600">
                   <p className="font-medium text-gray-900">{order.shipping_address.name}</p>
@@ -312,33 +315,33 @@ export const OrderDetailPage = () => {
           {/* Order Summary */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm sticky top-24">
-              <h2 className="text-lg font-bold text-gray-900 mb-6">Order Summary</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-6">{t('orders.orderSummary')}</h2>
               
               <div className="space-y-3 pb-6 border-b border-gray-100">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Subtotal</span>
+                  <span className="text-gray-500">{t('orders.subtotal')}</span>
                   <span className="font-medium">${subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Shipping</span>
+                  <span className="text-gray-500">{t('orders.shipping')}</span>
                   <span className="font-medium">
-                    {shipping === 0 ? <span className="text-green-600">Free</span> : `$${shipping.toFixed(2)}`}
+                    {shipping === 0 ? <span className="text-green-600">{t('orders.free')}</span> : `$${shipping.toFixed(2)}`}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Tax</span>
+                  <span className="text-gray-500">{t('orders.tax')}</span>
                   <span className="font-medium">${tax.toFixed(2)}</span>
                 </div>
               </div>
 
               <div className="flex justify-between items-center pt-6">
-                <span className="font-semibold">Total</span>
+                <span className="font-semibold">{t('orders.total')}</span>
                 <span className="text-2xl font-bold">${total.toFixed(2)}</span>
               </div>
 
               {order.tracking_number && (
                 <div className="mt-6 pt-6 border-t border-gray-100">
-                  <p className="text-sm text-gray-500 mb-1">Tracking Number</p>
+                  <p className="text-sm text-gray-500 mb-1">{t('orders.trackingNumber')}</p>
                   <p className="font-medium">{order.tracking_number}</p>
                 </div>
               )}

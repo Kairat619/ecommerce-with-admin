@@ -155,6 +155,39 @@
     "placeOrder": "Тапсырыс беру",
     "processing": "Өңделуде..."
   },
+
+  "orders": {
+    "title": "Менің тапсырыстарым",
+    "noOrders": "Тапсырыстар әлі жоқ",
+    "noOrdersDescription": "Тапсырыстарыңызды көру үшін сатып алуды бастаңыз",
+    "shopNow": "Қазір сатып алу",
+    "viewDetails": "Толығырақ",
+    "orderItems": "Тапсырыс өнімдері",
+    "shippingAddress": "Жеткізу мекенжайы",
+    "backToOrders": "← Тапсырыстарға оралу",
+    "placedOn": "Тапсырыс берілген күн",
+    "orderSummary": "Тапсырыс қорытындысы",
+    "subtotal": "Аралық жиын",
+    "shipping": "Жеткізу",
+    "tax": "Салық",
+    "total": "Барлығы",
+    "free": "Тегін",
+    "trackingNumber": "Жеткізу нөмірі",
+    "orderNotFound": "Тапсырыс табылмады",
+    "backToOrderList": "Тапсырыстарға оралу",
+    "page": "{{total}} беттің {{current}} беті",
+    "items": "{{count}} өнім",
+    "items_plural": "{{count}} өнім",
+    "qty": "Саны:",
+    "status": {
+      "pending": "Күтуде",
+      "confirmed": "Расталды",
+      "processing": "Өңделуде",
+      "shipped": "Жіберілді",
+      "delivered": "Жеткізілді",
+      "cancelled": "Бас тартылды"
+    }
+  },
   "auth": {
     "welcomeBack": "Қош келдіңіз",
     "signInToAccount": "Аккаунтыңызға кіріңіз",
@@ -169,25 +202,17 @@
     "noAccount": "Аккаунтыңыз жоқ па?",
     "haveAccount": "Аккаунтыңыз бар ма?",
     "signUp": "Тіркелу",
-    "signIn": "Кіру"
-  },
-  "orders": {
-    "title": "Менің тапсырыстарым",
-    "noOrders": "Тапсырыстар әлі жоқ",
-    "noOrdersDescription": "Тапсырыстарыңызды көру үшін сатып алуды бастаңыз",
-    "viewDetails": "Толығырақ",
-    "orderItems": "Тапсырыс өнімдері",
-    "shippingAddress": "Жеткізу мекенжайы",
-    "backToOrders": "← Тапсырыстарға оралу",
-    "placedOn": "Тапсырыс берілген күн",
-    "status": {
-      "pending": "Күтуде",
-      "confirmed": "Расталды",
-      "processing": "Өңделуде",
-      "shipped": "Жіберілді",
-      "delivered": "Жеткізілді",
-      "cancelled": "Бас тартылды"
-    }
+    "signIn": "Кіру",
+    "signingIn": "Кіру...",
+    "createAccountLoading": "Аккаунт құрылуда...",
+    "welcomeBackToast": "Қош келдіңіз!",
+    "accountCreatedToast": "Аккаунт құрылды!",
+    "invalidCredentials": "Деректер қате",
+    "registrationFailed": "Тіркелу сәтсіз",
+    "passwordMinChars": "Құпия сөз кемінде 6 таңба болуы керек",
+    "completingSignIn": "Кіру аяқталуда...",
+    "welcomeToast": "Қош келдіңіз!",
+    "authFailed": "Аутентификация сәтсіз"
   },
   "admin": {
     "dashboard": "Басқару тақтасы",

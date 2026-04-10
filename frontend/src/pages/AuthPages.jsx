@@ -9,8 +9,10 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { toast } from 'sonner';
 import { Mail, Lock, User, ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export const LoginPage = () => {
+  const { t } = useTranslation();
   const { login, loginWithGoogle, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,10 +32,10 @@ export const LoginPage = () => {
     setLoading(true);
     try {
       await login(formData.email, formData.password);
-      toast.success('Welcome back!');
+      toast.success(t('auth.welcomeBackToast'));
       navigate(redirect);
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Invalid credentials');
+      toast.error(error.response?.data?.detail || t('auth.invalidCredentials'));
     } finally {
       setLoading(false);
     }
@@ -43,14 +45,14 @@ export const LoginPage = () => {
     <div className="min-h-[80vh] flex items-center justify-center px-4" data-testid="login-page">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold font-outfit">Welcome Back</h1>
-          <p className="text-muted-foreground mt-2">Sign in to your account</p>
+          <h1 className="text-3xl font-bold font-outfit">{t('auth.welcomeBack')}</h1>
+          <p className="text-muted-foreground mt-2">{t('auth.signInToAccount')}</p>
         </div>
 
         <div className="bg-card rounded-2xl border p-8 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('auth.email')}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -66,7 +68,7 @@ export const LoginPage = () => {
               </div>
             </div>
             <div>
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t('auth.password')}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -88,7 +90,7 @@ export const LoginPage = () => {
               disabled={loading}
               data-testid="login-submit"
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? t('auth.signingIn') : t('auth.signIn')}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </form>
@@ -98,7 +100,7 @@ export const LoginPage = () => {
               <div className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+              <span className="bg-card px-2 text-muted-foreground">{t('auth.orContinueWith')}</span>
             </div>
           </div>
 
@@ -127,13 +129,13 @@ export const LoginPage = () => {
                 fill="#EA4335"
               />
             </svg>
-            Continue with Google
+            {t('auth.continueWithGoogle')}
           </Button>
 
           <p className="text-center text-sm text-muted-foreground mt-6">
-            Don't have an account?{' '}
+            {t('auth.noAccount')}{' '}
             <Link to="/register" className="text-primary font-medium hover:underline">
-              Sign up
+              {t('auth.signUp')}
             </Link>
           </p>
         </div>
@@ -143,6 +145,7 @@ export const LoginPage = () => {
 };
 
 export const RegisterPage = () => {
+  const { t } = useTranslation();
   const { register, loginWithGoogle, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -157,16 +160,16 @@ export const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password.length < 6) {
-      toast.error('Password must be at least 6 characters');
+      toast.error(t('auth.passwordMinChars'));
       return;
     }
     setLoading(true);
     try {
       await register(formData.name, formData.email, formData.password);
-      toast.success('Account created!');
+      toast.success(t('auth.accountCreatedToast'));
       navigate('/');
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Registration failed');
+      toast.error(error.response?.data?.detail || t('auth.registrationFailed'));
     } finally {
       setLoading(false);
     }
@@ -176,14 +179,14 @@ export const RegisterPage = () => {
     <div className="min-h-[80vh] flex items-center justify-center px-4" data-testid="register-page">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold font-outfit">Create Account</h1>
-          <p className="text-muted-foreground mt-2">Join us and start shopping</p>
+          <h1 className="text-3xl font-bold font-outfit">{t('auth.createAccount')}</h1>
+          <p className="text-muted-foreground mt-2">{t('auth.joinUs')}</p>
         </div>
 
         <div className="bg-card rounded-2xl border p-8 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="name">Full Name</Label>
+              <Label htmlFor="name">{t('auth.name')}</Label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -199,7 +202,7 @@ export const RegisterPage = () => {
               </div>
             </div>
             <div>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('auth.email')}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -215,7 +218,7 @@ export const RegisterPage = () => {
               </div>
             </div>
             <div>
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t('auth.password')}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -230,7 +233,7 @@ export const RegisterPage = () => {
                   data-testid="register-password"
                 />
               </div>
-              <p className="text-xs text-muted-foreground mt-1">Minimum 6 characters</p>
+              <p className="text-xs text-muted-foreground mt-1">{t('auth.minPassword')}</p>
             </div>
 
             <Button 
@@ -239,7 +242,7 @@ export const RegisterPage = () => {
               disabled={loading}
               data-testid="register-submit"
             >
-              {loading ? 'Creating account...' : 'Create Account'}
+              {loading ? t('auth.createAccountLoading') : t('auth.createAccount')}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </form>
@@ -249,7 +252,7 @@ export const RegisterPage = () => {
               <div className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+              <span className="bg-card px-2 text-muted-foreground">{t('auth.orContinueWith')}</span>
             </div>
           </div>
 
@@ -266,13 +269,13 @@ export const RegisterPage = () => {
               <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
               <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
             </svg>
-            Continue with Google
+            {t('auth.continueWithGoogle')}
           </Button>
 
           <p className="text-center text-sm text-muted-foreground mt-6">
-            Already have an account?{' '}
+            {t('auth.haveAccount')}{' '}
             <Link to="/login" className="text-primary font-medium hover:underline">
-              Sign in
+              {t('auth.signIn')}
             </Link>
           </p>
         </div>
@@ -282,6 +285,7 @@ export const RegisterPage = () => {
 };
 
 export const AuthCallback = () => {
+  const { t } = useTranslation();
   const { handleOAuthCallback } = useAuth();
   const navigate = useNavigate();
   const hasProcessed = useRef(false);
@@ -301,11 +305,11 @@ export const AuthCallback = () => {
         try {
           console.log('Calling handleOAuthCallback with code:', code.substring(0, 20) + '...');
           await handleOAuthCallback(code);
-          toast.success('Welcome!');
+          toast.success(t('auth.welcomeToast'));
           navigate('/');
         } catch (error) {
           console.error('AuthCallback error:', error);
-          toast.error('Authentication failed: ' + (error?.message || error?.response?.data?.detail || 'Unknown error'));
+          toast.error(t('auth.authFailed') + ': ' + (error?.message || error?.response?.data?.detail || 'Unknown error'));
           navigate('/login');
         }
       } else {
@@ -315,13 +319,13 @@ export const AuthCallback = () => {
     };
 
     processCallback();
-  }, [handleOAuthCallback, navigate]);
+  }, [handleOAuthCallback, navigate, t]);
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center">
       <div className="text-center">
         <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto" />
-        <p className="mt-4 text-muted-foreground">Completing sign in...</p>
+        <p className="mt-4 text-muted-foreground">{t('auth.completingSignIn')}</p>
       </div>
     </div>
   );
