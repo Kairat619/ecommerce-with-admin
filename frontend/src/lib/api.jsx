@@ -135,7 +135,7 @@ export const adminAPI = {
   listUsers: (params) => api.get('/admin/users', { params }),
   updateUser: (id, data) => api.put(`/admin/users/${id}`, data),
   
-  // Site Settings
+  // Site Settings (admin only)
   getSiteSettings: () => api.get('/admin/site-settings'),
   updateSiteSettings: (data) => api.put('/admin/site-settings', data),
   
@@ -144,6 +144,11 @@ export const adminAPI = {
   getReview: (id) => api.get(`/admin/reviews/${id}`),
   updateReviewStatus: (id, isApproved) => api.put(`/admin/reviews/${id}`, null, { params: { is_approved: isApproved } }),
   deleteReview: (id) => api.delete(`/admin/reviews/${id}`),
+};
+
+// Public API (no auth required)
+export const publicAPI = {
+  getSiteSettings: () => api.get('/site-settings'),
 };
 
 export default api;

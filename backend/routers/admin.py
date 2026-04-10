@@ -29,6 +29,34 @@ async def require_admin(db: Session, request: Request):
     return user
 
 
+# =============== PUBLIC ENDPOINTS ===============
+
+public_router = APIRouter(tags=["Public"])
+
+
+@public_router.get("/site-settings", response_model=SiteSettingsResponse)
+async def get_public_site_settings(db: Session = Depends(get_db)):
+    """Get public site settings (logo, hero slides) - no auth required."""
+    settings = db.query(SiteSettings).first()
+    if not settings:
+        settings = SiteSettings(
+            id=str(uuid.uuid4()),
+            logo_url=None,
+            hero_slides=[]
+        )
+        db.add(settings)
+        db.commit()
+        db.refresh(settings)
+    
+    return {
+        "id": settings.id,
+        "logo_url": settings.logo_url,
+        "hero_slides": settings.hero_slides or [],
+        "created_at": settings.created_at.isoformat() if settings.created_at else None,
+        "updated_at": settings.updated_at.isoformat() if settings.updated_at else None
+    }
+
+
 @router.get("/dashboard", response_model=DashboardStats)
 async def get_dashboard_stats(request: Request, db: Session = Depends(get_db)):
     """Get dashboard statistics."""

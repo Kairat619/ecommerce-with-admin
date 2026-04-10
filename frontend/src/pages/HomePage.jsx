@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, Star, Heart, ShoppingBag, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { productsAPI, categoriesAPI, adminAPI } from '../lib/api';
+import { productsAPI, categoriesAPI, adminAPI, publicAPI } from '../lib/api';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useProductUpdates } from '../context/ProductUpdateContext';
@@ -204,7 +204,7 @@ export const HomePage = () => {
         productsAPI.getFeatured(8),
         productsAPI.getNewArrivals(8),
         categoriesAPI.list(true),
-        adminAPI.getSiteSettings().catch(() => ({ data: { logo_url: null, hero_slides: [] } })),
+        publicAPI.getSiteSettings().catch(() => ({ data: { logo_url: null, hero_slides: [] } })),
       ]);
       setFeaturedProducts(Array.isArray(featuredRes.data) ? featuredRes.data : []);
       setNewArrivals(Array.isArray(newArrivalsRes.data) ? newArrivalsRes.data : []);
