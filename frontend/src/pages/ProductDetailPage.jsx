@@ -439,7 +439,7 @@ export const ProductDetailPage = () => {
                       : "border-transparent text-gray-500 hover:text-gray-700"
                   )}
                 >
-                  {t('product.reviews')} (128)
+                  {t('product.reviews')} ({reviewsPagination.review_count})
                 </button>
               </div>
 
