@@ -34,7 +34,7 @@ const ProductCard = ({ product, index }) => {
   };
 
   return (
-    <Link 
+    <Link
       to={`/products/${product.slug}`}
       className="group block"
       style={{ animationDelay: `${index * 100}ms` }}
@@ -52,13 +52,13 @@ const ProductCard = ({ product, index }) => {
           loading="lazy"
           onLoad={() => setImageLoaded(true)}
         />
-        
+
         <button
           onClick={handleWishlist}
           className={cn(
             "absolute top-3 right-3 p-2 rounded-full transition-all duration-300",
-            inWishlist 
-              ? "bg-red-500 text-white" 
+            inWishlist
+              ? "bg-red-500 text-white"
               : "bg-white/90 text-gray-600 hover:bg-white",
             isHovered && "opacity-100 translate-y-0" || "opacity-0 -translate-y-2"
           )}
@@ -72,13 +72,13 @@ const ProductCard = ({ product, index }) => {
           </span>
         )}
 
-        <div 
+        <div
           className={cn(
             "absolute bottom-3 left-3 right-3 transition-all duration-300",
             isHovered && "opacity-100 translate-y-0" || "opacity-0 translate-y-4"
           )}
         >
-          <Button 
+          <Button
             onClick={handleAddToCart}
             className="w-full bg-white text-gray-900 hover:bg-gray-900 hover:text-white rounded-full h-10"
           >
@@ -102,12 +102,12 @@ const ProductCard = ({ product, index }) => {
         </div>
         <div className="flex items-center gap-1">
           {[...Array(5)].map((_, i) => (
-            <Star 
-              key={i} 
+            <Star
+              key={i}
               className={cn(
-                "h-3 w-3", 
+                "h-3 w-3",
                 i < 4 ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"
-              )} 
+              )}
             />
           ))}
           <span className="text-xs text-gray-400 ml-1">(12)</span>
@@ -120,7 +120,7 @@ const ProductCard = ({ product, index }) => {
 const CategoryCard = ({ category, index }) => {
   const { t } = useTranslation();
   return (
-    <Link 
+    <Link
       to={`/products?category=${category.slug}`}
       className="group relative overflow-hidden rounded-2xl aspect-[4/5]"
       style={{ animationDelay: `${index * 100}ms` }}
@@ -151,6 +151,7 @@ export const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [siteSettings, setSiteSettings] = useState({ logo_url: null, hero_slides: [] });
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   const defaultHeroSlides = [
     {
@@ -179,16 +180,16 @@ export const HomePage = () => {
     },
   ];
 
-  const heroSlides = siteSettings.hero_slides?.length > 0
+  const heroSlides = settingsLoaded && siteSettings.hero_slides?.length > 0
     ? siteSettings.hero_slides.map(slide => ({
-        title: slide.title || t('home.heroTitle'),
-        subtitle: slide.subtitle || '',
-        description: '',
-        cta: slide.link ? 'Shop Now' : '',
-        ctaLink: slide.link || '/products',
-        image: slide.image_url,
-      }))
-    : defaultHeroSlides;
+      title: slide.title || t('home.heroTitle'),
+      subtitle: slide.subtitle || '',
+      description: '',
+      cta: slide.link ? 'Shop Now' : '',
+      ctaLink: slide.link || '/products',
+      image: slide.image_url,
+    }))
+    : settingsLoaded ? defaultHeroSlides : [];
 
   const benefits = [
     { icon: "🚚", title: t('home.freeShipping'), desc: t('home.freeShippingDesc') },
@@ -212,11 +213,13 @@ export const HomePage = () => {
       if (settingsRes?.data) {
         setSiteSettings(settingsRes.data);
       }
+      setSettingsLoaded(true);
     } catch (error) {
       console.error('Failed to load home data:', error);
       setFeaturedProducts([]);
       setNewArrivals([]);
       setCategories([]);
+      setSettingsLoaded(true);
     } finally {
       setLoading(false);
     }
@@ -228,13 +231,13 @@ export const HomePage = () => {
 
   useEffect(() => {
     const refreshData = () => fetchData();
-    
+
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) refreshData();
     });
     window.addEventListener('focus', refreshData);
     window.addEventListener('popstate', refreshData);
-    
+
     return () => {
       document.removeEventListener('visibilitychange', refreshData);
       window.removeEventListener('focus', refreshData);
@@ -243,6 +246,7 @@ export const HomePage = () => {
   }, []);
 
   useEffect(() => {
+    if (heroSlides.length === 0) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 5000);
@@ -252,8 +256,12 @@ export const HomePage = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-[70vh] md:h-[80vh] overflow-hidden">
-        {heroSlides.map((slide, index) => (
+      <section className="relative h-[70vh] md:h-[80vh] overflow-hidden bg-gray-900">
+        {!settingsLoaded ? (
+          <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-800 to-gray-900" />
+        ) : (
+          <>
+            {heroSlides.map((slide, index) => (
           <div
             key={index}
             className={cn(
@@ -289,32 +297,36 @@ export const HomePage = () => {
           </div>
         ))}
 
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-4">
-          <button
-            onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
-            className="p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <div className="flex items-center gap-2">
-            {heroSlides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={cn(
-                  "w-2 h-2 rounded-full transition-all",
-                  index === currentSlide ? "bg-white w-8" : "bg-white/50"
-                )}
-              />
-            ))}
+        {heroSlides.length > 0 && (
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-4">
+            <button
+              onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
+              className="p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <div className="flex items-center gap-2">
+              {heroSlides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={cn(
+                    "w-2 h-2 rounded-full transition-all",
+                    index === currentSlide ? "bg-white w-8" : "bg-white/50"
+                  )}
+                />
+              ))}
+            </div>
+            <button
+              onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
+              className="p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
           </div>
-          <button
-            onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
-            className="p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-        </div>
+        )}
+          </>
+        )}
       </section>
 
       {/* Benefits Bar */}
@@ -346,7 +358,7 @@ export const HomePage = () => {
               {t('home.viewAll')} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {loading ? (
               [...Array(4)].map((_, i) => (
@@ -373,7 +385,7 @@ export const HomePage = () => {
               {t('home.viewAll')} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {loading ? (
               [...Array(8)].map((_, i) => (
@@ -404,7 +416,7 @@ export const HomePage = () => {
               {t('home.viewAll')} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {loading ? (
               [...Array(8)].map((_, i) => (
