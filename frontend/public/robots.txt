@@ -9,4 +9,4 @@ Disallow: /cart
 User-agent: Googlebot
 Allow: /
 
-Sitemap: https://yourdomain.com/sitemap.xml
+Sitemap: https://yourdomain.com/api/sitemap.xml

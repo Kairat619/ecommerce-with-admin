@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { generateSitemapXml } from '../lib/sitemap';
+import { fetchSitemapXml } from '../lib/sitemap';
 
 export const SitemapPage = () => {
   const [sitemap, setSitemap] = useState('');
@@ -8,10 +8,10 @@ export const SitemapPage = () => {
   useEffect(() => {
     const loadSitemap = async () => {
       try {
-        const xml = await generateSitemapXml();
+        const xml = await fetchSitemapXml();
         setSitemap(xml);
       } catch (error) {
-        console.error('Error generating sitemap:', error);
+        console.error('Error fetching sitemap:', error);
         setSitemap('<?xml version="1.0" encoding="UTF-8"?><error>Failed to generate sitemap</error>');
       } finally {
         setLoading(false);

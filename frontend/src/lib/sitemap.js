@@ -1,89 +1,35 @@
-import { productsAPI, categoriesAPI } from '../lib/api';
+import api from '../lib/api';
 import { SITE_CONFIG } from '../components/seo/seoConfig';
 
-const changeFrequency = {
-  homepage: 'daily',
-  products: 'daily',
-  product: 'weekly',
-  category: 'weekly',
-  static: 'monthly',
-};
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const priority = {
-  homepage: '1.0',
-  products: '0.9',
-  product: '0.8',
-  category: '0.7',
-  static: '0.5',
-};
-
-const formatDate = (date) => {
-  return new Date(date).toISOString().split('T')[0];
-};
-
-export const generateSitemap = async () => {
-  const urls = [];
-  const today = formatDate(new Date());
-
-  urls.push({
-    loc: `${SITE_CONFIG.url}/`,
-    lastmod: today,
-    changefreq: changeFrequency.homepage,
-    priority: priority.homepage,
-  });
-
-  urls.push({
-    loc: `${SITE_CONFIG.url}/products`,
-    lastmod: today,
-    changefreq: changeFrequency.products,
-    priority: priority.products,
-  });
-
+export const fetchSitemapXml = async () => {
   try {
-    const [categoriesRes, productsRes] = await Promise.all([
-      categoriesAPI.list(true),
-      productsAPI.list({ page: 1, page_size: 1000 }),
-    ]);
-
-    const categories = categoriesRes.data || [];
-    categories.forEach((category) => {
-      urls.push({
-        loc: `${SITE_CONFIG.url}/products?category=${category.slug}`,
-        lastmod: today,
-        changefreq: changeFrequency.category,
-        priority: priority.category,
-      });
-    });
-
-    const products = productsRes.data?.items || [];
-    products.forEach((product) => {
-      urls.push({
-        loc: `${SITE_CONFIG.url}/products/${product.slug}`,
-        lastmod: formatDate(product.updated_at || product.created_at),
-        changefreq: changeFrequency.product,
-        priority: priority.product,
-      });
-    });
+    const response = await fetch(`${BACKEND_URL}/api/sitemap.xml`);
+    if (response.ok) {
+      return await response.text();
+    }
   } catch (error) {
-    console.error('Error fetching data for sitemap:', error);
+    console.error('Failed to fetch sitemap from backend:', error);
   }
-
-  return urls;
+  return generateFallbackSitemap();
 };
 
-export const generateSitemapXml = async () => {
-  const urls = await generateSitemap();
+const generateFallbackSitemap = () => {
+  const today = new Date().toISOString().split('T')[0];
+  const urls = [
+    { loc: `${SITE_CONFIG.url}/`, changefreq: 'daily', priority: '1.0' },
+    { loc: `${SITE_CONFIG.url}/products`, changefreq: 'daily', priority: '0.9' },
+  ];
 
   const urlsXml = urls
-    .map(
-      (url) => `
+    .map((url) => `
   <url>
     <loc>${url.loc}</loc>
-    <lastmod>${url.lastmod}</lastmod>
+    <lastmod>${today}</lastmod>
     <changefreq>${url.changefreq}</changefreq>
     <priority>${url.priority}</priority>
-  </url>`
-    )
+  </url>`)
     .join('');
 
   return `<?xml version="1.0" encoding="UTF-8"?>

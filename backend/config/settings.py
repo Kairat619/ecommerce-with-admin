@@ -40,6 +40,9 @@ class Settings:
     # App settings
     APP_NAME: str = "E-Commerce API"
     DEBUG: bool = os.environ.get('DEBUG', 'false').lower() == 'true'
+    
+    # Frontend URL for sitemap
+    FRONTEND_URL: str = os.environ.get('FRONTEND_URL', 'https://yourdomain.com')
 
 
 settings = Settings()

@@ -6,99 +6,114 @@ This SEO implementation provides comprehensive search engine optimization for yo
 
 - **react-helmet-async** for meta tag management
 - **JSON-LD structured data** for rich search results
-- **Dynamic sitemap generation**
+- **Dynamic sitemap generation (Backend)**
 - **Robots.txt configuration**
 
-## Components
+## Architecture
 
-### SEO Component (`src/components/seo/SEO.jsx`)
+For Railway deployment, the sitemap is served from the **backend** at `/api/sitemap.xml`, which fetches all products and categories from the database and generates the XML dynamically.
 
-Main component for managing page meta tags:
+```
+Frontend (Vite/Netlify)
+└── Points to Backend sitemap: /api/sitemap.xml
 
-```jsx
-import { SEO } from '../components/seo';
-
-<SEO
-  title="Page Title"
-  description="Page description for search results"
-  canonical="/products/some-product"
-  ogImage="/path/to/image.jpg"
-  ogType="product"
-/>
+Backend (Railway/FastAPI)
+└── /api/sitemap.xml - Generates XML from DB
+└── /api/robots.txt - Returns robots directives
 ```
 
-### Structured Data Components
+## Backend Setup
 
-#### ProductSchema (`src/components/seo/StructuredData.jsx`)
-Adds Product structured data for rich snippets in Google:
+### 1. Add FRONTEND_URL to Backend Environment
 
-```jsx
-import { ProductSchema } from '../components/seo';
-
-<ProductSchema product={productData} />
+In Railway, set the environment variable:
+```
+FRONTEND_URL=https://your-frontend-url.netlify.app
 ```
 
-#### BreadcrumbSchema
-Adds breadcrumb navigation for better SERP appearance:
+### 2. Backend Files Created
 
-```jsx
-import { BreadcrumbSchema } from '../components/seo';
+```
+backend/routers/
+└── sitemap.py         # Sitemap & robots.txt endpoints
 
-<BreadcrumbSchema items={[
-  { name: 'Home', path: '/' },
-  { name: 'Products', path: '/products' },
-  { name: 'Category', path: '/products?category=electronics' },
-]} />
+backend/config/
+└── settings.py         # Added FRONTEND_URL setting
 ```
 
-#### OrganizationSchema & WebSiteSchema
-Adds organization and website search actions:
+### 3. Endpoints Added
 
-```jsx
-import { OrganizationSchema, WebSiteSchema } from '../components/seo';
+| Endpoint | Description |
+|----------|-------------|
+| `/api/sitemap.xml` | Dynamic XML sitemap |
+| `/api/robots.txt` | Robots.txt with sitemap reference |
 
-<OrganizationSchema />
-<WebSiteSchema />
-```
+## Frontend Configuration
 
-## Configuration
-
-Update `src/components/seo/seoConfig.js` with your site details:
+Update `src/components/seo/seoConfig.js`:
 
 ```js
 export const SITE_CONFIG = {
   name: 'Your Store Name',
   description: 'Your store description',
-  url: 'https://yourdomain.com',
+  url: 'https://your-frontend-url.netlify.app',
   ogImage: '/og-image.png',
   twitterHandle: '@yourhandle',
   locale: 'en_US',
 };
 ```
 
+## Testing
+
+1. **Backend Sitemap**: Visit `https://your-backend-url.railway.app/api/sitemap.xml`
+2. **Backend Robots**: Visit `https://your-backend-url.railway.app/api/robots.txt`
+3. **Google Search Console**: Submit sitemap at `https://search.google.com/search-console`
+4. **Rich Results Test**: Test URLs at `https://search.google.com/test/rich-results`
+
+## Environment Variables Needed
+
+### Backend (.env / Railway)
+```
+FRONTEND_URL=https://your-frontend-url.netlify.app
+```
+
+### Frontend (.env)
+```
+VITE_APP_URL=https://your-frontend-url.netlify.app
+VITE_BACKEND_URL=https://your-backend-url.railway.app
+```
+
+## SEO Components
+
+See `src/components/seo/` for reusable components:
+- `SEO.jsx` - Meta tags (title, description, OG, Twitter)
+- `StructuredData.jsx` - JSON-LD schemas (Product, Breadcrumb, Organization)
+
 ## Files Created
 
+### Frontend
 ```
 frontend/src/components/seo/
 ├── SEO.jsx           # Main SEO meta tags component
 ├── StructuredData.jsx # JSON-LD schema components
 ├── seoConfig.js      # Site configuration
-├── RobotsTxt.jsx     # Robots.txt component
 └── index.js          # Exports
 
-frontend/public/
-├── robots.txt        # Public robots.txt
-
 frontend/src/lib/
-└── sitemap.js        # Dynamic sitemap generation
+└── sitemap.js        # Fetches from backend
 
 frontend/src/pages/
-└── SitemapPage.jsx   # Sitemap route
+└── SitemapPage.jsx   # Fallback sitemap page
 ```
 
-## Routes Added
+### Backend
+```
+backend/routers/
+└── sitemap.py        # Sitemap & robots endpoints
 
-- `/sitemap.xml` - Dynamic sitemap generation
+backend/config/
+└── settings.py       # Added FRONTEND_URL
+```
 
 ## SEO Best Practices
 
@@ -107,39 +122,3 @@ frontend/src/pages/
 3. **Open Graph**: Social sharing with proper previews
 4. **Canonical URLs**: Prevent duplicate content issues
 5. **Sitemap**: Help search engines discover all pages
-
-## Deployment Notes
-
-### Backend Sitemap Endpoint (Recommended)
-
-For production, create a backend endpoint that serves the sitemap:
-
-```python
-# backend/main.py (FastAPI)
-@app.get("/sitemap.xml")
-async def get_sitemap():
-    # Fetch products and categories from DB
-    # Return XML response
-```
-
-### Static Sitemap
-
-For static deployment, generate sitemap at build time:
-
-```bash
-# Build script that generates sitemap.xml
-```
-
-## Testing SEO
-
-1. **Google Search Console**: Submit sitemap at `https://search.google.com/search-console`
-2. **Rich Results Test**: Test URLs at `https://search.google.com/test/rich-results`
-3. **Facebook OG Debugger**: Test social sharing at `https://developers.facebook.com/tools/debug/`
-4. **Twitter Card Validator**: Test Twitter cards at `https://cards-dev.twitter.com/validator`
-
-## Performance Tips
-
-1. Lazy load images with `loading="lazy"`
-2. Use WebP format for images
-3. Implement proper caching headers
-4. Minimize JavaScript bundle size

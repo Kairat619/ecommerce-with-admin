@@ -1,7 +1,7 @@
 export const SITE_CONFIG = {
   name: 'Builda',
   description: 'Premium e-commerce store for quality products',
-  url: process.env.VITE_APP_URL || 'https://yourdomain.com',
+  url: process.env.VITE_APP_URL || 'https://builda-ecommerce1.netlify.app',
   ogImage: '/og-image.png',
   twitterHandle: '@yourhandle',
   locale: 'en_US',
