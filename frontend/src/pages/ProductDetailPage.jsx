@@ -10,6 +10,7 @@ import { Textarea } from '../components/ui/textarea';
 import { toast } from 'sonner';
 import { Minus, Plus, ShoppingCart, Heart, Truck, Shield, RefreshCw, ChevronLeft, Star, Check, Share2, ShoppingBag, CheckCircle } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { SEO, ProductSchema, BreadcrumbSchema } from '../components/seo';
 
 const ProductCard = ({ product }) => {
   return (
@@ -199,26 +200,30 @@ export const ProductDetailPage = () => {
     );
   }
 
-    if (!product) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900">{t('product.notFound')}</h2>
-          <Link to="/products">
-            <Button className="mt-4 rounded-full">{t('product.backToProducts')}</Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  const breadcrumbs = [
+    { name: 'Home', path: '/' },
+    { name: 'Products', path: '/products' },
+    ...(product.category ? [{ name: product.category.name, path: `/products?category=${product.category.slug}` }] : []),
+    { name: product.name, path: `/products/${product.slug}` },
+  ];
 
-  const images = product.images?.length > 0 ? product.images : [product.thumbnail];
-  const discount = product.compare_at_price 
-    ? Math.round((1 - product.price / product.compare_at_price) * 100) 
-    : 0;
+  const productSchema = {
+    ...product,
+    images: images,
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      <SEO
+        title={product.name}
+        description={product.short_description || product.description || `Buy ${product.name} at the best price. ${product.category?.name || 'Quality product'}.`}
+        canonical={`/products/${product.slug}`}
+        ogImage={images[0]}
+        ogType="product"
+      />
+      <ProductSchema product={productSchema} />
+      <BreadcrumbSchema items={breadcrumbs} />
+      <div className="min-h-screen bg-gray-50">
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -679,5 +684,6 @@ export const ProductDetailPage = () => {
         )}
       </div>
     </div>
+    </>
   );
 };

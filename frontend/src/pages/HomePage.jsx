@@ -8,6 +8,7 @@ import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useProductUpdates } from '../context/ProductUpdateContext';
 import { cn } from '../lib/utils';
+import { SEO, WebSiteSchema, OrganizationSchema } from '../components/seo';
 
 const ProductCard = ({ product, index }) => {
   const { t } = useTranslation();
@@ -254,7 +255,15 @@ export const HomePage = () => {
   }, [heroSlides.length]);
 
   return (
-    <div className="min-h-screen">
+    <>
+      <SEO
+        title="Premium E-commerce Store"
+        description="Shop the best products online. Discover great deals on electronics, fashion, home goods and more. Free shipping on orders over $50."
+        ogImage="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200"
+      />
+      <WebSiteSchema />
+      <OrganizationSchema />
+      <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative h-[70vh] md:h-[80vh] overflow-hidden bg-gray-900">
         {!settingsLoaded ? (
@@ -262,69 +271,69 @@ export const HomePage = () => {
         ) : (
           <>
             {heroSlides.map((slide, index) => (
-          <div
-            key={index}
-            className={cn(
-              "absolute inset-0 transition-opacity duration-700",
-              index === currentSlide ? "opacity-100" : "opacity-0"
-            )}
-          >
-            <div className="absolute inset-0 bg-black/30 z-10" />
-            <img
-              src={slide.image}
-              alt={slide.title}
-              className="w-full h-full object-cover"
-            />
-            <div className="relative z-20 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
-              <div className="max-w-xl">
-                <span className="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-sm text-white text-sm font-medium rounded-full mb-4">
-                  {slide.subtitle}
-                </span>
-                <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
-                  {slide.title}
-                </h1>
-                <p className="text-lg text-white/90 mb-8">
-                  {slide.description}
-                </p>
-                <Link to={slide.ctaLink}>
-                  <Button size="lg" className="rounded-full px-8 h-12 text-base bg-white text-gray-900 hover:bg-gray-100">
-                    {slide.cta}
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        ))}
-
-        {heroSlides.length > 0 && (
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-4">
-            <button
-              onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
-              className="p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <div className="flex items-center gap-2">
-              {heroSlides.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={cn(
-                    "w-2 h-2 rounded-full transition-all",
-                    index === currentSlide ? "bg-white w-8" : "bg-white/50"
-                  )}
+              <div
+                key={index}
+                className={cn(
+                  "absolute inset-0 transition-opacity duration-700",
+                  index === currentSlide ? "opacity-100" : "opacity-0"
+                )}
+              >
+                <div className="absolute inset-0 bg-black/30 z-10" />
+                <img
+                  src={slide.image}
+                  alt={slide.title}
+                  className="w-full h-full object-cover"
                 />
-              ))}
-            </div>
-            <button
-              onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
-              className="p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          </div>
-        )}
+                <div className="relative z-20 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+                  <div className="max-w-xl">
+                    <span className="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-sm text-white text-sm font-medium rounded-full mb-4">
+                      {slide.subtitle}
+                    </span>
+                    <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
+                      {slide.title}
+                    </h1>
+                    <p className="text-lg text-white/90 mb-8">
+                      {slide.description}
+                    </p>
+                    <Link to={slide.ctaLink}>
+                      <Button size="lg" className="rounded-full px-8 h-12 text-base bg-white text-gray-900 hover:bg-gray-100">
+                        {slide.cta}
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {heroSlides.length > 0 && (
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-4">
+                <button
+                  onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
+                  className="p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <div className="flex items-center gap-2">
+                  {heroSlides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={cn(
+                        "w-2 h-2 rounded-full transition-all",
+                        index === currentSlide ? "bg-white w-8" : "bg-white/50"
+                      )}
+                    />
+                  ))}
+                </div>
+                <button
+                  onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
+                  className="p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </div>
+            )}
           </>
         )}
       </section>
@@ -459,5 +468,6 @@ export const HomePage = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };

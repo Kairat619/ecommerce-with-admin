@@ -20,6 +20,7 @@ import { WishlistPage } from './pages/WishlistPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { LoginPage, RegisterPage, AuthCallback } from './pages/AuthPages';
 import { OrdersPage, OrderDetailPage } from './pages/OrdersPage';
+import { SitemapPage } from './pages/SitemapPage';
 
 // Admin Pages
 import { AdminDashboard } from './pages/admin/Dashboard';
@@ -92,6 +93,7 @@ function AppRouter() {
       <Route path="/login" element={<StoreLayout><LoginPage /></StoreLayout>} />
       <Route path="/register" element={<StoreLayout><RegisterPage /></StoreLayout>} />
       <Route path="/auth/callback" element={<AuthCallback />} />
+      <Route path="/sitemap.xml" element={<SitemapPage />} />
       
       {/* Admin Routes */}
       <Route path="/admin" element={

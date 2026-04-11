@@ -13,6 +13,7 @@ import {
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { cn } from '../lib/utils';
+import { SEO } from '../components/seo';
 
 const ProductCard = ({ product, viewMode }) => {
   const { t } = useTranslation();
@@ -317,8 +318,30 @@ export const ProductsPage = () => {
     { value: 'name-desc', label: t('products.nameZA') },
   ];
 
+  const categoryName = filters.category && filters.category !== 'all' 
+    ? categories.find(c => c.slug === filters.category)?.name 
+    : null;
+  
+  const pageTitle = categoryName 
+    ? `${categoryName} - Shop ${categoryName} Products`
+    : filters.q 
+      ? `Search results for "${filters.q}"`
+      : 'All Products';
+  
+  const pageDescription = categoryName
+    ? `Browse our collection of ${categoryName}. Quality products at competitive prices with free shipping.`
+    : filters.q
+      ? `Search results for "${filters.q}". Find the best products that match your search.`
+      : 'Explore our complete product catalog. Shop electronics, fashion, home goods and more.';
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      <SEO
+        title={pageTitle}
+        description={pageDescription}
+        canonical={`/products${filters.category && filters.category !== 'all' ? `?category=${filters.category}` : ''}`}
+      />
+      <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -613,5 +636,6 @@ export const ProductsPage = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
