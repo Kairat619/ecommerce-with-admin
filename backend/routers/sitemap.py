@@ -1,5 +1,5 @@
 """Sitemap router for SEO."""
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Response, Depends
 from sqlalchemy.orm import Session
 from datetime import datetime
 
@@ -30,7 +30,7 @@ def format_date(dt):
 
 
 @router.get("/sitemap.xml")
-async def get_sitemap(db: Session = next(get_db())):
+async def get_sitemap(db: Session = Depends(get_db)):
     """Generate XML sitemap for search engines."""
     
     from models.models import Product, Category
