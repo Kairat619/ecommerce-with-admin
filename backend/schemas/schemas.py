@@ -26,7 +26,6 @@ class UserRegister(BaseModel):
     password: str = Field(min_length=6)
     name: str = Field(min_length=1, max_length=255)
     website: Optional[str] = Field(None, description="Honeypot field for bot prevention")
-    recaptcha_token: Optional[str] = Field(None, description="reCAPTCHA v3 token")
 
 
 class UserLogin(BaseModel):

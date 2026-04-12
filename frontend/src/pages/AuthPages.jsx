@@ -1,5 +1,5 @@
 /**
- * Auth Pages - Login, Register, OAuth Callback with reCAPTCHA v3
+ * Auth Pages - Login, Register, OAuth Callback
  */
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -11,34 +11,6 @@ import { toast } from 'sonner';
 import { Mail, Lock, User, ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { authAPI } from '../lib/api';
-
-const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '';
-
-const loadRecaptcha = () => {
-  if (!RECAPTCHA_SITE_KEY) return Promise.resolve();
-  if (window.grecaptcha) return Promise.resolve();
-  
-  return new Promise((resolve) => {
-    const script = document.createElement('script');
-    script.src = 'https://www.google.com/recaptcha/api.js?render=' + RECAPTCHA_SITE_KEY;
-    script.async = true;
-    script.onload = resolve;
-    script.onerror = () => console.warn('Failed to load reCAPTCHA');
-    document.head.appendChild(script);
-  });
-};
-
-const executeRecaptcha = async () => {
-  if (!RECAPTCHA_SITE_KEY || !window.grecaptcha) return null;
-  
-  try {
-    const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'register' });
-    return token;
-  } catch (error) {
-    console.error('reCAPTCHA error:', error);
-    return null;
-  }
-};
 
 export const LoginPage = () => {
   const { t } = useTranslation();
@@ -191,12 +163,6 @@ export const RegisterPage = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  useEffect(() => {
-    if (RECAPTCHA_SITE_KEY) {
-      loadRecaptcha();
-    }
-  }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password.length < 6) {
@@ -205,14 +171,11 @@ export const RegisterPage = () => {
     }
     setLoading(true);
     try {
-      const recaptchaToken = await executeRecaptcha();
-      
       const response = await authAPI.register({
         name: formData.name,
         email: formData.email,
         password: formData.password,
-        website: formData.website,
-        recaptcha_token: recaptchaToken
+        website: formData.website
       });
       
       localStorage.setItem('access_token', response.data.access_token);

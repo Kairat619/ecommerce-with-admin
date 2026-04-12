@@ -76,36 +76,11 @@ def user_to_dict(user: User, include_password: bool = False):
     return data
 
 
-async def verify_recaptcha(token: str) -> bool:
-    """Verify reCAPTCHA v3 token with Google."""
-    if not settings.RECAPTCHA_SECRET_KEY:
-        return True
-    
-    if not token:
-        return False
-    
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                'https://www.google.com/recaptcha/api/siteverify',
-                data={
-                    'secret': settings.RECAPTCHA_SECRET_KEY,
-                    'response': token
-                },
-                timeout=10
-            ) as resp:
-                result = await resp.json()
-                return result.get('success', False) and result.get('score', 0) >= 0.5
-    except Exception:
-        return True
-
-
 @router.post("/register", response_model=TokenResponse)
 async def register(
     data: UserRegister,
     response: Response,
-    db: Session = Depends(get_db),
-    recaptcha_token: Optional[str] = None
+    db: Session = Depends(get_db)
 ):
     """Register a new user with bot protection."""
     if check_honeypot(data.model_dump()):
@@ -113,14 +88,6 @@ async def register(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid registration"
         )
-    
-    if settings.RECAPTCHA_SECRET_KEY:
-        is_valid = await verify_recaptcha(recaptcha_token)
-        if not is_valid:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="reCAPTCHA verification failed. Please try again."
-            )
     
     existing = get_user_by_email(db, data.email)
     if existing:
