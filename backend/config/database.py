@@ -81,6 +81,9 @@ def migrate_schema():
                 'users': [
                     ('auth_provider', 'VARCHAR(50) DEFAULT \'local\''),
                     ('is_deleted', 'BOOLEAN DEFAULT FALSE'),
+                    ('is_verified', 'BOOLEAN DEFAULT FALSE'),
+                    ('verification_token', 'VARCHAR(255)'),
+                    ('verification_sent_at', 'TIMESTAMP'),
                 ],
                 'orders': [
                     ('is_deleted', 'BOOLEAN DEFAULT FALSE'),
