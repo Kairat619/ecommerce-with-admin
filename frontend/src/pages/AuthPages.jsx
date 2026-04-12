@@ -15,6 +15,7 @@ import { authAPI } from '../lib/api';
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '';
 
 const loadRecaptcha = () => {
+  if (!RECAPTCHA_SITE_KEY) return Promise.resolve();
   if (window.grecaptcha) return Promise.resolve();
   
   return new Promise((resolve) => {
@@ -22,6 +23,7 @@ const loadRecaptcha = () => {
     script.src = 'https://www.google.com/recaptcha/api.js?render=' + RECAPTCHA_SITE_KEY;
     script.async = true;
     script.onload = resolve;
+    script.onerror = () => console.warn('Failed to load reCAPTCHA');
     document.head.appendChild(script);
   });
 };
@@ -297,10 +299,6 @@ export const RegisterPage = () => {
                 autoComplete="off"
               />
             </div>
-
-            {RECAPTCHA_SITE_KEY && (
-              <div className="g-recaptcha" data-sitekey={RECAPTCHA_SITE_KEY} data-callback="onRecaptcha" />
-            )}
 
             <Button 
               type="submit" 
