@@ -47,11 +47,6 @@ class User(Base):
     is_deleted = Column(Boolean, default=False)
     auth_provider = Column(String(50), default="local")  # local, google
     
-    # Email verification
-    is_verified = Column(Boolean, default=False)
-    verification_token = Column(String(255), nullable=True)
-    verification_sent_at = Column(DateTime(timezone=True), nullable=True)
-    
     # Audit fields
     created_at = Column(DateTime(timezone=True), default=utc_now)
     updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now)

@@ -1,7 +1,7 @@
-"""Authentication router using SQLite."""
+"""Authentication router with reCAPTCHA v3 and bot prevention."""
 from datetime import datetime, timedelta, timezone
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
+from fastapi import APIRouter, Depends, HTTPException, status, Response, Request, Header
 import aiohttp
 import uuid
 
@@ -10,17 +10,12 @@ from config.database import get_db
 from config.settings import settings
 from schemas.schemas import (
     UserRegister, UserLogin, TokenResponse, TokenRefresh,
-    UserResponse, UserUpdate, PasswordChange, RegisterResponse,
-    VerifyEmailRequest, ResendVerificationRequest
+    UserResponse, UserUpdate, PasswordChange
 )
 from models.models import User, RefreshToken
 from utils.security import (
     hash_password, verify_password, create_access_token,
     create_refresh_token, decode_token
-)
-from utils.email import (
-    generate_verification_token, get_verification_token_expiry,
-    send_verification_email
 )
 from utils.rate_limiter import check_honeypot
 
@@ -71,7 +66,6 @@ def user_to_dict(user: User, include_password: bool = False):
         "phone": user.phone,
         "role": user.role.value if hasattr(user.role, 'value') else user.role,
         "is_active": user.is_active,
-        "is_verified": user.is_verified,
         "is_deleted": user.is_deleted,
         "auth_provider": user.auth_provider,
         "created_at": user.created_at.isoformat() if user.created_at else None,
@@ -82,18 +76,51 @@ def user_to_dict(user: User, include_password: bool = False):
     return data
 
 
-@router.post("/register", response_model=RegisterResponse)
+async def verify_recaptcha(token: str) -> bool:
+    """Verify reCAPTCHA v3 token with Google."""
+    if not settings.RECAPTCHA_SECRET_KEY:
+        return True
+    
+    if not token:
+        return False
+    
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                'https://www.google.com/recaptcha/api/siteverify',
+                data={
+                    'secret': settings.RECAPTCHA_SECRET_KEY,
+                    'response': token
+                },
+                timeout=10
+            ) as resp:
+                result = await resp.json()
+                return result.get('success', False) and result.get('score', 0) >= 0.5
+    except Exception:
+        return True
+
+
+@router.post("/register", response_model=TokenResponse)
 async def register(
     data: UserRegister,
     response: Response,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    recaptcha_token: Optional[str] = None
 ):
-    """Register a new user with email verification."""
+    """Register a new user with bot protection."""
     if check_honeypot(data.model_dump()):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid registration"
         )
+    
+    if settings.RECAPTCHA_SECRET_KEY:
+        is_valid = await verify_recaptcha(recaptcha_token)
+        if not is_valid:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="reCAPTCHA verification failed. Please try again."
+            )
     
     existing = get_user_by_email(db, data.email)
     if existing:
@@ -101,8 +128,6 @@ async def register(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered"
         )
-    
-    verification_token = generate_verification_token()
     
     user = User(
         id=str(uuid.uuid4()),
@@ -114,20 +139,30 @@ async def register(
         role="customer",
         is_active=True,
         is_deleted=False,
-        auth_provider="local",
-        is_verified=False,
-        verification_token=verification_token,
-        verification_sent_at=get_verification_token_expiry()
+        auth_provider="local"
     )
     db.add(user)
     db.commit()
     db.refresh(user)
     
-    email_sent = send_verification_email(data.email, data.name, verification_token)
+    access_token = create_access_token({"sub": user.id})
+    refresh_token, expires_at = create_refresh_token({"sub": user.id})
     
-    return RegisterResponse(
-        message="Registration successful. Please check your email to verify your account.",
-        email_sent=email_sent
+    refresh_token_obj = RefreshToken(
+        id=str(uuid.uuid4()),
+        user_id=user.id,
+        token=refresh_token,
+        expires_at=expires_at,
+        is_revoked=False
+    )
+    db.add(refresh_token_obj)
+    db.commit()
+    
+    set_session_cookie(response, access_token)
+    
+    return TokenResponse(
+        access_token=access_token,
+        refresh_token=refresh_token
     )
 
 
@@ -182,12 +217,6 @@ async def login(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Account is disabled"
-        )
-    
-    if not user.is_verified:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Please verify your email address before logging in. Check your inbox for the verification link."
         )
     
     if not verify_password(data.password, user.password_hash):
@@ -334,8 +363,7 @@ async def google_oauth(
             role="customer",
             is_active=True,
             is_deleted=False,
-            auth_provider="google",
-            is_verified=True
+            auth_provider="google"
         )
         db.add(user)
         db.commit()
@@ -478,87 +506,6 @@ async def logout(
     response.delete_cookie(key="session_token", path="/")
     
     return {"message": "Logged out successfully"}
-
-
-@router.post("/verify-email")
-async def verify_email(
-    data: VerifyEmailRequest,
-    db: Session = Depends(get_db)
-):
-    """Verify user email with token."""
-    user = db.query(User).filter(
-        User.verification_token == data.token,
-        User.is_deleted == False
-    ).first()
-    
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid or expired verification token"
-        )
-    
-    if user.is_verified:
-        return {"message": "Email already verified", "verified": True}
-    
-    from datetime import datetime, timezone
-    if user.verification_sent_at:
-        if user.verification_sent_at.tzinfo is None:
-            user.verification_sent_at = user.verification_sent_at.replace(tzinfo=timezone.utc)
-        if user.verification_sent_at < datetime.now(timezone.utc):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Verification token has expired. Please request a new one."
-            )
-    
-    user.is_verified = True
-    user.verification_token = None
-    db.commit()
-    
-    return {"message": "Email verified successfully", "verified": True}
-
-
-@router.post("/resend-verification")
-async def resend_verification(
-    data: ResendVerificationRequest,
-    db: Session = Depends(get_db)
-):
-    """Resend verification email to user."""
-    user = get_user_by_email(db, data.email)
-    
-    if not user:
-        return {"message": "If that email exists, a verification link has been sent."}
-    
-    if user.is_verified:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="This email is already verified"
-        )
-    
-    from datetime import datetime, timezone
-    if user.verification_sent_at:
-        if user.verification_sent_at.tzinfo is None:
-            user.verification_sent_at = user.verification_sent_at.replace(tzinfo=timezone.utc)
-        time_since_last = datetime.now(timezone.utc) - user.verification_sent_at
-        if time_since_last.total_seconds() < 60:
-            raise HTTPException(
-                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                detail="Please wait before requesting another verification email."
-            )
-    
-    verification_token = generate_verification_token()
-    user.verification_token = verification_token
-    user.verification_sent_at = get_verification_token_expiry()
-    db.commit()
-    
-    email_sent = send_verification_email(user.email, user.name, verification_token)
-    
-    if not email_sent:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to send verification email. Please try again later."
-        )
-    
-    return {"message": "Verification email sent. Please check your inbox."}
 
 
 async def get_current_user_from_request(db: Session, request: Request) -> Optional[User]:

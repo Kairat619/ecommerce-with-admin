@@ -56,6 +56,10 @@ class Settings:
     # Resend Email API (alternative to SMTP)
     RESEND_API_KEY: str = os.environ.get('RESEND_API_KEY', '')
     RESEND_FROM_EMAIL: str = os.environ.get('RESEND_FROM_EMAIL', 'onboarding@resend.dev')
+    
+    # reCAPTCHA v3 (get keys from https://www.google.com/recaptcha/admin)
+    RECAPTCHA_SITE_KEY: str = os.environ.get('RECAPTCHA_SITE_KEY', '')
+    RECAPTCHA_SECRET_KEY: str = os.environ.get('RECAPTCHA_SECRET_KEY', '')
 
 
 settings = Settings()
