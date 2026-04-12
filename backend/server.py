@@ -272,7 +272,7 @@ app.add_middleware(
 )
 
 # Rate limiting middleware for auth endpoints
-app.add_middleware(RateLimiter, max_requests=5, window_seconds=300)
+app.add_middleware(RateLimiter, max_requests=10, window_seconds=300)
 
 # Include routers with /api prefix
 app.include_router(auth_router, prefix="/api")
