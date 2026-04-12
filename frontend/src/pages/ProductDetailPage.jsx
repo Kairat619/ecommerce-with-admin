@@ -66,6 +66,8 @@ export const ProductDetailPage = () => {
   const [existingReview, setExistingReview] = useState(null);
 
   const inWishlist = product ? isInWishlist(product.id) : false;
+  const images = product?.images || [];
+  const discount = product?.compare_at_price ? Math.round((1 - product.price / product.compare_at_price) * 100) : 0;
 
   useEffect(() => {
     const fetchProduct = async () => {
