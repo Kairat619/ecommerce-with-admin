@@ -25,6 +25,7 @@ class UserRegister(BaseModel):
     email: EmailStr
     password: str = Field(min_length=6)
     name: str = Field(min_length=1, max_length=255)
+    website: Optional[str] = Field(None, description="Honeypot field for bot prevention")
 
 
 class UserLogin(BaseModel):
@@ -36,6 +37,19 @@ class TokenResponse(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
+
+
+class RegisterResponse(BaseModel):
+    message: str
+    email_sent: bool
+
+
+class VerifyEmailRequest(BaseModel):
+    token: str
+
+
+class ResendVerificationRequest(BaseModel):
+    email: EmailStr
 
 
 class TokenRefresh(BaseModel):
@@ -52,6 +66,7 @@ class UserResponse(BaseModel):
     phone: Optional[str] = None
     role: UserRole
     is_active: bool
+    is_verified: bool = False
     auth_provider: str
     created_at: datetime
 

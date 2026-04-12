@@ -24,8 +24,9 @@ pydantic==2.12.5
 pydantic_core==2.41.5
 email-validator==2.3.0
 
-# HTTP Client (for OAuth)
+# HTTP Client (for OAuth & Email APIs)
 aiohttp==3.13.3
+httpx==0.28.1
 google-auth==2.36.0
 google-auth-oauthlib==1.2.1
 

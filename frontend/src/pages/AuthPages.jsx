@@ -1,15 +1,16 @@
 /**
- * Auth Pages - Login, Register, OAuth Callback
+ * Auth Pages - Login, Register, OAuth Callback, Email Verification
  */
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { toast } from 'sonner';
-import { Mail, Lock, User, ArrowRight } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, CheckCircle, AlertCircle, MailCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { authAPI } from '../lib/api';
 
 export const LoginPage = () => {
   const { t } = useTranslation();
@@ -35,9 +36,29 @@ export const LoginPage = () => {
       toast.success(t('auth.welcomeBackToast'));
       navigate(redirect);
     } catch (error) {
-      toast.error(error.response?.data?.detail || t('auth.invalidCredentials'));
+      const errorDetail = error.response?.data?.detail || t('auth.invalidCredentials');
+      if (errorDetail.includes('verify your email')) {
+        toast.error(errorDetail, {
+          action: {
+            label: t('auth.resendVerification'),
+            onClick: () => handleResendVerification(formData.email)
+          }
+        });
+      } else {
+        toast.error(errorDetail);
+      }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendVerification = async (email) => {
+    try {
+      await authAPI.resendVerification(email);
+      toast.success(t('auth.verificationEmailSent'));
+      navigate('/login');
+    } catch (error) {
+      toast.error(error.response?.data?.detail || t('auth.resendFailed'));
     }
   };
 
@@ -146,10 +167,17 @@ export const LoginPage = () => {
 
 export const RegisterPage = () => {
   const { t } = useTranslation();
-  const { register, loginWithGoogle, isAuthenticated } = useAuth();
+  const { loginWithGoogle, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState('');
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    email: '', 
+    password: '',
+    website: '' // honeypot field
+  });
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -165,15 +193,66 @@ export const RegisterPage = () => {
     }
     setLoading(true);
     try {
-      await register(formData.name, formData.email, formData.password);
-      toast.success(t('auth.accountCreatedToast'));
-      navigate('/');
+      await authAPI.register({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        website: formData.website
+      });
+      setRegisteredEmail(formData.email);
+      setShowSuccess(true);
+      toast.success(t('auth.checkEmailForVerification'));
     } catch (error) {
       toast.error(error.response?.data?.detail || t('auth.registrationFailed'));
     } finally {
       setLoading(false);
     }
   };
+
+  const handleResendVerification = async () => {
+    try {
+      await authAPI.resendVerification(registeredEmail);
+      toast.success(t('auth.verificationEmailSent'));
+    } catch (error) {
+      toast.error(error.response?.data?.detail || t('auth.resendFailed'));
+    }
+  };
+
+  if (showSuccess) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center px-4">
+        <div className="w-full max-w-md">
+          <div className="bg-card rounded-2xl border p-8 shadow-sm text-center">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <MailCheck className="w-8 h-8 text-green-600" />
+            </div>
+            <h1 className="text-2xl font-bold font-outfit mb-4">{t('auth.checkYourEmail')}</h1>
+            <p className="text-muted-foreground mb-2">
+              {t('auth.verificationSentTo')}
+            </p>
+            <p className="font-medium text-primary mb-6">{registeredEmail}</p>
+            <p className="text-sm text-muted-foreground mb-6">
+              {t('auth.clickVerificationLink')}
+            </p>
+            <div className="space-y-3">
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={handleResendVerification}
+              >
+                {t('auth.resendVerificationEmail')}
+              </Button>
+              <Link to="/login" className="block">
+                <Button variant="ghost" className="w-full">
+                  {t('auth.backToLogin')}
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4" data-testid="register-page">
@@ -235,6 +314,18 @@ export const RegisterPage = () => {
               </div>
               <p className="text-xs text-muted-foreground mt-1">{t('auth.minPassword')}</p>
             </div>
+            
+            {/* Honeypot field - hidden from users, bots will fill it */}
+            <div className="hidden" aria-hidden="true">
+              <input
+                type="text"
+                name="website"
+                value={formData.website}
+                onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </div>
 
             <Button 
               type="submit" 
@@ -278,6 +369,106 @@ export const RegisterPage = () => {
               {t('auth.signIn')}
             </Link>
           </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const VerifyEmailPage = () => {
+  const { t } = useTranslation();
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [verifying, setVerifying] = useState(true);
+  const [verified, setVerified] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const verifyEmail = async () => {
+      const token = searchParams.get('token');
+      
+      if (!token) {
+        setError(t('auth.noVerificationToken'));
+        setVerifying(false);
+        return;
+      }
+
+      try {
+        await authAPI.verifyEmail(token);
+        setVerified(true);
+        toast.success(t('auth.emailVerifiedSuccess'));
+      } catch (err) {
+        setError(err.response?.data?.detail || t('auth.verificationFailed'));
+      } finally {
+        setVerifying(false);
+      }
+    };
+
+    verifyEmail();
+  }, [searchParams, t]);
+
+  if (verifying) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center px-4">
+        <div className="text-center">
+          <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto" />
+          <p className="mt-4 text-muted-foreground">{t('auth.verifyingEmail')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (verified) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center px-4">
+        <div className="w-full max-w-md">
+          <div className="bg-card rounded-2xl border p-8 shadow-sm text-center">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-8 h-8 text-green-600" />
+            </div>
+            <h1 className="text-2xl font-bold font-outfit mb-4">{t('auth.emailVerified')}</h1>
+            <p className="text-muted-foreground mb-6">
+              {t('auth.emailVerifiedMessage')}
+            </p>
+            <Link to="/login">
+              <Button className="w-full rounded-full">
+                {t('auth.signIn')}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center px-4">
+      <div className="w-full max-w-md">
+        <div className="bg-card rounded-2xl border p-8 shadow-sm text-center">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <AlertCircle className="w-8 h-8 text-red-600" />
+          </div>
+          <h1 className="text-2xl font-bold font-outfit mb-4">{t('auth.verificationFailed')}</h1>
+          <p className="text-muted-foreground mb-2">
+            {error}
+          </p>
+          <p className="text-sm text-muted-foreground mb-6">
+            {t('auth.tryAgainLater')}
+          </p>
+          <div className="space-y-3">
+            <Link to="/register" className="block">
+              <Button variant="outline" className="w-full">
+                {t('auth.createNewAccount')}
+              </Button>
+            </Link>
+            <Link to="/login" className="block">
+              <Button variant="ghost" className="w-full">
+                {t('auth.backToLogin')}
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

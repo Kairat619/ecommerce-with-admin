@@ -43,6 +43,19 @@ class Settings:
     
     # Frontend URL for sitemap
     FRONTEND_URL: str = os.environ.get('FRONTEND_URL', 'https://yourdomain.com')
+    
+    # SMTP Email Settings
+    SMTP_ENABLED: bool = os.environ.get('SMTP_ENABLED', 'false').lower() == 'true'
+    SMTP_HOST: str = os.environ.get('SMTP_HOST', 'smtp.gmail.com')
+    SMTP_PORT: int = int(os.environ.get('SMTP_PORT', '587'))
+    SMTP_USERNAME: str = os.environ.get('SMTP_USERNAME', '')
+    SMTP_PASSWORD: str = os.environ.get('SMTP_PASSWORD', '')
+    SMTP_FROM_EMAIL: str = os.environ.get('SMTP_FROM_EMAIL', 'noreply@yourdomain.com')
+    SMTP_FROM_NAME: str = os.environ.get('SMTP_FROM_NAME', 'E-Commerce')
+    
+    # Resend Email API (alternative to SMTP)
+    RESEND_API_KEY: str = os.environ.get('RESEND_API_KEY', '')
+    RESEND_FROM_EMAIL: str = os.environ.get('RESEND_FROM_EMAIL', 'onboarding@resend.dev')
 
 
 settings = Settings()

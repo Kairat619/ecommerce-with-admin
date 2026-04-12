@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from config.settings import settings
 from config.database import init_db, SessionLocal, engine
 from utils.security import hash_password
+from utils.rate_limiter import RateLimiter
 from routers import (
     auth_router, categories_router, products_router,
     cart_router, orders_router, admin_router, user_reviews_router
@@ -43,7 +44,8 @@ async def seed_admin():
                 role="admin",
                 is_active=True,
                 is_deleted=False,
-                auth_provider="local"
+                auth_provider="local",
+                is_verified=True
             )
             db.add(admin)
             db.commit()
@@ -268,6 +270,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Rate limiting middleware for auth endpoints
+app.add_middleware(RateLimiter, max_requests=5, window_seconds=300)
 
 # Include routers with /api prefix
 app.include_router(auth_router, prefix="/api")

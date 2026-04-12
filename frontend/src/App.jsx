@@ -18,7 +18,7 @@ import { ProductDetailPage } from './pages/ProductDetailPage';
 import { CartPage } from './pages/CartPage';
 import { WishlistPage } from './pages/WishlistPage';
 import { CheckoutPage } from './pages/CheckoutPage';
-import { LoginPage, RegisterPage, AuthCallback } from './pages/AuthPages';
+import { LoginPage, RegisterPage, AuthCallback, VerifyEmailPage } from './pages/AuthPages';
 import { OrdersPage, OrderDetailPage } from './pages/OrdersPage';
 import { SitemapPage } from './pages/SitemapPage';
 
@@ -92,6 +92,7 @@ function AppRouter() {
       {/* Auth Routes */}
       <Route path="/login" element={<StoreLayout><LoginPage /></StoreLayout>} />
       <Route path="/register" element={<StoreLayout><RegisterPage /></StoreLayout>} />
+      <Route path="/verify-email" element={<StoreLayout><VerifyEmailPage /></StoreLayout>} />
       <Route path="/auth/callback" element={<AuthCallback />} />
       <Route path="/sitemap.xml" element={<SitemapPage />} />
       
