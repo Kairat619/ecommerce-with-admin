@@ -54,100 +54,69 @@ export const StoreLayout = ({ children }) => {
   };
 
   const navLinks = [
-    { href: '/products', label: t('nav.products') },
-    { href: '/products?category=electronics', label: t('nav.electronics') },
-    { href: '/products?category=fashion', label: t('nav.fashion') },
-    { href: '/products?category=home-living', label: t('nav.home') },
+    { href: '/products', label: 'New Arrivals' },
+    { href: '/products?category=fashion', label: 'Categories' },
+    { href: '/products?category=electronics', label: 'Brands' },
+    { href: '/products?category=home-living', label: 'Editorial' },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-background" data-testid="store-layout">
+    <div className="min-h-screen flex flex-col bg-background font-body-md text-on-surface antialiased" data-testid="store-layout">
       {/* Header */}
       <header 
         className={cn(
-          "sticky top-0 z-50 transition-all duration-300",
+          "fixed top-0 w-full z-50 transition-all duration-300",
           scrolled 
-            ? "bg-white/95 backdrop-blur-md shadow-sm py-3" 
-            : "bg-transparent py-4"
+            ? "bg-white/95 backdrop-blur-md border-b border-zinc-100 h-16" 
+            : "bg-white border-b border-zinc-100 h-20"
         )}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between gap-4">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 shrink-0" data-testid="logo-link">
-              <span className="text-2xl font-bold tracking-tight text-gray-900 font-outfit">
-                {t('common.shop')}
-              </span>
+        <div className="flex justify-between items-center px-4 md:px-8 h-full max-w-screen-2xl mx-auto">
+          <div className="flex items-center gap-8 md:gap-12">
+            <Link to="/" className="text-2xl font-bold tracking-tighter text-zinc-900 font-headline-lg font-serif">
+              ShopNest
             </Link>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-6">
+            <nav className="hidden md:flex gap-6 lg:gap-8 items-center">
               {navLinks.map((link) => (
                 <Link 
                   key={link.href}
                   to={link.href}
-                  className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors relative group"
+                  className="font-serif tracking-tight text-zinc-500 font-medium hover:text-secondary transition-colors duration-200 text-sm"
                 >
                   {link.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-900 transition-all group-hover:w-full" />
                 </Link>
               ))}
             </nav>
-
-            {/* Search Bar */}
-            <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-xl">
-              <div className="relative w-full">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  type="search"
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-11 pr-4 h-11 bg-gray-50 border-gray-200 rounded-full focus:bg-white focus:border-gray-300 focus:ring-0 transition-all"
-                />
-              </div>
+          </div>
+          <div className="flex items-center gap-4 md:gap-6">
+            <form onSubmit={handleSearch} className="hidden lg:block relative">
+              <Input
+                type="search"
+                placeholder="Search curated styles..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="bg-zinc-50 border-none rounded-full px-6 py-2 text-sm w-56 lg:w-64 focus:ring-1 focus:ring-primary focus:outline-none"
+              />
+              <Search className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
             </form>
-
-            {/* Actions */}
-            <div className="flex items-center gap-1">
-              {/* Language Switcher */}
+            <div className="flex items-center gap-2 md:gap-4">
               <LanguageSwitcher />
-
-              {/* Wishlist */}
-              <Link to="/wishlist" className="relative hidden sm:block">
-                <Button variant="ghost" size="icon" className="text-gray-600 hover:text-gray-900">
+              <Link to="/wishlist" className="hidden sm:block scale-100 active:scale-95 transition-transform">
+                <Button variant="ghost" size="icon" className="text-zinc-600 hover:text-zinc-900 relative">
                   <Heart className="h-5 w-5" />
                   {wishlistCount > 0 && (
-                    <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-[10px] font-medium rounded-full flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 h-4 w-4 bg-tertiary text-white text-[10px] font-medium rounded-full flex items-center justify-center">
                       {wishlistCount}
                     </span>
                   )}
                 </Button>
               </Link>
-
-              {/* Cart */}
-              <Link to="/cart" className="relative">
-                <Button variant="ghost" size="icon" className="text-gray-600 hover:text-gray-900">
-                  <ShoppingCart className="h-5 w-5" />
-                  {itemsCount > 0 && (
-                    <span className="absolute -top-1 -right-1 h-5 w-5 bg-gray-900 text-white text-xs font-medium rounded-full flex items-center justify-center">
-                      {itemsCount}
-                    </span>
-                  )}
-                </Button>
-              </Link>
-
-              {/* User Menu */}
               {isAuthenticated ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="text-gray-600 hover:text-gray-900" data-testid="user-menu-trigger">
+                    <Button variant="ghost" size="icon" className="text-zinc-600 hover:text-zinc-900 scale-100 active:scale-95 transition-transform">
                       {user?.picture ? (
-                        <img 
-                          src={user.picture} 
-                          alt={user.name} 
-                          className="h-8 w-8 rounded-full object-cover"
-                        />
+                        <img src={user.picture} alt={user.name} className="h-8 w-8 rounded-full object-cover" />
                       ) : (
                         <User className="h-5 w-5" />
                       )}
@@ -160,39 +129,47 @@ export const StoreLayout = ({ children }) => {
                     </div>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link to="/orders" className="cursor-pointer" data-testid="my-orders-link">
+                      <Link to="/orders" className="cursor-pointer">
                         <Package className="mr-2 h-4 w-4" />
                         {t('common.myOrders')}
                       </Link>
                     </DropdownMenuItem>
                     {isAdmin && (
                       <DropdownMenuItem asChild>
-                        <Link to="/admin" className="cursor-pointer" data-testid="admin-link">
+                        <Link to="/admin" className="cursor-pointer">
                           <Settings className="mr-2 h-4 w-4" />
                           {t('common.adminPanel')}
                         </Link>
                       </DropdownMenuItem>
                     )}
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive" data-testid="logout-btn">
+                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive">
                       <LogOut className="mr-2 h-4 w-4" />
                       {t('common.signOut')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <Link to="/login">
-                  <Button variant="outline" size="sm" className="rounded-full border-gray-300 text-gray-700 hover:bg-gray-900 hover:text-white" data-testid="login-btn">
-                    {t('common.signIn')}
+                <Link to="/login" className="hidden sm:block">
+                  <Button variant="ghost" size="icon" className="text-zinc-600 hover:text-zinc-900 scale-100 active:scale-95 transition-transform">
+                    <User className="h-5 w-5" />
                   </Button>
                 </Link>
               )}
-
-              {/* Mobile Menu Toggle */}
+              <Link to="/cart" className="relative scale-100 active:scale-95 transition-transform">
+                <Button variant="ghost" size="icon" className="text-zinc-600 hover:text-zinc-900">
+                  <ShoppingCart className="h-5 w-5" />
+                  {itemsCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-secondary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                      {itemsCount}
+                    </span>
+                  )}
+                </Button>
+              </Link>
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="lg:hidden"
+                className="md:hidden"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -203,17 +180,17 @@ export const StoreLayout = ({ children }) => {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-gray-100 bg-white">
+          <div className="md:hidden border-t border-zinc-100 bg-white">
             <div className="px-4 py-4 space-y-4">
               <form onSubmit={handleSearch}>
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
                   <Input
                     type="search"
-                    placeholder="Search products..."
+                    placeholder="Search curated styles..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 w-full bg-gray-50"
+                    className="pl-10 w-full bg-zinc-50 border-none rounded-full"
                   />
                 </div>
               </form>
@@ -222,7 +199,7 @@ export const StoreLayout = ({ children }) => {
                   <Link 
                     key={link.href}
                     to={link.href}
-                    className="px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50"
+                    className="px-3 py-2.5 font-serif text-sm text-zinc-700 rounded-lg hover:bg-zinc-50"
                   >
                     {link.label}
                   </Link>
@@ -234,65 +211,52 @@ export const StoreLayout = ({ children }) => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1">
+      <main className="pt-20">
         {children}
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
-            {/* Brand */}
-            <div className="col-span-2 md:col-span-1">
-              <span className="text-2xl font-bold font-outfit">{t('common.shop')}</span>
-              <p className="mt-4 text-gray-400 text-sm leading-relaxed">
-                {t('footer.description')}
-              </p>
-            </div>
-            
-            {/* Shop Links */}
-            <div>
-              <h4 className="font-semibold mb-4 text-white">{t('footer.shop')}</h4>
-              <ul className="space-y-3 text-sm text-gray-400">
-                <li><Link to="/products" className="hover:text-white transition-colors">{t('nav.allProducts')}</Link></li>
-                <li><Link to="/products?category=electronics" className="hover:text-white transition-colors">{t('nav.electronics')}</Link></li>
-                <li><Link to="/products?category=fashion" className="hover:text-white transition-colors">{t('nav.fashion')}</Link></li>
-                <li><Link to="/products?category=home-living" className="hover:text-white transition-colors">{t('nav.homeLiving')}</Link></li>
-              </ul>
-            </div>
-            
-            {/* Account Links */}
-            <div>
-              <h4 className="font-semibold mb-4 text-white">{t('footer.account')}</h4>
-              <ul className="space-y-3 text-sm text-gray-400">
-                <li><Link to="/login" className="hover:text-white transition-colors">{t('common.signIn')}</Link></li>
-                <li><Link to="/register" className="hover:text-white transition-colors">{t('auth.createAccount')}</Link></li>
-                <li><Link to="/orders" className="hover:text-white transition-colors">{t('common.myOrders')}</Link></li>
-                <li><Link to="/cart" className="hover:text-white transition-colors">{t('common.cart')}</Link></li>
-              </ul>
-            </div>
-            
-            {/* Support Links */}
-            <div>
-              <h4 className="font-semibold mb-4 text-white">{t('footer.support')}</h4>
-              <ul className="space-y-3 text-sm text-gray-400">
-                <li><span className="hover:text-white transition-colors cursor-pointer">{t('footer.helpCenter')}</span></li>
-                <li><span className="hover:text-white transition-colors cursor-pointer">{t('footer.shippingInfo')}</span></li>
-                <li><span className="hover:text-white transition-colors cursor-pointer">{t('footer.returns')}</span></li>
-                <li><span className="hover:text-white transition-colors cursor-pointer">{t('footer.support')}</span></li>
-              </ul>
+      <footer className="w-full border-t border-zinc-200 bg-zinc-50">
+        <div className="w-full py-16 px-4 md:px-12 grid grid-cols-1 md:grid-cols-2 lg:flex lg:justify-between items-start gap-8 max-w-screen-2xl mx-auto">
+          <div className="max-w-xs">
+            <Link to="/" className="text-lg font-bold text-zinc-900 mb-6 block font-serif">ShopNest</Link>
+            <p className="font-serif text-sm text-zinc-600 mb-8 leading-relaxed">
+              Curating the world's finest minimalist fashion and lifestyle goods since 2024.
+            </p>
+            <div className="flex gap-4">
+              <a href="#" className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-primary transition-colors border border-zinc-200 rounded-full text-xs">IG</a>
+              <a href="#" className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-primary transition-colors border border-zinc-200 rounded-full text-xs">TW</a>
+              <a href="#" className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-primary transition-colors border border-zinc-200 rounded-full text-xs">FB</a>
             </div>
           </div>
-          
-          {/* Bottom Bar */}
-          <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-gray-400">
-              {t('footer.copyright')}
-            </p>
-            <div className="flex items-center gap-6 text-sm text-gray-400">
-              <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>
-              <span className="hover:text-white transition-colors cursor-pointer">Terms of Service</span>
+          <div className="grid grid-cols-2 gap-8 lg:gap-24">
+            <div className="flex flex-col gap-4">
+              <h5 className="font-label-lg text-primary uppercase text-xs tracking-widest mb-2">Company</h5>
+              <Link to="/products" className="font-serif text-sm text-zinc-600 hover:text-secondary transition-all">About Us</Link>
+              <a href="#" className="font-serif text-sm text-zinc-600 hover:text-secondary transition-all">Sustainability</a>
+              <a href="#" className="font-serif text-sm text-zinc-600 hover:text-secondary transition-all">Journal</a>
             </div>
+            <div className="flex flex-col gap-4">
+              <h5 className="font-label-lg text-primary uppercase text-xs tracking-widest mb-2">Support</h5>
+              <a href="#" className="font-serif text-sm text-zinc-600 hover:text-secondary transition-all">Shipping & Returns</a>
+              <a href="#" className="font-serif text-sm text-zinc-600 hover:text-secondary transition-all">Contact</a>
+            </div>
+          </div>
+          <div className="max-w-xs">
+            <h5 className="font-label-lg text-primary uppercase text-xs tracking-widest mb-6">Newsletter</h5>
+            <p className="font-serif text-sm text-zinc-600 mb-4">Join for early access and seasonal curations.</p>
+            <form className="flex border-b border-zinc-300 pb-2">
+              <input className="bg-transparent border-none p-0 focus:ring-0 text-sm w-full font-body-md" placeholder="Email Address" type="email" />
+              <button className="text-xs font-bold uppercase tracking-widest hover:text-secondary transition-colors font-label-lg" type="submit">Join</button>
+            </form>
+          </div>
+        </div>
+        <div className="px-4 md:px-12 py-8 border-t border-zinc-200 flex flex-col md:flex-row justify-between items-center gap-4 max-w-screen-2xl mx-auto">
+          <p className="font-serif text-sm text-zinc-600">© 2024 ShopNest. The Luxury of Space and Curation.</p>
+          <div className="flex gap-8 text-xs font-label-lg text-zinc-400">
+            <a href="#" className="hover:text-primary uppercase">Privacy Policy</a>
+            <a href="#" className="hover:text-primary uppercase">Terms of Service</a>
+            <a href="#" className="hover:text-primary uppercase">Accessibility</a>
           </div>
         </div>
       </footer>
