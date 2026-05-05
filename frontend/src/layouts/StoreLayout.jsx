@@ -216,47 +216,47 @@ export const StoreLayout = ({ children }) => {
       </main>
 
       {/* Footer */}
-      <footer className="w-full border-t border-zinc-200 bg-zinc-50">
+      <footer className="w-full border-t border-zinc-800 bg-black text-white">
         <div className="w-full py-16 px-4 md:px-12 grid grid-cols-1 md:grid-cols-2 lg:flex lg:justify-between items-start gap-8 max-w-screen-2xl mx-auto">
           <div className="max-w-xs">
-            <Link to="/" className="text-lg font-bold text-zinc-900 mb-6 block font-serif">ShopNest</Link>
-            <p className="font-serif text-sm text-zinc-600 mb-8 leading-relaxed">
+            <Link to="/" className="text-lg font-bold text-white mb-6 block font-serif">ShopNest</Link>
+            <p className="font-serif text-sm text-gray-400 mb-8 leading-relaxed">
               Curating the world's finest minimalist fashion and lifestyle goods since 2024.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-primary transition-colors border border-zinc-200 rounded-full text-xs">IG</a>
-              <a href="#" className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-primary transition-colors border border-zinc-200 rounded-full text-xs">TW</a>
-              <a href="#" className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-primary transition-colors border border-zinc-200 rounded-full text-xs">FB</a>
+              <a href="#" className="w-8 h-8 flex items-center justify-center text-gray-300 hover:text-white transition-colors border border-zinc-700 rounded-full text-xs">IG</a>
+              <a href="#" className="w-8 h-8 flex items-center justify-center text-gray-300 hover:text-white transition-colors border border-zinc-700 rounded-full text-xs">TW</a>
+              <a href="#" className="w-8 h-8 flex items-center justify-center text-gray-300 hover:text-white transition-colors border border-zinc-700 rounded-full text-xs">FB</a>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-8 lg:gap-24">
             <div className="flex flex-col gap-4">
               <h5 className="font-label-lg text-primary uppercase text-xs tracking-widest mb-2">Company</h5>
-              <Link to="/products" className="font-serif text-sm text-zinc-600 hover:text-secondary transition-all">About Us</Link>
-              <a href="#" className="font-serif text-sm text-zinc-600 hover:text-secondary transition-all">Sustainability</a>
-              <a href="#" className="font-serif text-sm text-zinc-600 hover:text-secondary transition-all">Journal</a>
+              <Link to="/products" className="font-serif text-sm text-gray-300 hover:text-white transition-all">About Us</Link>
+              <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">Sustainability</a>
+              <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">Journal</a>
             </div>
             <div className="flex flex-col gap-4">
               <h5 className="font-label-lg text-primary uppercase text-xs tracking-widest mb-2">Support</h5>
-              <a href="#" className="font-serif text-sm text-zinc-600 hover:text-secondary transition-all">Shipping & Returns</a>
-              <a href="#" className="font-serif text-sm text-zinc-600 hover:text-secondary transition-all">Contact</a>
+              <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">Shipping & Returns</a>
+              <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">Contact</a>
             </div>
           </div>
           <div className="max-w-xs">
             <h5 className="font-label-lg text-primary uppercase text-xs tracking-widest mb-6">Newsletter</h5>
-            <p className="font-serif text-sm text-zinc-600 mb-4">Join for early access and seasonal curations.</p>
-            <form className="flex border-b border-zinc-300 pb-2">
-              <input className="bg-transparent border-none p-0 focus:ring-0 text-sm w-full font-body-md" placeholder="Email Address" type="email" />
-              <button className="text-xs font-bold uppercase tracking-widest hover:text-secondary transition-colors font-label-lg" type="submit">Join</button>
+            <p className="font-serif text-sm text-gray-300 mb-4">Join for early access and seasonal curations.</p>
+            <form className="flex border-b border-zinc-700 pb-2">
+              <input className="bg-transparent border-none p-0 focus:ring-0 text-sm w-full text-white font-body-md" placeholder="Email Address" type="email" />
+              <button className="text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white transition-colors font-label-lg" type="submit">Join</button>
             </form>
           </div>
         </div>
-        <div className="px-4 md:px-12 py-8 border-t border-zinc-200 flex flex-col md:flex-row justify-between items-center gap-4 max-w-screen-2xl mx-auto">
-          <p className="font-serif text-sm text-zinc-600">© 2024 ShopNest. The Luxury of Space and Curation.</p>
-          <div className="flex gap-8 text-xs font-label-lg text-zinc-400">
-            <a href="#" className="hover:text-primary uppercase">Privacy Policy</a>
-            <a href="#" className="hover:text-primary uppercase">Terms of Service</a>
-            <a href="#" className="hover:text-primary uppercase">Accessibility</a>
+        <div className="px-4 md:px-12 py-8 border-t border-zinc-800 flex flex-col md:flex-row justify-between items-center gap-4 max-w-screen-2xl mx-auto">
+          <p className="font-serif text-sm text-gray-400">© 2024 ShopNest. The Luxury of Space and Curation.</p>
+          <div className="flex gap-8 text-xs font-label-lg text-gray-400">
+            <a href="#" className="text-gray-300 hover:text-white transition-colors uppercase">Privacy Policy</a>
+            <a href="#" className="text-gray-300 hover:text-white transition-colors uppercase">Terms of Service</a>
+            <a href="#" className="text-gray-300 hover:text-white transition-colors uppercase">Accessibility</a>
           </div>
         </div>
       </footer>
