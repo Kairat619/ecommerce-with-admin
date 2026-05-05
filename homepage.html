@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#0c1014",
+                    "secondary-fixed-dim": "#e9c176",
+                    "secondary-fixed": "#ffdea5",
+                    "on-tertiary-container": "#f44895",
+                    "on-error": "#ffffff",
+                    "surface-container": "#edeeef",
+                    "on-surface-variant": "#44474a",
+                    "on-secondary-fixed": "#261900",
+                    "on-primary-fixed-variant": "#43474c",
+                    "tertiary-fixed": "#ffd9e3",
+                    "background": "#f8f9fa",
+                    "surface-dim": "#d9dadb",
+                    "primary-fixed": "#e0e3e8",
+                    "on-tertiary": "#ffffff",
+                    "outline": "#75777b",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#8d004e",
+                    "on-background": "#191c1d",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#212529",
+                    "secondary": "#775a19",
+                    "on-tertiary-fixed": "#3e001f",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface-bright": "#f8f9fa",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#5b5f63",
+                    "surface-container-low": "#f3f4f5",
+                    "on-surface": "#191c1d",
+                    "error": "#ba1a1a",
+                    "surface-container-high": "#e7e8e9",
+                    "tertiary": "#280012",
+                    "on-primary-fixed": "#181c20",
+                    "on-secondary-container": "#785a1a",
+                    "secondary-container": "#fed488",
+                    "tertiary-container": "#4f0029",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed-dim": "#ffb0ca",
+                    "on-secondary-fixed-variant": "#5d4201",
+                    "on-primary-container": "#888c91",
+                    "outline-variant": "#c5c6ca",
+                    "inverse-primary": "#c3c7cc",
+                    "primary-fixed-dim": "#c3c7cc",
+                    "inverse-surface": "#2e3132",
+                    "inverse-on-surface": "#f0f1f2",
+                    "surface": "#f8f9fa",
+                    "surface-variant": "#e1e3e4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container-max": "1280px",
+                    "stack-sm": "8px",
+                    "section-gap": "80px",
+                    "stack-lg": "32px",
+                    "stack-md": "16px",
+                    "gutter": "24px",
+                    "margin": "32px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Noto Serif"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "display-md": ["Noto Serif"],
+                    "display-lg": ["Noto Serif"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg": ["Noto Serif"],
+                    "label-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["22px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "display-md": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "headline-lg": ["28px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "label-lg": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        body {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-background antialiased">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 max-w-screen-2xl mx-auto bg-white border-b border-zinc-100">
+<div class="flex items-center gap-12">
+<a class="text-2xl font-bold tracking-tighter text-zinc-900 font-headline-lg" href="#">ShopNest</a>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="font-serif tracking-tight text-zinc-900 border-b-2 border-zinc-900 pb-1 hover:text-amber-600 transition-colors duration-200" href="#">New Arrivals</a>
+<a class="font-serif tracking-tight text-zinc-500 font-medium hover:text-amber-600 transition-colors duration-200" href="#">Categories</a>
+<a class="font-serif tracking-tight text-zinc-500 font-medium hover:text-amber-600 transition-colors duration-200" href="#">Brands</a>
+<a class="font-serif tracking-tight text-zinc-500 font-medium hover:text-amber-600 transition-colors duration-200" href="#">Editorial</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden lg:block">
+<input class="bg-zinc-50 border-none rounded-full px-6 py-2 text-sm w-64 focus:ring-1 focus:ring-primary focus:outline-none" placeholder="Search curated styles..." type="text"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400" data-icon="search">search</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="scale-100 active:scale-95 transition-transform"><span class="material-symbols-outlined" data-icon="favorite">favorite</span></button>
+<button class="scale-100 active:scale-95 transition-transform"><span class="material-symbols-outlined" data-icon="person">person</span></button>
+<button class="scale-100 active:scale-95 transition-transform relative">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+<span class="absolute -top-1 -right-1 bg-secondary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">2</span>
+</button>
+</div>
+</div>
+</header>
+<main class="pt-20">
+<!-- Hero Slider Section -->
+<section class="relative h-[870px] overflow-hidden bg-zinc-900">
+<div class="absolute inset-0 opacity-80">
+<img class="w-full h-full object-cover" data-alt="A high-end minimalist boutique interior with clean architectural lines and neutral tones. Soft morning sunlight streams through large windows, highlighting curated designer garments hanging on architectural steel racks. The atmosphere is quiet and luxurious, reflecting a sophisticated editorial aesthetic with a palette of beige, charcoal, and warm oak." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzk0nVvGW36XuUtYMrkl5xKGoetxciy0knirUZV6gCSqlyYC4FsTEm6A6SaxxCEEca3nPi7I_TYSNhi6ynVIfko8tbVVJNDT7kUgJ0okdevvFhRlJiG33pzXNwS1nxAuQb35F6r-ndSK7ko39OMygK5zMUXgcxQ4AaeMlltabmveWIgx7RvYJO1faZJLZLPI6A1pLcIqC8BjlKM5Hn0zxc_7ZzaKfZvaihl1k6N5IhEXPTBKAw7VZ-wFm4f2gwYqv37iObxNcG3g"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex items-center px-12 md:px-24">
+<div class="max-w-xl text-white">
+<span class="font-label-lg tracking-[0.2em] text-secondary-fixed-dim block mb-4">SEASONAL CURATION</span>
+<h1 class="font-display-lg text-white mb-6">The Art of Refined Living</h1>
+<p class="font-body-lg text-zinc-300 mb-8 max-w-md">Discover our exclusive Spring/Summer collection featuring sustainable fabrics and timeless silhouettes designed for the modern minimalist.</p>
+<div class="flex gap-4">
+<button class="bg-white text-primary px-8 py-4 font-label-lg hover:bg-secondary-fixed transition-colors">Shop Collection</button>
+<button class="border border-white text-white px-8 py-4 font-label-lg hover:bg-white/10 transition-colors">View Editorial</button>
+</div>
+</div>
+</div>
+<div class="absolute bottom-8 right-12 flex gap-4">
+<button class="w-12 h-12 border border-white/30 rounded-full flex items-center justify-center text-white hover:bg-white/10"><span class="material-symbols-outlined">arrow_back</span></button>
+<button class="w-12 h-12 border border-white/30 rounded-full flex items-center justify-center text-white hover:bg-white/10"><span class="material-symbols-outlined">arrow_forward</span></button>
+</div>
+</section>
+<!-- Top Categories -->
+<section class="py-24 px-8 max-w-screen-2xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-display-md text-primary mb-2">Curated Categories</h2>
+<div class="w-12 h-0.5 bg-secondary mx-auto"></div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+<!-- Fashion -->
+<a class="group text-center" href="#">
+<div class="aspect-[4/5] overflow-hidden mb-4 bg-zinc-100">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Close-up of high-fashion neutral-toned apparel. A beige silk dress flows elegantly against a minimalist off-white background. The lighting is soft and diffuse, emphasizing the luxury texture of the fabric. Clean, editorial style photography suitable for a premium boutique interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXcLOzDyETK3hh91M7AhV-eKZHRLDX36qsoubQYvAvXyZ5ZA25nz9SltgCcVms7DGSPbxP1BDuz7D3JnuFe6u_XJRyeTXwAeOyCITyNEdPF1OoO_EGOZPbyoUlY3_QKkaYcPSnmYTGccSTW67o4K9qvcTuyRdSoVvq3AgecKuOJLcAotSPzhoZ-VcEcYglnWbcqT3cHYfBokupd1HIhkflVFebH7tafktgs4ifAQTs6_a2BqhWHkfcB6jAf4gka0Dy3XELO32y0w"/>
+</div>
+<span class="font-serif text-lg text-zinc-900 group-hover:text-secondary transition-colors">Fashion</span>
+</a>
+<!-- Topwear -->
+<a class="group text-center" href="#">
+<div class="aspect-[4/5] overflow-hidden mb-4 bg-zinc-100">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A collection of premium knitwear and linen tops neatly organized on a minimalist wooden rail. The lighting is warm and natural, casting soft shadows. The aesthetic is extremely clean and high-end, featuring a color palette of cream, sand, and charcoal grey." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJr-cPSFahtRwqiUj-KcvCEhSPC16szcJ6dAFAJYPE-t7etVOUBBlc0lHD_3I3OFdlA23Cu_-mSwMznYxFV4_wAIcP-qXRRME1PJ08fgYi0J8DWruDmuIThdbRYg9H2saQxKcKrvnuiTUcfb7aK0FtlD_rMZVL8H6z0zF9XswT9E0fPjPvbCt-TivU_0A1t59F2qvSiuSygnkOBgnWdsQaryisrVdA-fbG6ZUYjyC-gUTp2l2FiF_zxyAAAL5ZtLV7nlEdYWQ7-g"/>
+</div>
+<span class="font-serif text-lg text-zinc-900 group-hover:text-secondary transition-colors">Topwear</span>
+</a>
+<!-- Lingerie -->
+<a class="group text-center" href="#">
+<div class="aspect-[4/5] overflow-hidden mb-4 bg-zinc-100">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Premium minimalist lingerie in earth tones displayed elegantly on a clean surface. The focus is on delicate craftsmanship and sustainable fabrics. The lighting is soft-key and sophisticated, highlighting the subtle textures and high-quality construction of the garments." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTaGxAQQynfWYSdE5IGOZCvlr03Suv2NkTDKbN4b7qQL_nwVhZK5Mil-GFJ4sWTSDgVBrM71to7SdaSzeAlFysYo6cWFenWcbjZAREWQwZRkA2R9Fpg5-wZW-YQT9tjcB-g-8vVYqbCglIAaMynkIODe6hX2BLPSYvk_7eXRCEisbwk90-chvCQPCKmmaMrMPMvhZkf0d-oBP0UFVBq_ZLV9FMV2EHgddbfm6eey3qafjA6xZVJeNorQPa7aNJkRoQi08J9UyN7A"/>
+</div>
+<span class="font-serif text-lg text-zinc-900 group-hover:text-secondary transition-colors">Lingerie</span>
+</a>
+<!-- Dresses -->
+<a class="group text-center" href="#">
+<div class="aspect-[4/5] overflow-hidden mb-4 bg-zinc-100">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="An ethereal long silk dress captured in motion within a minimalist studio setting. The lighting creates high-contrast highlights on the flowing fabric. The mood is artistic and editorial, focusing on the silhouette and premium material quality in a monochromatic setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJS0XLWxxMsjjzj4fdypCtCAk8Ybr8zJti5clMY4RwgNegSbNtsvidpPFr2FUHOk_G1OC0jrgEBe1Hg1pauD-t6ZBtohST7hGJ9SgC4htQRHBDEIipCMph_3oZVSc2DWzaDUzUmOGjJqYTz8fqPGlH3jAGFzNnIhkHCwJCHBNwAJ4CFffOyKSKEvB2q1GuFSGvaVuTeC4IQBjTiiJZ055s38ehWOrR2WTTw00krtZXET7xRera_QcaMVDHbzlvYwdXuejTvsQhUw"/>
+</div>
+<span class="font-serif text-lg text-zinc-900 group-hover:text-secondary transition-colors">Dresses</span>
+</a>
+<!-- Shoes -->
+<a class="group text-center" href="#">
+<div class="aspect-[4/5] overflow-hidden mb-4 bg-zinc-100">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Luxury designer footwear arranged on a minimalist white pedestal. The shoes feature sleek architectural lines and premium leather textures. The lighting is sharp and directional, emphasizing the quality and designer origin of the product in a gallery-like presentation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuhMHLyLlbMue1M73tFo_OGAwbcDTuNx9zNv-jJkBFjfyIJ0MLyQHRCaYHhgKctAJ8t1kwHutECtPBokD1ncOgNSq4pnJCT7E7HibjGTT8cOwbNqsDHNTGRCfZjGwW7Gmt2d738ogutqXfSl_Yd5hjnxUrbLJnUsQWIQLS57YoFdRjrwGX4b0mi90DaQxR67s5c2kn_J5NWppu7X2fKZ2cigjFUTNOKZ2pB5jSVh1M0o896uLjmu1LVFmcLfM9OnJqbmyW3M_ZvQ"/>
+</div>
+<span class="font-serif text-lg text-zinc-900 group-hover:text-secondary transition-colors">Shoes</span>
+</a>
+<!-- Jackets -->
+<a class="group text-center" href="#">
+<div class="aspect-[4/5] overflow-hidden mb-4 bg-zinc-100">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A tailored wool coat in charcoal grey hanging against a textured concrete wall. The design is timeless and minimal. Lighting is moody and sophisticated, highlighting the weave of the fabric and the precision of the stitching. This represents a luxury urban aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5OblOTZvID9arJFC9N0PO3dEONDd3uatRfzGkLRiPyQW4OwVuVOppzEoRL-vhIB5RXl6DMdk951i7YKY8BoOVmXytKe70_jMXnlMWpH_9FKIOp9AM2ZA9cICaDZxjTajPPYcYrZNTNqHHOQbxkocGbpNzrTjpmjlBF-JwbV66Ph4Roa17xN9ePmFt-WoP4ASHs4kjHrMUdqy9bD0E-bjch5_BKuHtlozP4ANUiApSzSf8iF-pMUZLUOmb9mDPgTmQqOTIfEG1RA"/>
+</div>
+<span class="font-serif text-lg text-zinc-900 group-hover:text-secondary transition-colors">Jackets</span>
+</a>
+</div>
+</section>
+<!-- Featured Products Grid -->
+<section class="py-24 bg-white px-8">
+<div class="max-w-screen-2xl mx-auto">
+<div class="flex justify-between items-end mb-12">
+<div>
+<h2 class="font-display-md text-primary mb-2">Editor's Choice</h2>
+<p class="font-body-md text-zinc-500">Hand-picked selections for the discerning eye.</p>
+</div>
+<a class="font-label-lg text-primary border-b border-primary pb-1 hover:text-secondary hover:border-secondary transition-colors" href="#">View All Selection</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
+<!-- Product Card 1 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] overflow-hidden bg-zinc-100 mb-6">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A pair of premium charcoal grey trousers styled with a minimalist approach. The fabric texture is crisp and tailored, shown against a soft grey architectural backdrop. High-end product photography that emphasizes fit and quality for an upscale e-commerce platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFpPZCJQDd_EqC9-hQdHsZqKhD6GdIom1YL-wtbSmMiUBSjY1kH8FMgpkhKblyYMck7dxfe8aV_1HtA4Xy8S6VDe2WHPuq51sJieRJLqjA3JjKMEjXeboWTIAPu_XammLPxrA3BU3ua04N9MRK59_JS8okvMZyAP4pngiIHibDMMDk1nO5-BkbGVaalqh438e0C2JMxqc0zMVVxa_vTqc5epZp9lBBt3Jp9lfHSwS-5RDmNUnYxGJlEKcjnnxAo0jvOOXXVlp0tg"/>
+<div class="absolute top-4 left-4 bg-white/90 px-3 py-1 text-[10px] font-label-lg tracking-widest text-primary uppercase">Exclusive</div>
+<button class="absolute bottom-4 right-4 bg-white w-10 h-10 flex items-center justify-center rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-serif text-lg text-zinc-900">Grey Venish Pant</h3>
+<span class="material-symbols-outlined text-zinc-400" data-icon="favorite">favorite</span>
+</div>
+<p class="font-body-md text-zinc-500">Tailored Perfection</p>
+<div class="flex items-center gap-3 pt-2">
+<span class="font-body-md font-bold text-primary">$499</span>
+<span class="font-body-sm text-zinc-400 line-through">$650</span>
+<span class="text-xs font-label-lg text-red-600">-23% OFF</span>
+</div>
+</div>
+</div>
+<!-- Other Products Placeholder -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] overflow-hidden bg-zinc-100 mb-6">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A luxury oversized cashmere sweater in cream white, draped elegantly over a minimalist chair. The lighting is bright and ethereal, accentuating the softness of the high-quality wool. The aesthetic is pure, calm, and expensive, reflecting a boutique-first design philosophy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiiVo98cS5SfTdgFy5SNpiDf9IVOB2Vy4WRceByqGoq-jTx9BWNqs8Z329a27xPFpZuDS5CuE11Lo6R0N4ng7kQ9j6xRfizL_J7lSuGcKHUFcptO58NDiYprQvc1PrqGY0pjrunAYHK0rcbfQMnq8UmYnbw88PVF5vcN-4yuIcUnT9RcsSx5HdplEMzoCjZILaZtBe_tRatJIiRoR1y-YLBagjhxjTYhVGPZyR1m-ok2YUjX3ooenEdvFT1GxJ5OLdv_Z2Kj4yAg"/>
+</div>
+<div class="space-y-1">
+<h3 class="font-serif text-lg text-zinc-900">Linen Blend Blazer</h3>
+<p class="font-body-md text-zinc-500">Unstructured Comfort</p>
+<p class="font-body-md font-bold text-primary">$820</p>
+</div>
+</div>
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] overflow-hidden bg-zinc-100 mb-6">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Sleek white minimalist sneakers made from premium Italian leather. Displayed on a black marble surface with sharp, clean lighting that defines the silhouettes. The visual style is premium editorial, emphasizing the contrast between the white product and the dark, luxurious background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfwQ_81CGZ8mqYQaBSyroYFCnt-WNq4s35zZjKwNOvORZGFkt96PmL1OUvJqr0y1EVBPdfKcgw8ynwu-UxjSTrnPTBtfFVZi60lGOb01moMBXANrnGUp-zEaUHzDPIFUJJZ4P8-qCK4kVAJTF9jkYfVJYYTVZVf29E0tXSSblzCvDv6Y-ZZUhMFlvf_9_V5TPsTfmwnBb1kPL9p2pX8rxJPRlKL__Bk3sN0as7ic_nnt4sqF_gGB4vQ9W4lhCQVoO8HXVgxSYIIw"/>
+</div>
+<div class="space-y-1">
+<h3 class="font-serif text-lg text-zinc-900">Minimalist Low-Top</h3>
+<p class="font-body-md text-zinc-500">Italian Calfskin</p>
+<p class="font-body-md font-bold text-primary">$345</p>
+</div>
+</div>
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] overflow-hidden bg-zinc-100 mb-6">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A sophisticated structured leather handbag in deep tan. The lighting focuses on the fine craftsmanship and gold-tone hardware. Set against a minimalist architectural background with clean lines and soft shadows, evoking a sense of timeless luxury and status." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDslBfQFJd1K7tSUfuX4AbPgJQQgjxBJ2KtA3kP62WVw8ZpNchuupEpGAQhz-K13NSivral418_QUDs5KuGhxf2fW9iCER9n4FGFeuxqY7OovhtWKQL3CG75T-MH94n4nIW99zX0KagttTTxHhEA8FqQYPuaWbkXxztosEQ4NsucwOwdQ54VuFglgi_eeEWOXnwAunw63f8loBOKywelwhHBJ_lLhTFnoNaVlJrLO3dzdg8eQWrA_bpdNTt5baVQXkMcY02iqCfMQ"/>
+</div>
+<div class="space-y-1">
+<h3 class="font-serif text-lg text-zinc-900">The Sculptural Tote</h3>
+<p class="font-body-md text-zinc-500">Hand-finished Leather</p>
+<p class="font-body-md font-bold text-primary">$1,250</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Just For You / Flash Sales -->
+<section class="py-24 px-8 max-w-screen-2xl mx-auto">
+<div class="bg-primary-container text-white p-12 md:p-20 relative overflow-hidden flex flex-col md:flex-row items-center gap-12">
+<div class="z-10 flex-1">
+<div class="flex items-center gap-2 mb-6">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed animate-pulse"></span>
+<span class="font-label-lg tracking-widest text-secondary-fixed">JUST FOR YOU • FLASH SALE</span>
+</div>
+<h2 class="font-display-lg mb-4">Limited Edition Black Sunglasses</h2>
+<p class="font-body-lg text-zinc-400 mb-8 max-w-md">Precision engineered with Japanese acetate and polarized lenses. Your seasonal essential, curated for the modern man.</p>
+<div class="flex items-baseline gap-4 mb-10">
+<span class="text-4xl font-bold">$189</span>
+<span class="text-xl text-zinc-500 line-through">$320</span>
+</div>
+<button class="bg-secondary text-white px-10 py-4 font-label-lg hover:bg-secondary-fixed-dim transition-colors">Shop Now</button>
+</div>
+<div class="z-10 flex-1 relative w-full aspect-square md:aspect-auto md:h-[500px]">
+<img class="w-full h-full object-contain" data-alt="Sleek black designer sunglasses for men, presented in high-contrast lighting that highlights the polished frames and dark lenses. The background is a minimalist dark grey, creating a moody, premium tech-luxury feel. The focus is on the precision and quality of the materials." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAip-uy-rRtOW5qvgZtVRHJj1rdkbEBR0frxFWQZu5twCwL3CxjITSYnZZt7RWLYirVolcLWMGH6Du2gkZil1i70mwTTy_xzRvK5MYlfcxbppjmSqH4E59sZ1XDNG1-ORxw1_W6rx8Xk_IRAg43UEfOsnGdATr75r-tJk73bxBrcBqeNmsDSSzU4tJCAvdWeWfQmsKkaafqAxD7-bc-ECLAI7J9KzV9TDtpMcN6d_HOENRPYp5vVx0mmOJySrU9ytMsnrYGmXfdXQ"/>
+</div>
+<!-- Decorative background text -->
+<div class="absolute -bottom-10 -right-10 text-[200px] font-black text-white/5 select-none leading-none">NEST</div>
+</div>
+</section>
+<!-- Shop By Brands -->
+<section class="py-24 border-y border-zinc-100 bg-white">
+<div class="px-8 max-w-screen-2xl mx-auto overflow-hidden">
+<p class="font-label-lg text-center text-zinc-400 mb-12 tracking-widest">GLOBAL BRAND PARTNERS</p>
+<div class="flex flex-wrap justify-center md:justify-between items-center gap-12 opacity-50 grayscale hover:grayscale-0 transition-all">
+<span class="text-3xl font-serif font-bold text-zinc-800">ARC'TERYX</span>
+<span class="text-3xl font-serif font-bold text-zinc-800">LEMAIRE</span>
+<span class="text-3xl font-serif font-bold text-zinc-800">JIL SANDER</span>
+<span class="text-3xl font-serif font-bold text-zinc-800">THE ROW</span>
+<span class="text-3xl font-serif font-bold text-zinc-800">TOTEME</span>
+<span class="text-3xl font-serif font-bold text-zinc-800">LOEWE</span>
+</div>
+</div>
+</section>
+<!-- Shop by Instagram -->
+<section class="py-24 px-8 max-w-screen-2xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-display-md text-primary mb-2">Shop The Feed</h2>
+<p class="font-body-md text-zinc-500">Tag @ShopNest for a chance to be featured in our curation.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2">
+<div class="aspect-square bg-zinc-200 overflow-hidden group relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Lifestyle shot of a modern interior with curated fashion elements. Soft sunlight creates long shadows on a white wall. Minimalist and editorial aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2bGKkWLbZ6aTQlYRNBFzb3nz-FuZZaisL2LWIBeBRvTERdHWpVDABKdC2nZD2EnYD4Kzg5xmrf9XPOs37dWtVM0Yh5tHkJBGdMNXFTT1lsgO1TRRNaGRnUs4N5vKEXlQD78WeLg2uRz4i3B_igfeHaSOThUgFMFsxdKcV-AEyitFPc0OVBDYsTCr5JCxYgTD7wmdjnMaK9MINtbK0fv2YnIYvgXOpK2vqpz1Tj8GmRKjBnXXfdUWzUDyG6tZNmI6HVmbY-2s6WA"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white" data-icon="shopping_bag">shopping_bag</span>
+</div>
+</div>
+<div class="aspect-square bg-zinc-200 overflow-hidden group relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Close up of a premium watch and leather bag styled for a daily commute. Urban minimalist vibes with high-end accessories." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwilp7Il1cxcmCL_xHOWP72lTiT7Vvr5_r4zSHBvzqshlU_VwVOhNZEJRE3_yTCdMgkYGZcGqXsgJnMr5DC_b3sCYorpQDnrRxvr_4Fx8Basd0v9U9_JR1sHu65fs1UscY9Z_HQ6YBBeaSphobU_hE5OgiC38q7eVq0Le0a8FKDKlA3FHxDSiBm-4e0AonYyPDhtJ_b5kK43Pr6a1GNz2pWI4x9DbIX6d6CRtlOshPOAUm4lp8k6L1uR4VXSvU-qhX7AC6QHNJtQ"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white" data-icon="shopping_bag">shopping_bag</span>
+</div>
+</div>
+<div class="aspect-square bg-zinc-200 overflow-hidden group relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Model wearing minimalist linen set in a bright architectural space. Focus on silhouette and neutral color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQoWBXudIO4scRjb4RVqfxF0w25xsdFN8qDxCW4PSEz4o_442zw4UvOKT5X5kjHN28zo6My8hkcfd-LI5m8R_xFt2m2yplF4cvhYLiI3-0ceI2n8BxOOfCtCmjbh1izYz_K0-mVZjh0ceSNkUiIwk5_JUqnG4g7n17zFshOF5TLZWZhaPk8vqDjNUwpSnxKT3xIiy9jyG_oQw1ycxJTi08YTcfSxwfJCeDFHoXE7INsct2mpjQapHC8OdIeYG-hYkkBXwkXbB9gw"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white" data-icon="shopping_bag">shopping_bag</span>
+</div>
+</div>
+<div class="aspect-square bg-zinc-200 overflow-hidden group relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="High fashion accessories arranged artistically on a glass table. Reflections and light play emphasize luxury textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDylbV--Dj8DrrzSF_Ace2PaQ17QrqQtSWVdD7MFGVS2ddc_A_kvEDVtld9mxXst9BGHWWsd10LaRoDiJlKCWw0rQkpqW8JeZzSedWeYH2LxZRUhEOW0h1NAnrXIoz8zPtKLmHozgiLWZPVFVtPv6qYXS480Ep8LRRrOTbb6HvL9rUa3bYNbccJ_tCU0OgdtvzHeJOkhXKFV6tYf_0lAGe6IlQt4LLGvtJeHAnpAyODdS2gU0ufIU0npDeFoorWxHKqxOyDhYsq1w"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white" data-icon="shopping_bag">shopping_bag</span>
+</div>
+</div>
+<div class="aspect-square bg-zinc-200 overflow-hidden group relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Editorial fashion photography featuring neutral tones and architectural backgrounds. Clean, modern, and sophisticated visual style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAp79-bUMvIk5DrMuEK1jZS1rFn-VPoKHCPI06IeIC_opV38xFbDIpFWQCZGMnwXYzgFHXPEG7kbj2mvZhurFfxSbblMLVVjUjyq2-bY_QcUsLlb0iHByHYLAeFcOP0Xy3pDZICaAOc0TwuCefp-AZaYLoxUoiZUZDkcy9QXuEp81g2XDrgruePG0wHuJEmHaxWuRdaWMQAoLKsZdLYEOuF0LX4jqd81aDGFhry3Rfw1sclXwja4jchdU4MQtbeIqB9i6xN2EjyhA"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white" data-icon="shopping_bag">shopping_bag</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Value Propositions -->
+<section class="py-20 border-t border-zinc-100 bg-zinc-50">
+<div class="px-8 max-w-screen-2xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+<div class="flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-3xl mb-4 text-secondary">assignment_return</span>
+<h4 class="font-serif text-lg mb-2">30-Day Return</h4>
+<p class="font-body-sm text-zinc-500">Hassle-free returns for your peace of mind.</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-3xl mb-4 text-secondary">local_shipping</span>
+<h4 class="font-serif text-lg mb-2">Complimentary Shipping</h4>
+<p class="font-body-sm text-zinc-500">On all orders above $200. Always tracked.</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-3xl mb-4 text-secondary">support_agent</span>
+<h4 class="font-serif text-lg mb-2">24/7 Support</h4>
+<p class="font-body-sm text-zinc-500">Our concierge is here to assist your journey.</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-3xl mb-4 text-secondary">card_membership</span>
+<h4 class="font-serif text-lg mb-2">Member Rewards</h4>
+<p class="font-body-sm text-zinc-500">Exclusive access to drops and member pricing.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t border-zinc-200 bg-zinc-50">
+<div class="w-full py-16 px-12 grid grid-cols-1 md:grid-cols-2 lg:flex lg:justify-between items-start gap-8 max-w-screen-2xl mx-auto">
+<div class="max-w-xs">
+<a class="text-lg font-bold text-zinc-900 mb-6 block" href="#">ShopNest</a>
+<p class="font-serif text-sm text-zinc-600 mb-8 leading-relaxed">Curating the world's finest minimalist fashion and lifestyle goods since 2024.</p>
+<div class="flex gap-4">
+<a class="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-primary transition-colors border border-zinc-200 rounded-full" href="#">IG</a>
+<a class="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-primary transition-colors border border-zinc-200 rounded-full" href="#">TW</a>
+<a class="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-primary transition-colors border border-zinc-200 rounded-full" href="#">FB</a>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-12 lg:gap-24">
+<div class="flex flex-col gap-4">
+<h5 class="font-label-lg text-primary uppercase text-xs tracking-widest mb-2">Company</h5>
+<a class="font-serif text-sm text-zinc-600 hover:text-amber-600 transition-all" href="#">About Us</a>
+<a class="font-serif text-sm text-zinc-600 hover:text-amber-600 transition-all" href="#">Sustainability</a>
+<a class="font-serif text-sm text-zinc-600 hover:text-amber-600 transition-all" href="#">Journal</a>
+</div>
+<div class="flex flex-col gap-4">
+<h5 class="font-label-lg text-primary uppercase text-xs tracking-widest mb-2">Support</h5>
+<a class="font-serif text-sm text-zinc-600 hover:text-amber-600 transition-all" href="#">Shipping &amp; Returns</a>
+<a class="font-serif text-sm text-zinc-600 hover:text-amber-600 transition-all" href="#">Contact</a>
+</div>
+</div>
+<div class="max-w-xs">
+<h5 class="font-label-lg text-primary uppercase text-xs tracking-widest mb-6">Newsletter</h5>
+<p class="font-serif text-sm text-zinc-600 mb-4">Join for early access and seasonal curations.</p>
+<form class="flex border-b border-zinc-300 pb-2">
+<input class="bg-transparent border-none p-0 focus:ring-0 text-sm w-full" placeholder="Email Address" type="email"/>
+<button class="text-xs font-bold uppercase tracking-widest hover:text-secondary transition-colors" type="submit">Join</button>
+</form>
+</div>
+</div>
+<div class="px-12 py-8 border-t border-zinc-200 flex flex-col md:flex-row justify-between items-center gap-4 max-w-screen-2xl mx-auto">
+<p class="font-serif text-sm text-zinc-600">© 2024 ShopNest. The Luxury of Space and Curation.</p>
+<div class="flex gap-8 text-xs font-label-lg text-zinc-400">
+<a class="hover:text-primary" href="#">PRIVACY POLICY</a>
+<a class="hover:text-primary" href="#">TERMS OF SERVICE</a>
+<a class="hover:text-primary" href="#">ACCESSIBILITY</a>
+</div>
+</div>
+</footer>
+</body></html>

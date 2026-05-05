@@ -231,19 +231,19 @@ export const StoreLayout = ({ children }) => {
           </div>
           <div className="grid grid-cols-2 gap-8 lg:gap-24">
             <div className="flex flex-col gap-4">
-              <h5 className="font-label-lg text-primary uppercase text-xs tracking-widest mb-2">Company</h5>
+              <h5 className="font-label-lg text-primary uppercase text-xs text-white tracking-widest mb-2">Company</h5>
               <Link to="/products" className="font-serif text-sm text-gray-300 hover:text-white transition-all">About Us</Link>
               <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">Sustainability</a>
               <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">Journal</a>
             </div>
             <div className="flex flex-col gap-4">
-              <h5 className="font-label-lg text-primary uppercase text-xs tracking-widest mb-2">Support</h5>
+              <h5 className="font-label-lg text-primary uppercase text-xs text-white tracking-widest mb-2">Support</h5>
               <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">Shipping & Returns</a>
               <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">Contact</a>
             </div>
           </div>
           <div className="max-w-xs">
-            <h5 className="font-label-lg text-primary uppercase text-xs tracking-widest mb-6">Newsletter</h5>
+            <h5 className="font-label-lg text-primary uppercase text-xs text-white tracking-widest mb-6">Newsletter</h5>
             <p className="font-serif text-sm text-gray-300 mb-4">Join for early access and seasonal curations.</p>
             <form className="flex border-b border-zinc-700 pb-2">
               <input className="bg-transparent border-none p-0 focus:ring-0 text-sm w-full text-white font-body-md" placeholder="Email Address" type="email" />

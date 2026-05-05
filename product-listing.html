@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#0c1014",
+                    "secondary-fixed-dim": "#e9c176",
+                    "secondary-fixed": "#ffdea5",
+                    "on-tertiary-container": "#f44895",
+                    "on-error": "#ffffff",
+                    "surface-container": "#edeeef",
+                    "on-surface-variant": "#44474a",
+                    "on-secondary-fixed": "#261900",
+                    "on-primary-fixed-variant": "#43474c",
+                    "tertiary-fixed": "#ffd9e3",
+                    "background": "#f8f9fa",
+                    "surface-dim": "#d9dadb",
+                    "primary-fixed": "#e0e3e8",
+                    "on-tertiary": "#ffffff",
+                    "outline": "#75777b",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#8d004e",
+                    "on-background": "#191c1d",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#212529",
+                    "secondary": "#775a19",
+                    "on-tertiary-fixed": "#3e001f",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface-bright": "#f8f9fa",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#5b5f63",
+                    "surface-container-low": "#f3f4f5",
+                    "on-surface": "#191c1d",
+                    "error": "#ba1a1a",
+                    "surface-container-high": "#e7e8e9",
+                    "tertiary": "#280012",
+                    "on-primary-fixed": "#181c20",
+                    "on-secondary-container": "#785a1a",
+                    "secondary-container": "#fed488",
+                    "tertiary-container": "#4f0029",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed-dim": "#ffb0ca",
+                    "on-secondary-fixed-variant": "#5d4201",
+                    "on-primary-container": "#888c91",
+                    "outline-variant": "#c5c6ca",
+                    "inverse-primary": "#c3c7cc",
+                    "primary-fixed-dim": "#c3c7cc",
+                    "inverse-surface": "#2e3132",
+                    "inverse-on-surface": "#f0f1f2",
+                    "surface": "#f8f9fa",
+                    "surface-variant": "#e1e3e4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container-max": "1280px",
+                    "stack-sm": "8px",
+                    "section-gap": "80px",
+                    "stack-lg": "32px",
+                    "stack-md": "16px",
+                    "gutter": "24px",
+                    "margin": "32px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Noto Serif"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "display-md": ["Noto Serif"],
+                    "display-lg": ["Noto Serif"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg": ["Noto Serif"],
+                    "label-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["22px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "display-md": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "headline-lg": ["28px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "label-lg": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body { background-color: #f8f9fa; }
+    </style>
+</head>
+<body class="font-body-md text-on-background">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 bg-white border-b border-zinc-100 max-w-screen-2xl mx-auto left-1/2 -translate-x-1/2">
+<div class="flex items-center gap-12">
+<a class="text-2xl font-bold tracking-tighter text-zinc-900 font-headline-md" href="#">ShopNest</a>
+<nav class="hidden lg:flex items-center gap-8">
+<a class="text-zinc-900 border-b-2 border-zinc-900 pb-1 font-serif tracking-tight font-medium hover:text-amber-600 transition-colors duration-200" href="#">New Arrivals</a>
+<a class="text-zinc-500 font-medium font-serif tracking-tight hover:text-amber-600 transition-colors duration-200" href="#">Categories</a>
+<a class="text-zinc-500 font-medium font-serif tracking-tight hover:text-amber-600 transition-colors duration-200" href="#">Brands</a>
+<a class="text-zinc-500 font-medium font-serif tracking-tight hover:text-amber-600 transition-colors duration-200" href="#">Editorial</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border-none focus:ring-1 focus:ring-primary text-body-sm w-64 rounded-lg" placeholder="Search curated collections..." type="text"/>
+</div>
+<button class="scale-100 active:scale-95 transition-transform"><span class="material-symbols-outlined text-zinc-900" data-icon="favorite">favorite</span></button>
+<button class="scale-100 active:scale-95 transition-transform"><span class="material-symbols-outlined text-zinc-900" data-icon="person">person</span></button>
+<button class="scale-100 active:scale-95 transition-transform relative">
+<span class="material-symbols-outlined text-zinc-900" data-icon="shopping_bag">shopping_bag</span>
+<span class="absolute -top-1 -right-1 bg-secondary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">2</span>
+</button>
+</div>
+</header>
+<main class="pt-32 pb-20 max-w-screen-2xl mx-auto px-8">
+<!-- Breadcrumb Navigation -->
+<nav class="mb-10 flex items-center gap-2 text-label-sm text-on-surface-variant">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Apparel</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="text-primary font-semibold">New Arrivals</span>
+</nav>
+<div class="flex flex-col lg:flex-row gap-12">
+<!-- Sidebar with Filters -->
+<aside class="w-full lg:w-64 flex-shrink-0">
+<div class="sticky top-28 space-y-10">
+<section>
+<h3 class="font-headline-md text-primary mb-6 text-lg">Category</h3>
+<div class="space-y-3">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-sm text-on-surface-variant group-hover:text-primary transition-colors">Outerwear (124)</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-sm text-primary font-medium">Trousers &amp; Pants (86)</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-sm text-on-surface-variant group-hover:text-primary transition-colors">Knitwear (54)</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-sm text-on-surface-variant group-hover:text-primary transition-colors">Accessories (210)</span>
+</label>
+</div>
+</section>
+<section>
+<h3 class="font-headline-md text-primary mb-6 text-lg">Price range</h3>
+<div class="px-2">
+<input class="w-full h-1 bg-surface-container-highest rounded-full appearance-none accent-primary cursor-pointer" max="1000" min="0" type="range"/>
+<div class="flex justify-between mt-4 text-label-sm text-on-surface-variant">
+<span>$0</span>
+<span>$1000+</span>
+</div>
+</div>
+</section>
+<section>
+<h3 class="font-headline-md text-primary mb-6 text-lg">Size</h3>
+<div class="grid grid-cols-4 gap-2">
+<button class="h-10 border border-outline-variant text-label-sm hover:border-primary transition-colors">XS</button>
+<button class="h-10 border border-primary bg-primary text-white text-label-sm">S</button>
+<button class="h-10 border border-outline-variant text-label-sm hover:border-primary transition-colors">M</button>
+<button class="h-10 border border-outline-variant text-label-sm hover:border-primary transition-colors">L</button>
+<button class="h-10 border border-outline-variant text-label-sm hover:border-primary transition-colors">XL</button>
+</div>
+</section>
+<section>
+<h3 class="font-headline-md text-primary mb-6 text-lg">Color</h3>
+<div class="flex flex-wrap gap-3">
+<button class="w-8 h-8 rounded-full border border-outline-variant bg-zinc-900" title="Charcoal"></button>
+<button class="w-8 h-8 rounded-full border border-outline-variant bg-[#C5A059]" title="Gold"></button>
+<button class="w-8 h-8 rounded-full border border-outline-variant bg-[#D2B48C]" title="Beige"></button>
+<button class="w-8 h-8 rounded-full border border-primary ring-1 ring-offset-2 ring-primary bg-zinc-200" title="Grey"></button>
+<button class="w-8 h-8 rounded-full border border-outline-variant bg-white" title="White"></button>
+</div>
+</section>
+<section>
+<h3 class="font-headline-md text-primary mb-6 text-lg">Brand</h3>
+<div class="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-sm text-on-surface-variant group-hover:text-primary transition-colors">Aetheria</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-sm text-on-surface-variant group-hover:text-primary transition-colors">Loom &amp; Thread</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-sm text-on-surface-variant group-hover:text-primary transition-colors">Minimalist Co.</span>
+</label>
+</div>
+</section>
+</div>
+</aside>
+<!-- Product Grid Section -->
+<div class="flex-1">
+<!-- Sorting & Stats -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+<p class="text-body-sm text-on-surface-variant">Showing <span class="text-primary font-semibold">1-12</span> of 86 results for <span class="italic">"Trousers"</span></p>
+<div class="flex items-center gap-4">
+<span class="text-label-sm uppercase tracking-widest text-on-surface-variant">Sort by</span>
+<select class="border-none bg-transparent text-body-sm font-semibold focus:ring-0 cursor-pointer">
+<option>Newest Arrivals</option>
+<option>Price: Low to High</option>
+<option>Price: High to Low</option>
+<option>Most Popular</option>
+</select>
+</div>
+</div>
+<!-- Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-gutter gap-y-12">
+<!-- Product Card 1 -->
+<div class="group">
+<div class="relative aspect-[3/4] mb-6 overflow-hidden bg-surface-container-low">
+<img alt="Grey Venish Pant" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A high-end editorial studio shot of premium wide-leg trousers in a soft dove-grey wool fabric. The lighting is soft and directional, highlighting the exquisite tailoring and texture. The background is a minimalist, warm-toned off-white studio. The overall mood is sophisticated, calm, and fashion-forward with a focus on sustainable luxury materials." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU7h6qCYN611AFi1H2HthGTvoM8XWkMePDx3Mu2avT7xrnbZ9AWMHsmfl7jo4ZGVpNROK70AIcFIJhRjveRgfJ_plk1K7Ji3OrMZPOuT4L7mVVjyS9mZhrhn2aiedXMpXzLZKaqnBxV0SwnFRxZr5JX4xLMuDYQkxmgngu9EkEfQOocoyg3Bdx-XG2CQzC_NZ5O14n1ixygrZ1UnR_eIw8Di_WYQlcIHeYw1vIL29pCrYlMfPdglrqDM4BrqPNyX3gbLuuXzSY1w"/>
+<div class="absolute top-4 left-4 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary">New Arrival</div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+<button class="absolute bottom-0 left-0 w-full bg-primary text-white py-4 font-label-lg translate-y-full group-hover:translate-y-0 transition-transform duration-300">ADD TO CART</button>
+</div>
+<div class="space-y-1">
+<p class="text-label-sm text-on-surface-variant uppercase tracking-tighter">Loom &amp; Thread</p>
+<h3 class="font-headline-md text-lg text-primary">Grey Venish Pant</h3>
+<div class="flex items-center gap-3">
+<span class="font-body-md font-semibold text-primary">$185.00</span>
+<span class="text-body-sm text-on-surface-variant line-through">$240.00</span>
+<span class="text-label-sm text-secondary font-bold">25% OFF</span>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="group">
+<div class="relative aspect-[3/4] mb-6 overflow-hidden bg-surface-container-low">
+<img alt="Signature Slim Chino" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A meticulously styled product photo of dark navy slim-fit chinos draped over a designer chair in a modern, sun-drenched loft. The lighting creates sharp, clean shadows that emphasize the high-quality twill weave. The atmosphere is professional yet relaxed, capturing the essence of modern business-casual luxury. Colors are deep, saturated, and premium." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyIRFTPHXAWp1hP0uz_lDPKVAMObWdWd3x73IRyhe-DZ6VcWeJYvEblpGfZdHQRYFdNVNgz7XHl3FwORFoDBygM4wxEEf6KsfHTGLLRLeGiZSMxiK9NlIqZ9OVjTbd5vHhZTmdV8ERae-tWnMzyUzzTBPQVfkYfVi1U8Vx0hJAN5jtrxvsTsgRgIwkct2nrUpXqdk-PwuqHLqDNCbOuuX4AUF6yl-WyoICh5AZm9_uLc6dfiyOVwwu7LZWFtHUPexjZNF3_5u9kA"/>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+<button class="absolute bottom-0 left-0 w-full bg-primary text-white py-4 font-label-lg translate-y-full group-hover:translate-y-0 transition-transform duration-300">ADD TO CART</button>
+</div>
+<div class="space-y-1">
+<p class="text-label-sm text-on-surface-variant uppercase tracking-tighter">Aetheria</p>
+<h3 class="font-headline-md text-lg text-primary">Signature Slim Chino</h3>
+<div class="flex items-center gap-3">
+<span class="font-body-md font-semibold text-primary">$140.00</span>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="group">
+<div class="relative aspect-[3/4] mb-6 overflow-hidden bg-surface-container-low">
+<img alt="Structured Linen Trouser" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Close-up detailed shot of a structured linen trouser in a creamy ivory shade. The fabric grain is clearly visible, illuminated by natural morning light filtering through a window. The setting is an minimalist architectural space with clean lines. The image conveys a sense of breathability, summer elegance, and high-quality natural fibers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9WaTlbYqhrKBd5rC2rsdLtl1AhERSLt3bYusXzqopaEfUn7UhqUiOSCjy61VFxumz2vyaSr6t2hVzSX0nkZH5ik5YcD-vJIzGfqFnfuhX8DDigQL3AiidBWCHHz63KKaeqE8ZxGJw09jVWOk1548p76Ix7qgpEU3PVxVturJO4oCCk_xSpQ4avs4MvLWGVPtEj43FWxtmlOcf62mg9GP2WLNpO4YyHdfkfUf9nj041owlDrE5FzG7qudRPQjbpv1rdCBxdyXlNA"/>
+<div class="absolute top-4 left-4 bg-secondary text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest">Sustainable</div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+<button class="absolute bottom-0 left-0 w-full bg-primary text-white py-4 font-label-lg translate-y-full group-hover:translate-y-0 transition-transform duration-300">ADD TO CART</button>
+</div>
+<div class="space-y-1">
+<p class="text-label-sm text-on-surface-variant uppercase tracking-tighter">Minimalist Co.</p>
+<h3 class="font-headline-md text-lg text-primary">Structured Linen Trouser</h3>
+<div class="flex items-center gap-3">
+<span class="font-body-md font-semibold text-primary">$210.00</span>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="group">
+<div class="relative aspect-[3/4] mb-6 overflow-hidden bg-surface-container-low">
+<img alt="Oversized Cargo Pant" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A modern streetwear editorial featuring oversized charcoal cargo pants. The model is posed against a raw concrete background with dramatic high-contrast lighting. The focus is on the functional details like pockets and heavy-duty seams. The style is edgy yet sophisticated, utilizing a monochromatic palette of blacks and greys with sharp shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3F_zn_I9zQ-Nhp7iF395awIg750S1YIfRfEgLWa3lBRvIJeeAZmRUUosfAx7rb8oyLCBKd2uOnXxqyqQP2uXTTBIimTNkRda4Grd3_CfoQH73G0Xt-2AneeVDC38LP8Nr1ZMN7O9bzmZSog1TZXXSJkDAsjezEcZ6X8aefo8mgKFXSFjRdo5NRhyMUo7hkKf3qWQRdZbRHqvlqF7FrWJ_dY9ABA28jQfjXVenwYkHtbaeiFAx8Gjcjd7kJZ7lnEVWh18QtQSY2A"/>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+<button class="absolute bottom-0 left-0 w-full bg-primary text-white py-4 font-label-lg translate-y-full group-hover:translate-y-0 transition-transform duration-300">ADD TO CART</button>
+</div>
+<div class="space-y-1">
+<p class="text-label-sm text-on-surface-variant uppercase tracking-tighter">Urban Layer</p>
+<h3 class="font-headline-md text-lg text-primary">Oversized Cargo Pant</h3>
+<div class="flex items-center gap-3">
+<span class="font-body-md font-semibold text-primary">$165.00</span>
+<span class="text-body-sm text-on-surface-variant line-through">$195.00</span>
+</div>
+</div>
+</div>
+<!-- Product Card 5 -->
+<div class="group">
+<div class="relative aspect-[3/4] mb-6 overflow-hidden bg-surface-container-low">
+<img alt="Classic Tapered Denim" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Studio photography of classic indigo tapered denim jeans presented on a clean white background. The lighting is bright and even, highlighting the rich blue dye and copper hardware details. The shot is clean, commercial, and emphasizes the timeless fit and premium quality of the denim fabric. A minimalist aesthetic that screams high-end boutique retail." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIIAk2neqQQFjNlmwCTvjI5cQLdygdxBBfuiKIHRxS86kL5PQOIqVN1JYN6Y2ivKWhtlsDMRpVv2y8OPR2_YxRLjlrhVMo03airDLnKBTFh0bw4RYM1EFAMXqba9BLruHzNSyRTxaQbm85m4Dq8k3b_fSZPKacM3oC7Lyf-FeK_KKA_pS02layUEIO6aQIooeW1FzDL2uWhgrtqqG5faBYQA77M2a67tQ5Hu6ilHCqc3n6DetVj20IDHlVMRpkroWdZLQUf7oqCg"/>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+<button class="absolute bottom-0 left-0 w-full bg-primary text-white py-4 font-label-lg translate-y-full group-hover:translate-y-0 transition-transform duration-300">ADD TO CART</button>
+</div>
+<div class="space-y-1">
+<p class="text-label-sm text-on-surface-variant uppercase tracking-tighter">Heritage Denim</p>
+<h3 class="font-headline-md text-lg text-primary">Classic Tapered Denim</h3>
+<div class="flex items-center gap-3">
+<span class="font-body-md font-semibold text-primary">$120.00</span>
+</div>
+</div>
+</div>
+<!-- Product Card 6 -->
+<div class="group">
+<div class="relative aspect-[3/4] mb-6 overflow-hidden bg-surface-container-low">
+<img alt="Relaxed Corduroy Pant" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Editorial close-up of relaxed-fit corduroy trousers in a rich chocolate brown hue. The fine ribbing of the corduroy captures soft highlights from a warm, late-afternoon sun. The setting is an elegant study with leather accents and dark wood. The mood is cozy, intellectual, and premium, emphasizing texture and autumnal warmth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx4Je4tmFUZmZa2eCgqsHsLdx6l0GX9CSnoveD4vMbPx7z2Yn9TOSMUHNxPQaoHZLHX48lO5imXc0Bqq9gnY2v2JzcRg8FHHcJaVpbyPRX0uAz__ZDM05zXcWPQfuB_cDAq5POZ1c9w9NL14Knx1kdHtFkxZdGKZjCi8VKzlIdB6LCJ_wNI-ZkwD00j48d0TDb26PRxJj7v4y6veqzths6Xo4bg5LnuFoJzJ-SOTwZ2PTMwSJM6oWDmyglNWJafkxn_JkkTzAlIg"/>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+<button class="absolute bottom-0 left-0 w-full bg-primary text-white py-4 font-label-lg translate-y-full group-hover:translate-y-0 transition-transform duration-300">ADD TO CART</button>
+</div>
+<div class="space-y-1">
+<p class="text-label-sm text-on-surface-variant uppercase tracking-tighter">Loom &amp; Thread</p>
+<h3 class="font-headline-md text-lg text-primary">Relaxed Corduroy Pant</h3>
+<div class="flex items-center gap-3">
+<span class="font-body-md font-semibold text-primary">$155.00</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="mt-20 flex justify-center items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center text-zinc-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center bg-primary text-white font-semibold">1</button>
+<button class="w-10 h-10 flex items-center justify-center text-zinc-600 hover:bg-zinc-100 transition-colors font-semibold">2</button>
+<button class="w-10 h-10 flex items-center justify-center text-zinc-600 hover:bg-zinc-100 transition-colors font-semibold">3</button>
+<span class="px-2 text-zinc-400">...</span>
+<button class="w-10 h-10 flex items-center justify-center text-zinc-600 hover:bg-zinc-100 transition-colors font-semibold">8</button>
+<button class="w-10 h-10 flex items-center justify-center text-zinc-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full bg-zinc-50 border-t border-zinc-200 py-16 px-12 grid grid-cols-1 md:grid-cols-2 lg:flex lg:justify-between items-start gap-8 max-w-screen-2xl mx-auto">
+<div class="space-y-6 max-w-xs">
+<h2 class="text-lg font-bold text-zinc-900 font-headline-md tracking-tighter">ShopNest</h2>
+<p class="text-zinc-600 font-serif text-sm leading-relaxed">Curating the world's finest essentials for the modern lifestyle. Quality over quantity, always.</p>
+<div class="flex gap-4">
+<a class="w-8 h-8 rounded-full bg-zinc-200 flex items-center justify-center hover:bg-zinc-300 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">language</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-zinc-200 flex items-center justify-center hover:bg-zinc-300 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">alternate_email</span>
+</a>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-semibold text-zinc-900 uppercase text-xs tracking-widest mb-2">Shop</h4>
+<a class="font-serif text-sm text-zinc-600 hover:text-amber-600 transition-all" href="#">New Arrivals</a>
+<a class="font-serif text-sm text-zinc-600 hover:text-amber-600 transition-all" href="#">Categories</a>
+<a class="font-serif text-sm text-zinc-600 hover:text-amber-600 transition-all" href="#">Brands</a>
+<a class="font-serif text-sm text-zinc-600 hover:text-amber-600 transition-all" href="#">Sustainability</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-semibold text-zinc-900 uppercase text-xs tracking-widest mb-2">Help</h4>
+<a class="font-serif text-sm text-zinc-600 hover:text-amber-600 transition-all" href="#">Shipping &amp; Returns</a>
+<a class="font-serif text-sm text-zinc-600 hover:text-amber-600 transition-all" href="#">Contact</a>
+<a class="font-serif text-sm text-zinc-600 hover:text-amber-600 transition-all" href="#">FAQ</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-semibold text-zinc-900 uppercase text-xs tracking-widest mb-2">Company</h4>
+<a class="font-serif text-sm text-zinc-600 hover:text-amber-600 transition-all underline decoration-1 underline-offset-4" href="#">About Us</a>
+<a class="font-serif text-sm text-zinc-600 hover:text-amber-600 transition-all" href="#">Journal</a>
+<a class="font-serif text-sm text-zinc-600 hover:text-amber-400 transition-all" href="#">Careers</a>
+</div>
+<div class="w-full lg:w-auto text-left lg:text-right space-y-4">
+<p class="font-serif text-sm text-zinc-900 font-semibold">Join the list for early access</p>
+<form class="flex border-b border-zinc-900 pb-2">
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full lg:w-48 placeholder-zinc-400" placeholder="Email Address" type="email"/>
+<button class="material-symbols-outlined text-zinc-900" type="submit">arrow_forward</button>
+</form>
+<p class="text-zinc-400 text-[10px] uppercase tracking-widest mt-8">© 2024 ShopNest. The Luxury of Space and Curation.</p>
+</div>
+</footer>
+</body></html>

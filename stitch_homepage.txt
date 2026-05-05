@@ -1,0 +1,28 @@
+{
+    "id": 3,
+    "jsonrpc": "2.0",
+    "result": {
+        "content": [
+            {
+                "text": "{\"name\":\"projects/8993880906335676140/screens/44523b632bb04b41b485ee1cd8078449\",\"title\":\"ShopNest Homepage\",\"screenshot\":{\"name\":\"projects/8993880906335676140/files/90bad73e878f478ca1413f1636ce596f\",\"downloadUrl\":\"https://lh3.googleusercontent.com/aida/ADBb0uhWOJbFUQxUtWKVTMVDRRMjIjgtYwMel_XF4TJu6hwBlJYJNYLSf7CmkA05MO_q7kKyGpOIoslqOuRNQMrp8pIuF2Uge3nQveRXyID22COkBOQ-7Ti2cEp7wWLPIt1BaaFoIPXgsC7SgS1KbS7lKOKauUvMCMBNI9ikCVJUd84ZsOkmrGoSYblAvkUC009PJuaE2GRSSDEWNLw_161FDSzl5WjiNuYgrFxiYi8k-mGUYbGdvpKVKjoYAA\"},\"htmlCode\":{\"name\":\"projects/8993880906335676140/files/c46cbabb76ac4bfc936044e459595199\",\"downloadUrl\":\"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ6Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpZCiVodG1sX2MzN2RjNjQyNTQ0MDRmNDg4YjMyNjkwNmRmMDU5MWQ1EgoSBhClsoePaxgBkgEjCgpwcm9qZWN0X2lkEhVCEzg5OTM4ODA5MDYzMzU2NzYxNDA&filename=&opi=89354086\",\"mimeType\":\"text/html\"},\"width\":\"2560\",\"height\":\"9330\",\"deviceType\":\"DESKTOP\"}",
+                "type": "text"
+            }
+        ],
+        "structuredContent": {
+            "deviceType": "DESKTOP",
+            "height": "9330",
+            "htmlCode": {
+                "downloadUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ6Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpZCiVodG1sX2MzN2RjNjQyNTQ0MDRmNDg4YjMyNjkwNmRmMDU5MWQ1EgoSBhClsoePaxgBkgEjCgpwcm9qZWN0X2lkEhVCEzg5OTM4ODA5MDYzMzU2NzYxNDA&filename=&opi=89354086",
+                "mimeType": "text/html",
+                "name": "projects/8993880906335676140/files/c46cbabb76ac4bfc936044e459595199"
+            },
+            "name": "projects/8993880906335676140/screens/44523b632bb04b41b485ee1cd8078449",
+            "screenshot": {
+                "downloadUrl": "https://lh3.googleusercontent.com/aida/ADBb0uhWOJbFUQxUtWKVTMVDRRMjIjgtYwMel_XF4TJu6hwBlJYJNYLSf7CmkA05MO_q7kKyGpOIoslqOuRNQMrp8pIuF2Uge3nQveRXyID22COkBOQ-7Ti2cEp7wWLPIt1BaaFoIPXgsC7SgS1KbS7lKOKauUvMCMBNI9ikCVJUd84ZsOkmrGoSYblAvkUC009PJuaE2GRSSDEWNLw_161FDSzl5WjiNuYgrFxiYi8k-mGUYbGdvpKVKjoYAA",
+                "name": "projects/8993880906335676140/files/90bad73e878f478ca1413f1636ce596f"
+            },
+            "title": "ShopNest Homepage",
+            "width": "2560"
+        }
+    }
+}
