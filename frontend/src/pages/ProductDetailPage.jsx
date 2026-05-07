@@ -23,7 +23,6 @@ export const ProductDetailPage = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
-  const [expandedSections, setExpandedSections] = useState({ details: true, shipping: false });
 
   const inWishlist = product ? isInWishlist(product.id) : false;
   const images = product?.images?.length ? product.images : ['/placeholder.jpg'];
@@ -73,10 +72,6 @@ export const ProductDetailPage = () => {
       addToWishlist(product);
       toast.success('Added to wishlist');
     }
-  };
-
-  const toggleSection = (section) => {
-    setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
 
   if (loading) {
@@ -264,13 +259,12 @@ export const ProductDetailPage = () => {
               {/* Product Info Accordion */}
               <div className="border-t border-outline-variant mt-8 divide-y divide-outline-variant">
                 <details
-                  open={expandedSections.details}
-                  onToggle={() => toggleSection('details')}
+                  open
                   className="group py-4"
                 >
                   <summary className="flex justify-between items-center cursor-pointer list-none">
                     <span className="font-label-lg uppercase tracking-wider">Product Details</span>
-                    <ChevronRight className={cn("h-5 w-5 transition-transform", expandedSections.details && "rotate-90")} />
+                    <ChevronRight className="h-5 w-5 transition-transform group-open:rotate-90" />
                   </summary>
                   <div className="pt-4 text-body-sm text-on-surface-variant space-y-2">
                     {product.description && <p>{product.description}</p>}
@@ -280,13 +274,11 @@ export const ProductDetailPage = () => {
                   </div>
                 </details>
                 <details
-                  open={expandedSections.shipping}
-                  onToggle={() => toggleSection('shipping')}
                   className="group py-4"
                 >
                   <summary className="flex justify-between items-center cursor-pointer list-none">
                     <span className="font-label-lg uppercase tracking-wider">Shipping & Returns</span>
-                    <ChevronRight className={cn("h-5 w-5 transition-transform", expandedSections.shipping && "rotate-90")} />
+                    <ChevronRight className="h-5 w-5 transition-transform group-open:rotate-90" />
                   </summary>
                   <div className="pt-4 text-body-sm text-on-surface-variant">
                     <p>Complimentary standard shipping on orders over $200. Returns accepted within 30 days of delivery.</p>
