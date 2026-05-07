@@ -190,11 +190,11 @@ async def get_new_arrivals(
     return [product_to_dict(p) for p in products]
 
 
-@router.get("/{product_id}", response_model=ProductWithCategory)
-async def get_product(product_id: str, db: Session = Depends(get_db)):
-    """Get product by ID."""
+@router.get("/slug/{slug}", response_model=ProductWithCategory)
+async def get_product_by_slug(slug: str, db: Session = Depends(get_db)):
+    """Get product by slug."""
     product = db.query(Product).filter(
-        Product.id == product_id,
+        Product.slug == slug,
         Product.is_deleted == False
     ).first()
     
@@ -204,11 +204,11 @@ async def get_product(product_id: str, db: Session = Depends(get_db)):
     return product_to_dict(product, include_category=True)
 
 
-@router.get("/slug/{slug}", response_model=ProductWithCategory)
-async def get_product_by_slug(slug: str, db: Session = Depends(get_db)):
-    """Get product by slug."""
+@router.get("/{product_id}", response_model=ProductWithCategory)
+async def get_product(product_id: str, db: Session = Depends(get_db)):
+    """Get product by ID."""
     product = db.query(Product).filter(
-        Product.slug == slug,
+        Product.id == product_id,
         Product.is_deleted == False
     ).first()
     
