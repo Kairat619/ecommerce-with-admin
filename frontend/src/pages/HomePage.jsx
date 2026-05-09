@@ -217,7 +217,7 @@ export const HomePage = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-8 justify-items-center">
             {loading ? (
               [...Array(6)].map((_, i) => (
-                <div key={i} className="animate-pulse flex flex-col items-center">
+                <div key={i} className="animate-pulse flex flex-col">
                   <div className="aspect-square rounded-full bg-zinc-100 mb-4 w-4/5" />
                   <div className="h-5 bg-zinc-100 w-16" />
                 </div>
