@@ -18,6 +18,22 @@ export const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [siteSettings, setSiteSettings] = useState({ logo_url: null, hero_slides: [] });
+  const [lastChanceProduct, setLastChanceProduct] = useState(null);
+  const [countdown, setCountdown] = useState(48 * 60 * 60);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdown(prev => prev <= 0 ? 0 : prev - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatCountdown = (totalSeconds) => {
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  };
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   const defaultHeroSlides = [
@@ -84,9 +100,10 @@ export const HomePage = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [hotOfferRes, newArrivalsRes, categoriesRes, settingsRes] = await Promise.all([
+      const [hotOfferRes, newArrivalsRes, lastChanceRes, categoriesRes, settingsRes] = await Promise.all([
         productsAPI.list({ badge: 'hot_offer', page_size: 8 }),
         productsAPI.list({ badge: 'new_arrival', page_size: 8 }),
+        productsAPI.list({ badge: 'last_chance', page_size: 1 }),
         categoriesAPI.list(true),
         publicAPI.getSiteSettings().catch(() => ({ data: { logo_url: null, hero_slides: [] } })),
       ]);
@@ -100,8 +117,10 @@ export const HomePage = () => {
         const fallbackRes = await productsAPI.getNewArrivals(8);
         newArrivalProducts = Array.isArray(fallbackRes.data) ? fallbackRes.data : [];
       }
+      const lcProducts = Array.isArray(lastChanceRes.data?.items) ? lastChanceRes.data.items : [];
       setFeaturedProducts(editorProducts);
       setNewArrivals(newArrivalProducts);
+      setLastChanceProduct(lcProducts.length > 0 ? lcProducts[0] : null);
       setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data.slice(0, 6) : []);
       if (settingsRes?.data) {
         setSiteSettings(settingsRes.data);
@@ -271,23 +290,27 @@ export const HomePage = () => {
         </section>
 
         {/* Flash Sale Banner */}
-        {featuredProducts.length > 0 && (
+        {lastChanceProduct && (
           <section className="py-16 md:py-24 px-4 md:px-8 max-w-screen-2xl mx-auto">
             <div className="bg-primary-container text-white p-8 md:p-12 lg:p-20 relative overflow-hidden flex flex-col md:flex-row items-center gap-8 md:gap-12">
               <div className="z-10 flex-1">
                 <div className="flex items-center gap-2 mb-6">
                   <span className="w-2 h-2 rounded-full bg-secondary-fixed animate-pulse"></span>
-                  <span className="font-label-lg tracking-widest text-secondary-fixed">JUST FOR YOU • FLASH SALE</span>
+                  <span className="font-label-lg tracking-widest text-secondary-fixed">LAST CHANCE • FLASH SALE</span>
                 </div>
-                <h2 className="font-display-lg mb-4">{featuredProducts[0]?.name || 'Limited Edition'}</h2>
-                <p className="font-body-lg text-zinc-400 mb-8 max-w-md line-clamp-2">{featuredProducts[0]?.description || 'Your seasonal essential, curated for the modern lifestyle.'}</p>
+                <div className="flex items-center gap-4 mb-6">
+                  <span className="font-label-lg text-secondary-fixed">Ends in</span>
+                  <span className="font-display-md text-3xl tracking-widest tabular-nums">{formatCountdown(countdown)}</span>
+                </div>
+                <h2 className="font-display-lg mb-4">{lastChanceProduct.name}</h2>
+                <p className="font-body-lg text-zinc-400 mb-8 max-w-md line-clamp-2">{lastChanceProduct.description}</p>
                 <div className="flex items-baseline gap-4 mb-10">
-                  <span className="text-4xl font-bold">${featuredProducts[0]?.price.toFixed(2) || '189'}</span>
-                  {featuredProducts[0]?.compare_at_price && (
-                    <span className="text-xl text-zinc-500 line-through">${featuredProducts[0]?.compare_at_price.toFixed(2)}</span>
+                  <span className="text-4xl font-bold">${lastChanceProduct.price.toFixed(2)}</span>
+                  {lastChanceProduct.compare_at_price && (
+                    <span className="text-xl text-zinc-500 line-through">${lastChanceProduct.compare_at_price.toFixed(2)}</span>
                   )}
                 </div>
-                <Link to={`/products/${featuredProducts[0]?.slug}`}>
+                <Link to={`/products/${lastChanceProduct.slug}`}>
                   <Button size="lg" className="bg-secondary text-white hover:bg-secondary-fixed-dim px-10 py-4 font-label-lg">
                     Shop Now
                   </Button>
@@ -295,8 +318,8 @@ export const HomePage = () => {
               </div>
               <div className="z-10 flex-1 relative w-full aspect-square md:aspect-auto md:h-[400px]">
                 <img
-                  src={featuredProducts[0]?.thumbnail || featuredProducts[0]?.images?.[0] || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600'}
-                  alt={featuredProducts[0]?.name || 'Featured product'}
+                  src={lastChanceProduct.thumbnail || lastChanceProduct.images?.[0] || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600'}
+                  alt={lastChanceProduct.name}
                   className="w-full h-full object-contain"
                 />
               </div>
