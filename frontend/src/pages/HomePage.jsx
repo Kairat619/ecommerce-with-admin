@@ -27,7 +27,7 @@ export const HomePage = () => {
       description: 'Discover our exclusive Spring/Summer collection featuring sustainable fabrics and timeless silhouettes designed for the modern minimalist.',
       cta: 'Shop Collection',
       ctaLink: '/products',
-      image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600',
+      image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80',
     },
     {
       title: 'Elevated Essentials',
@@ -35,7 +35,7 @@ export const HomePage = () => {
       description: 'Curated pieces that define modern elegance. Quality over quantity, always.',
       cta: 'View Editorial',
       ctaLink: '/products?category=fashion',
-      image: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=1600',
+      image: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=1920&q=80',
     },
     {
       title: 'Timeless Sophistication',
@@ -43,9 +43,15 @@ export const HomePage = () => {
       description: 'Hand-selected pieces for the discerning individual who values craftsmanship.',
       cta: 'Browse Collection',
       ctaLink: '/products?category=home-living',
-      image: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=1600',
+      image: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=1920&q=80',
     },
   ];
+
+  const getUnsplashSrcSet = (url) => {
+    if (!url?.includes('unsplash.com')) return undefined;
+    const base = url.split('?')[0];
+    return `${base}?w=800&q=75 800w, ${base}?w=1200&q=75 1200w, ${base}?w=1920&q=80 1920w`;
+  };
 
   const heroSlides = settingsLoaded && siteSettings.hero_slides?.length > 0
     ? siteSettings.hero_slides.map(slide => ({
@@ -155,6 +161,8 @@ export const HomePage = () => {
                   <div className="absolute inset-0 opacity-80">
                     <img
                       src={slide.image}
+                      srcSet={getUnsplashSrcSet(slide.image)}
+                      sizes="(max-width: 768px) 100vw, 1920px"
                       alt={slide.title}
                       className="w-full h-full object-cover"
                     />
