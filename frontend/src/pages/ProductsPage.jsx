@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ChevronRight, ChevronLeft, X, Plus, Minus, Heart, ShoppingBag, Filter } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import { Slider } from '../components/ui/slider';
 import { productsAPI, categoriesAPI } from '../lib/api';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -234,27 +235,17 @@ export const ProductsPage = () => {
       <section>
         <h3 className="font-headline-md text-primary mb-6 text-lg">Price range</h3>
         <div className="px-2 space-y-4">
-          <div className="flex gap-3">
-            <input
-              type="number"
-              value={filters.minPrice}
-              onChange={(e) => updateFilter('minPrice', Number(e.target.value))}
-              className="w-full h-10 px-3 border border-outline-variant rounded text-sm focus:ring-1 focus:ring-primary"
-              placeholder="Min"
-              min={0}
-            />
-            <input
-              type="number"
-              value={filters.maxPrice}
-              onChange={(e) => updateFilter('maxPrice', Number(e.target.value))}
-              className="w-full h-10 px-3 border border-outline-variant rounded text-sm focus:ring-1 focus:ring-primary"
-              placeholder="Max"
-              min={0}
-            />
-          </div>
+          <Slider
+            value={[filters.minPrice, filters.maxPrice]}
+            onValueChange={([min, max]) => setFilters({ ...filters, minPrice: min, maxPrice: max, page: 1 })}
+            min={0}
+            max={2000}
+            step={10}
+            className="mt-2"
+          />
           <div className="flex justify-between text-label-sm text-on-surface-variant">
-            <span>${filters.minPrice}</span>
-            <span>${filters.maxPrice}+</span>
+            <span className="font-medium text-primary">${filters.minPrice}</span>
+            <span className="font-medium text-primary">${filters.maxPrice}+</span>
           </div>
         </div>
       </section>
