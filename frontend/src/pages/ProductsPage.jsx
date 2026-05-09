@@ -2,103 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ChevronRight, ChevronLeft, X, Plus, Minus, Heart, ShoppingBag, Filter } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import { Slider } from '../components/ui/slider';
 import { productsAPI, categoriesAPI } from '../lib/api';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { cn } from '../lib/utils';
 import { SEO } from '../components/seo';
-
-const PriceSlider = ({ min, max, step, value, onChange }) => {
-  const trackRef = useRef(null);
-  const [dragging, setDragging] = useState(null);
-
-  const handleMouseMove = useRef(null);
-  const handleMouseUp = useRef(null);
-
-  useEffect(() => {
-    handleMouseMove.current = (e) => {
-      if (!dragging || !trackRef.current) return;
-      const rect = trackRef.current.getBoundingClientRect();
-      let pct = ((e.clientX - rect.left) / rect.width) * 100;
-      pct = Math.max(0, Math.min(100, pct));
-      const val = Math.round((pct / 100) * (max - min) / step) * step + min;
-      if (dragging === 'min') {
-        onChange([Math.min(val, value[1] - step), value[1]]);
-      } else {
-        onChange([value[0], Math.max(val, value[0] + step)]);
-      }
-    };
-  }, [dragging, value, min, max, step, onChange]);
-
-  useEffect(() => {
-    handleMouseUp.current = () => setDragging(null);
-  }, []);
-
-  useEffect(() => {
-    if (!dragging) return;
-    const onMove = (e) => handleMouseMove.current(e);
-    const onUp = () => handleMouseUp.current();
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
-    window.addEventListener('touchmove', onMove, { passive: true });
-    window.addEventListener('touchend', onUp);
-    return () => {
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mouseup', onUp);
-      window.removeEventListener('touchmove', onMove);
-      window.removeEventListener('touchend', onUp);
-    };
-  }, [dragging]);
-
-  const pct = (v) => ((v - min) / (max - min)) * 100;
-
-  const startDrag = (handle, e) => {
-    e.preventDefault();
-    setDragging(handle);
-  };
-
-  const handleTrackClick = (e) => {
-    if (dragging) return;
-    const rect = trackRef.current.getBoundingClientRect();
-    let pct = ((e.clientX - rect.left) / rect.width) * 100;
-    pct = Math.max(0, Math.min(100, pct));
-    const val = Math.round((pct / 100) * (max - min) / step) * step + min;
-    const distMin = Math.abs(val - value[0]);
-    const distMax = Math.abs(val - value[1]);
-    if (distMin <= distMax) {
-      onChange([Math.min(val, value[1] - step), value[1]]);
-    } else {
-      onChange([value[0], Math.max(val, value[0] + step)]);
-    }
-  };
-
-  return (
-    <div className="relative pt-3 pb-1">
-      <div
-        ref={trackRef}
-        className="relative h-1.5 bg-outline-variant rounded-full cursor-pointer"
-        onMouseDown={handleTrackClick}
-      >
-        <div
-          className="absolute h-full bg-primary rounded-full"
-          style={{ left: `${pct(value[0])}%`, right: `${100 - pct(value[1])}%` }}
-        />
-      </div>
-      <div
-        className="absolute top-3 w-4 h-4 -ml-2 rounded-full bg-white border-2 border-primary shadow cursor-grab active:cursor-grabbing"
-        style={{ left: `${pct(value[0])}%`, zIndex: dragging === 'min' ? 10 : 5 }}
-        onMouseDown={(e) => startDrag('min', e)}
-        onTouchStart={(e) => startDrag('min', e)}
-      />
-      <div
-        className="absolute top-3 w-4 h-4 -ml-2 rounded-full bg-white border-2 border-primary shadow cursor-grab active:cursor-grabbing"
-        style={{ left: `${pct(value[1])}%`, zIndex: dragging === 'max' ? 10 : 5 }}
-        onMouseDown={(e) => startDrag('max', e)}
-        onTouchStart={(e) => startDrag('max', e)}
-      />
-    </div>
-  );
-};
 
 const StitchProductCard = ({ product, index }) => {
   const { addToCart } = useCart();
@@ -326,12 +235,12 @@ export const ProductsPage = () => {
       <section>
         <h3 className="font-headline-md text-primary mb-6 text-lg">Price range</h3>
         <div className="px-2 space-y-4">
-          <PriceSlider
+          <Slider
             min={0}
             max={2000}
             step={10}
             value={[filters.minPrice, filters.maxPrice]}
-            onChange={([min, max]) => setFilters(prev => ({ ...prev, minPrice: min, maxPrice: max, page: 1 }))}
+            onValueChange={([min, max]) => setFilters(prev => ({ ...prev, minPrice: min, maxPrice: max, page: 1 }))}
           />
           <div className="flex justify-between text-label-sm text-on-surface-variant">
             <span className="font-medium text-primary">${filters.minPrice}</span>
