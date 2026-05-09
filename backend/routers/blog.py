@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import or_
 
 from config.database import get_db
-from schemas.schemas import BlogPostResponse, PaginatedResponse
+from schemas.schemas import PaginatedResponse
 from models.models import BlogPost, User
 
 router = APIRouter(prefix="/blog", tags=["Blog"])
@@ -67,7 +67,7 @@ async def list_posts(
     )
 
 
-@router.get("/{slug}", response_model=BlogPostResponse)
+@router.get("/{slug}")
 async def get_post(slug: str, db: Session = Depends(get_db)):
     """Get a single published blog post by slug."""
     post = db.query(BlogPost).filter(
