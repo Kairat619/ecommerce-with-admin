@@ -84,13 +84,13 @@ export const HomePage = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [featuredRes, newArrivalsRes, categoriesRes, settingsRes] = await Promise.all([
-        productsAPI.getFeatured(8),
+      const [hotOfferRes, newArrivalsRes, categoriesRes, settingsRes] = await Promise.all([
+        productsAPI.list({ badge: 'hot_offer', page_size: 8 }),
         productsAPI.getNewArrivals(8),
         categoriesAPI.list(true),
         publicAPI.getSiteSettings().catch(() => ({ data: { logo_url: null, hero_slides: [] } })),
       ]);
-      setFeaturedProducts(Array.isArray(featuredRes.data) ? featuredRes.data : []);
+      setFeaturedProducts(Array.isArray(hotOfferRes.data?.items) ? hotOfferRes.data.items : []);
       setNewArrivals(Array.isArray(newArrivalsRes.data) ? newArrivalsRes.data : []);
       setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data.slice(0, 6) : []);
       if (settingsRes?.data) {
@@ -238,7 +238,7 @@ export const HomePage = () => {
                 <h2 className="font-display-md text-primary mb-2">Editor's Choice</h2>
                 <p className="font-body-md text-zinc-500">Hand-picked selections for the discerning eye.</p>
               </div>
-              <Link to="/products" className="font-label-lg text-primary border-b border-primary pb-1 hover:text-secondary hover:border-secondary transition-colors hidden md:block">
+              <Link to="/products?badge=hot_offer" className="font-label-lg text-primary border-b border-primary pb-1 hover:text-secondary hover:border-secondary transition-colors hidden md:block">
                 View All Selection
               </Link>
             </div>
