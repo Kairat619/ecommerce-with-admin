@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ChevronRight, ChevronLeft, X, Plus, Minus, Heart, ShoppingBag, Filter } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -108,6 +108,24 @@ export const ProductsPage = () => {
     page: Number(searchParams.get('page')) || 1,
   });
 
+  const filtersSynced = useRef(false);
+
+  useEffect(() => {
+    if (filtersSynced.current) {
+      setFilters({
+        q: searchParams.get('q') || '',
+        category: searchParams.get('category') || 'all',
+        badge: searchParams.get('badge') || '',
+        minPrice: Number(searchParams.get('min_price')) || 0,
+        maxPrice: Number(searchParams.get('max_price')) || 2000,
+        sortBy: searchParams.get('sort_by') || 'created_at',
+        sortOrder: searchParams.get('sort_order') || 'desc',
+        page: Number(searchParams.get('page')) || 1,
+      });
+    }
+    filtersSynced.current = true;
+  }, [searchParams]);
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -158,7 +176,7 @@ export const ProductsPage = () => {
     if (filters.sortBy !== 'created_at') newParams.set('sort_by', filters.sortBy);
     if (filters.sortOrder !== 'desc') newParams.set('sort_order', filters.sortOrder);
     if (filters.page > 1) newParams.set('page', String(filters.page));
-    setSearchParams(newParams);
+    setSearchParams(newParams, { replace: true });
   }, [filters, setSearchParams]);
 
   const updateFilter = (key, value) => {
