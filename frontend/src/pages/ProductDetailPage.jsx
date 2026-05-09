@@ -21,19 +21,10 @@ export const ProductDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedSize, setSelectedSize] = useState('');
-  const [selectedColor, setSelectedColor] = useState('');
 
   const inWishlist = product ? isInWishlist(product.id) : false;
   const images = product?.images?.length ? product.images : ['/placeholder.jpg'];
   const discount = product?.compare_at_price ? Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100) : 0;
-
-  const sizes = ['XS', 'S', 'M', 'L', 'XL'];
-  const colors = [
-    { name: 'Charcoal', hex: '#2A2D34' },
-    { name: 'Grey', hex: '#8E9196' },
-    { name: 'White', hex: '#E5E5E5' },
-  ];
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -173,51 +164,6 @@ export const ProductDetailPage = () => {
               <p className="font-body-md text-on-surface-variant leading-relaxed">
                 {product.description || 'A masterfully crafted piece designed for the discerning individual who seeks quality without compromising on style.'}
               </p>
-
-              {/* Color Selector */}
-              <div className="flex flex-col gap-4">
-                <label className="font-label-lg text-primary">
-                  Color: <span className="font-normal text-on-surface-variant">{selectedColor || colors[0].name}</span>
-                </label>
-                <div className="flex gap-3">
-                  {colors.map((color, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedColor(color.name)}
-                      className={cn(
-                        "w-10 h-10 rounded-full p-0.5 transition-colors",
-                        selectedColor === color.name ? "border-2 border-primary" : "border border-outline-variant hover:border-outline"
-                      )}
-                    >
-                      <div className="w-full h-full rounded-full" style={{ backgroundColor: color.hex }} />
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Size Selector */}
-              <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center">
-                  <label className="font-label-lg text-primary">Size</label>
-                  <button className="text-label-sm text-outline underline hover:text-primary">Size Guide</button>
-                </div>
-                <div className="grid grid-cols-4 sm:grid-cols-5 gap-3">
-                  {sizes.map((size) => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={cn(
-                        "py-3 border text-center text-label-lg transition-all",
-                        selectedSize === size
-                          ? "border-primary bg-primary text-white"
-                          : "border-outline-variant hover:border-primary"
-                      )}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </div>
 
               {/* Actions */}
               <div className="flex flex-col gap-3 pt-4">
