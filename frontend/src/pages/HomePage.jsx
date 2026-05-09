@@ -271,7 +271,7 @@ export const HomePage = () => {
         </section>
 
         {/* Flash Sale Banner */}
-        {newArrivals.length > 0 && (
+        {featuredProducts.length > 0 && (
           <section className="py-16 md:py-24 px-4 md:px-8 max-w-screen-2xl mx-auto">
             <div className="bg-primary-container text-white p-8 md:p-12 lg:p-20 relative overflow-hidden flex flex-col md:flex-row items-center gap-8 md:gap-12">
               <div className="z-10 flex-1">
@@ -279,15 +279,15 @@ export const HomePage = () => {
                   <span className="w-2 h-2 rounded-full bg-secondary-fixed animate-pulse"></span>
                   <span className="font-label-lg tracking-widest text-secondary-fixed">JUST FOR YOU • FLASH SALE</span>
                 </div>
-                <h2 className="font-display-lg mb-4">{newArrivals[0]?.name || 'Limited Edition'}</h2>
-                <p className="font-body-lg text-zinc-400 mb-8 max-w-md line-clamp-2">{newArrivals[0]?.description || 'Your seasonal essential, curated for the modern lifestyle.'}</p>
+                <h2 className="font-display-lg mb-4">{featuredProducts[0]?.name || 'Limited Edition'}</h2>
+                <p className="font-body-lg text-zinc-400 mb-8 max-w-md line-clamp-2">{featuredProducts[0]?.description || 'Your seasonal essential, curated for the modern lifestyle.'}</p>
                 <div className="flex items-baseline gap-4 mb-10">
-                  <span className="text-4xl font-bold">${newArrivals[0]?.price.toFixed(2) || '189'}</span>
-                  {newArrivals[0]?.compare_at_price && (
-                    <span className="text-xl text-zinc-500 line-through">${newArrivals[0]?.compare_at_price.toFixed(2)}</span>
+                  <span className="text-4xl font-bold">${featuredProducts[0]?.price.toFixed(2) || '189'}</span>
+                  {featuredProducts[0]?.compare_at_price && (
+                    <span className="text-xl text-zinc-500 line-through">${featuredProducts[0]?.compare_at_price.toFixed(2)}</span>
                   )}
                 </div>
-                <Link to={`/products/${newArrivals[0]?.slug}`}>
+                <Link to={`/products/${featuredProducts[0]?.slug}`}>
                   <Button size="lg" className="bg-secondary text-white hover:bg-secondary-fixed-dim px-10 py-4 font-label-lg">
                     Shop Now
                   </Button>
@@ -295,8 +295,8 @@ export const HomePage = () => {
               </div>
               <div className="z-10 flex-1 relative w-full aspect-square md:aspect-auto md:h-[400px]">
                 <img
-                  src={newArrivals[0]?.thumbnail || newArrivals[0]?.images?.[0] || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600'}
-                  alt={newArrivals[0]?.name || 'Featured product'}
+                  src={featuredProducts[0]?.thumbnail || featuredProducts[0]?.images?.[0] || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600'}
+                  alt={featuredProducts[0]?.name || 'Featured product'}
                   className="w-full h-full object-contain"
                 />
               </div>
