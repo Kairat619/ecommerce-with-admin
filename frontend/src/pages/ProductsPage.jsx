@@ -209,7 +209,7 @@ export const ProductsPage = () => {
         <h3 className="font-headline-md text-primary mb-6 text-lg">Category</h3>
         <div className="space-y-3">
           <button
-            onClick={() => updateFilter('category', 'all')}
+            onClick={() => setFilters({ ...filters, category: 'all', badge: '', page: 1 })}
             className={cn(
               "w-full text-left text-body-sm transition-colors py-1",
               filters.category === 'all' ? "text-primary font-medium" : "text-on-surface-variant hover:text-primary"
