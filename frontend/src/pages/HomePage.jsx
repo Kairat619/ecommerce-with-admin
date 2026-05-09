@@ -86,7 +86,7 @@ export const HomePage = () => {
       setLoading(true);
       const [hotOfferRes, newArrivalsRes, categoriesRes, settingsRes] = await Promise.all([
         productsAPI.list({ badge: 'hot_offer', page_size: 8 }),
-        productsAPI.getNewArrivals(8),
+        productsAPI.list({ badge: 'new_arrival', page_size: 8 }),
         categoriesAPI.list(true),
         publicAPI.getSiteSettings().catch(() => ({ data: { logo_url: null, hero_slides: [] } })),
       ]);
@@ -95,8 +95,13 @@ export const HomePage = () => {
         const fallbackRes = await productsAPI.getFeatured(8);
         editorProducts = Array.isArray(fallbackRes.data) ? fallbackRes.data : [];
       }
+      let newArrivalProducts = Array.isArray(newArrivalsRes.data?.items) ? newArrivalsRes.data.items : [];
+      if (newArrivalProducts.length === 0) {
+        const fallbackRes = await productsAPI.getNewArrivals(8);
+        newArrivalProducts = Array.isArray(fallbackRes.data) ? fallbackRes.data : [];
+      }
       setFeaturedProducts(editorProducts);
-      setNewArrivals(Array.isArray(newArrivalsRes.data) ? newArrivalsRes.data : []);
+      setNewArrivals(newArrivalProducts);
       setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data.slice(0, 6) : []);
       if (settingsRes?.data) {
         setSiteSettings(settingsRes.data);
@@ -319,7 +324,7 @@ export const HomePage = () => {
               <h2 className="font-display-md text-primary mb-2">New Arrivals</h2>
               <p className="font-body-md text-zinc-500">Fresh additions to our curated collection.</p>
             </div>
-            <Link to="/products" className="font-label-lg text-primary border-b border-primary pb-1 hover:text-secondary hover:border-secondary transition-colors hidden md:block">
+            <Link to="/products?badge=new_arrival" className="font-label-lg text-primary border-b border-primary pb-1 hover:text-secondary hover:border-secondary transition-colors hidden md:block">
               View All
             </Link>
           </div>
