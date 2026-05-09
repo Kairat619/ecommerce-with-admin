@@ -90,7 +90,12 @@ export const HomePage = () => {
         categoriesAPI.list(true),
         publicAPI.getSiteSettings().catch(() => ({ data: { logo_url: null, hero_slides: [] } })),
       ]);
-      setFeaturedProducts(Array.isArray(hotOfferRes.data?.items) ? hotOfferRes.data.items : []);
+      let editorProducts = Array.isArray(hotOfferRes.data?.items) ? hotOfferRes.data.items : [];
+      if (editorProducts.length === 0) {
+        const fallbackRes = await productsAPI.getFeatured(8);
+        editorProducts = Array.isArray(fallbackRes.data) ? fallbackRes.data : [];
+      }
+      setFeaturedProducts(editorProducts);
       setNewArrivals(Array.isArray(newArrivalsRes.data) ? newArrivalsRes.data : []);
       setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data.slice(0, 6) : []);
       if (settingsRes?.data) {
