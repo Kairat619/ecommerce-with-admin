@@ -172,4 +172,26 @@ def migrate_schema():
         finally:
             db.close()
     else:
+        logger.info("SQLite: running migrations...")
+        db = SessionLocal()
+        try:
+            from sqlalchemy import text
+            columns_to_add = {
+                'products': [
+                    'badge',
+                ],
+            }
+            for table_name, cols in columns_to_add.items():
+                for col in cols:
+                    try:
+                        db.execute(text(f"ALTER TABLE {table_name} ADD COLUMN {col} VARCHAR(50)"))
+                        db.commit()
+                        logger.info(f"Added column {col} to {table_name}")
+                    except Exception:
+                        db.rollback()
+                        logger.info(f"Column {col} already exists in {table_name}")
+        except Exception as e:
+            logger.error(f"SQLite migration error: {e}")
+        finally:
+            db.close()
         logger.info("Not PostgreSQL, skipping migrations")

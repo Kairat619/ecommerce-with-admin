@@ -44,9 +44,9 @@ export const StoreLayout = ({ children }) => {
   };
 
   const navLinks = [
-    { href: '/products', label: 'New Arrivals' },
-    { href: '/products?category=fashion', label: 'Hot Offer' },
-    { href: '/products?category=electronics', label: 'Last Chance' },
+    { href: '/products?badge=new_arrival', label: 'New Arrivals' },
+    { href: '/products?badge=hot_offer', label: 'Hot Offer' },
+    { href: '/products?badge=last_chance', label: 'Last Chance' },
     { href: '/blog', label: 'Editorial' },
   ];
 

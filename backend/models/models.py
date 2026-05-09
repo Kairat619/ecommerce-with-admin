@@ -149,6 +149,7 @@ class Product(Base):
     meta_description = Column(String(500), nullable=True)
     
     # Status
+    badge = Column(String(50), nullable=True, default=None)
     is_active = Column(Boolean, default=True)
     is_featured = Column(Boolean, default=False)
     is_deleted = Column(Boolean, default=False)

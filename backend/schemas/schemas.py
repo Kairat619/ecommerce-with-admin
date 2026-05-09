@@ -147,6 +147,7 @@ class ProductBase(BaseModel):
     meta_title: Optional[str] = None
     meta_description: Optional[str] = None
     is_featured: bool = False
+    badge: Optional[str] = None
     weight: Optional[float] = None
     dimensions: Optional[Dict[str, float]] = None
     attributes: Dict[str, Any] = {}
@@ -176,6 +177,7 @@ class ProductUpdate(BaseModel):
     meta_description: Optional[str] = None
     is_active: Optional[bool] = None
     is_featured: Optional[bool] = None
+    badge: Optional[str] = None
     weight: Optional[float] = None
     dimensions: Optional[Dict[str, float]] = None
     attributes: Optional[Dict[str, Any]] = None

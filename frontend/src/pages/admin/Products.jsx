@@ -53,6 +53,7 @@ export const AdminProducts = () => {
     sku: '',
     category_id: '',
     is_featured: false,
+    badge: '',
     images: '',
   });
 
@@ -101,6 +102,7 @@ export const AdminProducts = () => {
       sku: '',
       category_id: '',
       is_featured: false,
+      badge: '',
       images: '',
     });
     setDialogOpen(true);
@@ -118,6 +120,7 @@ export const AdminProducts = () => {
       sku: product.sku || '',
       category_id: product.category_id || '',
       is_featured: product.is_featured,
+      badge: product.badge || '',
       images: product.images?.join('\n') || '',
     });
     setDialogOpen(true);
@@ -136,6 +139,7 @@ export const AdminProducts = () => {
         sku: formData.sku || null,
         category_id: formData.category_id && formData.category_id !== 'none' ? formData.category_id : null,
         is_featured: formData.is_featured,
+        badge: formData.badge || null,
         images: formData.images.split('\n').filter(Boolean),
       };
 
@@ -421,6 +425,23 @@ export const AdminProducts = () => {
                   onCheckedChange={(checked) => setFormData({ ...formData, is_featured: checked })}
                 />
                 <Label htmlFor="is_featured">{t('admin.featuredProduct')}</Label>
+              </div>
+              <div>
+                <Label>Badge</Label>
+                <Select
+                  value={formData.badge}
+                  onValueChange={(value) => setFormData({ ...formData, badge: value === 'none' ? '' : value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="None" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">None</SelectItem>
+                    <SelectItem value="new_arrival">New Arrival</SelectItem>
+                    <SelectItem value="hot_offer">Hot Offer</SelectItem>
+                    <SelectItem value="last_chance">Last Chance</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="col-span-2">
                 <Label htmlFor="short_description">{t('admin.shortDescription')}</Label>

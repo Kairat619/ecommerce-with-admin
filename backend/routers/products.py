@@ -38,6 +38,7 @@ def product_to_dict(product: Product, include_category: bool = False):
         "meta_description": product.meta_description,
         "is_active": product.is_active,
         "is_featured": product.is_featured,
+        "badge": product.badge,
         "is_deleted": product.is_deleted,
         "weight": product.weight,
         "dimensions": product.dimensions,
@@ -101,6 +102,7 @@ async def list_products(
     max_price: Optional[float] = Query(None),
     in_stock: Optional[bool] = Query(None),
     is_featured: Optional[bool] = Query(None),
+    badge: Optional[str] = Query(None, enum=["new_arrival", "hot_offer", "last_chance"]),
     sort_by: str = Query("created_at", enum=["created_at", "price", "name"]),
     sort_order: str = Query("desc", enum=["asc", "desc"]),
     page: int = Query(1, ge=1),
@@ -140,6 +142,9 @@ async def list_products(
     
     if is_featured is not None:
         query = query.filter(Product.is_featured == is_featured)
+    
+    if badge is not None:
+        query = query.filter(Product.badge == badge)
     
     total = query.count()
     

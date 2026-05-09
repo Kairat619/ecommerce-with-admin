@@ -100,6 +100,7 @@ export const ProductsPage = () => {
   const [filters, setFilters] = useState({
     q: searchParams.get('q') || '',
     category: searchParams.get('category') || 'all',
+    badge: searchParams.get('badge') || '',
     minPrice: Number(searchParams.get('min_price')) || 0,
     maxPrice: Number(searchParams.get('max_price')) || 2000,
     sortBy: searchParams.get('sort_by') || 'created_at',
@@ -132,6 +133,7 @@ export const ProductsPage = () => {
         };
         if (filters.q) params.q = filters.q;
         if (filters.category && filters.category !== 'all') params.category_slug = filters.category;
+        if (filters.badge) params.badge = filters.badge;
         if (filters.minPrice > 0) params.min_price = filters.minPrice;
         if (filters.maxPrice < 2000) params.max_price = filters.maxPrice;
 
@@ -150,6 +152,7 @@ export const ProductsPage = () => {
     const newParams = new URLSearchParams();
     if (filters.q) newParams.set('q', filters.q);
     if (filters.category && filters.category !== 'all') newParams.set('category', filters.category);
+    if (filters.badge) newParams.set('badge', filters.badge);
     if (filters.minPrice > 0) newParams.set('min_price', String(filters.minPrice));
     if (filters.maxPrice < 2000) newParams.set('max_price', String(filters.maxPrice));
     if (filters.sortBy !== 'created_at') newParams.set('sort_by', filters.sortBy);
@@ -162,15 +165,25 @@ export const ProductsPage = () => {
     setFilters(prev => ({ ...prev, [key]: value, page: 1 }));
   };
 
+  const badgeLabels = {
+    new_arrival: 'New Arrivals',
+    hot_offer: 'Hot Offer',
+    last_chance: 'Last Chance',
+  };
+
   const categoryName = filters.category && filters.category !== 'all' 
     ? categories.find(c => c.slug === filters.category)?.name 
     : null;
 
-  const pageTitle = categoryName 
-    ? `${categoryName} - ShopNest`
-    : filters.q 
-      ? `Search: ${filters.q}`
-      : 'All Products';
+  const badgeName = filters.badge ? badgeLabels[filters.badge] : null;
+
+  const pageTitle = badgeName 
+    ? `${badgeName} - ShopNest`
+    : categoryName 
+      ? `${categoryName} - ShopNest`
+      : filters.q 
+        ? `Search: ${filters.q}`
+        : 'All Products';
 
   const FilterSidebar = () => (
     <div className="space-y-10">
