@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ChevronRight, ChevronLeft, X, Plus, Minus, Heart, ShoppingBag, Filter } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { Slider } from '../components/ui/slider';
 import { productsAPI, categoriesAPI } from '../lib/api';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -235,14 +234,40 @@ export const ProductsPage = () => {
       <section>
         <h3 className="font-headline-md text-primary mb-6 text-lg">Price range</h3>
         <div className="px-2 space-y-4">
-          <Slider
-            value={[filters.minPrice, filters.maxPrice]}
-            onValueChange={([min, max]) => setFilters({ ...filters, minPrice: min, maxPrice: max, page: 1 })}
-            min={0}
-            max={2000}
-            step={10}
-            className="mt-2"
-          />
+          <div className="relative h-2 bg-outline-variant rounded-full">
+            <div
+              className="absolute h-full bg-primary rounded-full"
+              style={{ left: `${(filters.minPrice / 2000) * 100}%`, right: `${100 - (filters.maxPrice / 2000) * 100}%` }}
+            />
+          </div>
+          <div className="relative">
+            <input
+              type="range"
+              min={0}
+              max={2000}
+              step={10}
+              value={filters.minPrice}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setFilters(prev => ({ ...prev, minPrice: Math.min(val, prev.maxPrice - 10), page: 1 }));
+              }}
+              className="absolute w-full h-2 appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:shadow [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:shadow"
+              style={{ zIndex: filters.minPrice > 2000 - filters.maxPrice ? 5 : 3 }}
+            />
+            <input
+              type="range"
+              min={0}
+              max={2000}
+              step={10}
+              value={filters.maxPrice}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setFilters(prev => ({ ...prev, maxPrice: Math.max(val, prev.minPrice + 10), page: 1 }));
+              }}
+              className="absolute w-full h-2 appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:shadow [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:shadow"
+              style={{ zIndex: filters.minPrice > 2000 - filters.maxPrice ? 3 : 5 }}
+            />
+          </div>
           <div className="flex justify-between text-label-sm text-on-surface-variant">
             <span className="font-medium text-primary">${filters.minPrice}</span>
             <span className="font-medium text-primary">${filters.maxPrice}+</span>
