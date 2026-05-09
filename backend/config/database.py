@@ -77,6 +77,7 @@ def migrate_schema():
                     ('is_deleted', 'BOOLEAN DEFAULT FALSE'),
                     ('average_rating', 'FLOAT DEFAULT 0'),
                     ('review_count', 'INTEGER DEFAULT 0'),
+                    ('badge', 'VARCHAR(50)'),
                 ],
                 'users': [
                     ('auth_provider', 'VARCHAR(50) DEFAULT \'local\''),
