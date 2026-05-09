@@ -112,7 +112,7 @@ export const CategoryCard = ({ category, index = 0 }) => {
       className="group text-center"
       style={{ animationDelay: `${index * 100}ms` }}
     >
-      <div className="aspect-[4/5] overflow-hidden mb-4 bg-zinc-100">
+      <div className="aspect-square rounded-full overflow-hidden mb-4 bg-zinc-100 mx-auto w-4/5">
         <img
           src={category.image_url || '/placeholder.jpg'}
           alt={category.name}
