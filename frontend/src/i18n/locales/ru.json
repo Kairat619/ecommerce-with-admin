@@ -19,7 +19,10 @@
     "home": "Главная",
     "allProducts": "Все товары",
     "homeLiving": "Дом и быт",
-    "blog": "Блог"
+    "blog": "Блог",
+    "newArrivals": "Новинки",
+    "hotOffer": "Хиты продаж",
+    "lastChance": "Скидки"
   },
   "home": {
     "newCollection": "Новая коллекция 2024",

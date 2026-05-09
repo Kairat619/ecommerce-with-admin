@@ -45,8 +45,8 @@ export const StoreLayout = ({ children }) => {
 
   const navLinks = [
     { href: '/products', label: 'New Arrivals' },
-    { href: '/products?category=fashion', label: 'Categories' },
-    { href: '/products?category=electronics', label: 'Brands' },
+    { href: '/products?category=fashion', label: 'Hot Offer' },
+    { href: '/products?category=electronics', label: 'Last Chance' },
     { href: '/blog', label: 'Editorial' },
   ];
 

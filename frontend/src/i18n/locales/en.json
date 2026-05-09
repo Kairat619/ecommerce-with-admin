@@ -19,7 +19,10 @@
     "home": "Home",
     "allProducts": "All Products",
     "homeLiving": "Home & Living",
-    "blog": "Blog"
+    "blog": "Blog",
+    "newArrivals": "New Arrivals",
+    "hotOffer": "Hot Offer",
+    "lastChance": "Last Chance"
   },
   "home": {
     "newCollection": "New Collection 2024",
