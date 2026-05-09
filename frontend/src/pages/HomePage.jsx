@@ -214,7 +214,7 @@ export const HomePage = () => {
             <h2 className="font-display-md text-primary mb-2">Curated Categories</h2>
             <div className="w-12 h-0.5 bg-secondary mx-auto"></div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-8 items-center">
+         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 justify-items-center">
             {loading ? (
               [...Array(6)].map((_, i) => (
                 <div key={i} className="animate-pulse flex flex-col">
