@@ -18,7 +18,8 @@
     "fashion": "Fashion",
     "home": "Home",
     "allProducts": "All Products",
-    "homeLiving": "Home & Living"
+    "homeLiving": "Home & Living",
+    "blog": "Blog"
   },
   "home": {
     "newCollection": "New Collection 2024",
@@ -364,7 +365,20 @@
     "userLabelAdmin": "User",
     "ratingLabel": "Rating",
     "reviewActions": "Actions",
-    "reviewsManagement": "Reviews Management"
+    "reviewsManagement": "Reviews Management",
+    "blog": "Blog Posts",
+    "addBlogPost": "Add Post",
+    "addPostTitle": "Add Blog Post",
+    "editPostTitle": "Edit Blog Post",
+    "deleteBlogPost": "Delete Post",
+    "blogTitle": "Title",
+    "blogContent": "Content",
+    "blogExcerpt": "Excerpt",
+    "blogImage": "Image URL",
+    "blogStatus": "Status",
+    "blogDraft": "Draft",
+    "confirmDeletePost": "Are you sure you want to delete \"{{title}}\"?",
+    "publishPost": "Published"
   },
   "footer": {
     "description": "Premium products for modern living. Quality you can trust.",

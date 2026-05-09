@@ -47,7 +47,7 @@ export const StoreLayout = ({ children }) => {
     { href: '/products', label: 'New Arrivals' },
     { href: '/products?category=fashion', label: 'Categories' },
     { href: '/products?category=electronics', label: 'Brands' },
-    { href: '/products?category=home-living', label: 'Editorial' },
+    { href: '/blog', label: 'Editorial' },
   ];
 
   return (
@@ -222,7 +222,7 @@ export const StoreLayout = ({ children }) => {
               <h5 className="font-label-lg text-primary uppercase text-xs text-white tracking-widest mb-2">Company</h5>
               <Link to="/products" className="font-serif text-sm text-gray-300 hover:text-white transition-all">About Us</Link>
               <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">Sustainability</a>
-              <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">Journal</a>
+              <Link to="/blog" className="font-serif text-sm text-gray-300 hover:text-white transition-all">Journal</Link>
             </div>
             <div className="flex flex-col gap-4">
               <h5 className="font-label-lg text-primary uppercase text-xs text-white tracking-widest mb-2">Support</h5>

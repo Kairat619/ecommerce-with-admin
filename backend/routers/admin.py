@@ -2,6 +2,7 @@
 from typing import Optional
 from fastapi import APIRouter, HTTPException, Query, Request, Depends
 import uuid
+from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, func
 
@@ -11,9 +12,10 @@ from schemas.schemas import (
     ProductCreate, ProductUpdate, ProductResponse, ProductListResponse,
     OrderResponse, OrderStatusUpdate,
     AdminUserUpdate, UserResponse, DashboardStats, PaginatedResponse,
-    UserRole, OrderStatus, SiteSettingsUpdate, SiteSettingsResponse
+    UserRole, OrderStatus, SiteSettingsUpdate, SiteSettingsResponse,
+    BlogPostCreate, BlogPostUpdate, BlogPostResponse
 )
-from models.models import Category, Product, Order, OrderItem, User, CartItem, SiteSettings, ProductReview
+from models.models import Category, Product, Order, OrderItem, User, CartItem, SiteSettings, ProductReview, BlogPost
 from routers.auth import get_current_user_from_request
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
@@ -926,6 +928,182 @@ async def update_site_settings(
         "created_at": settings.created_at.isoformat() if settings.created_at else None,
         "updated_at": settings.updated_at.isoformat() if settings.updated_at else None
     }
+
+
+# =============== BLOG POSTS MANAGEMENT ===============
+@router.get("/blog", response_model=PaginatedResponse)
+async def list_blog_posts(
+    request: Request,
+    q: Optional[str] = Query(None),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
+    db: Session = Depends(get_db),
+):
+    """List all blog posts (including drafts) for admin."""
+    await require_admin(db, request)
+
+    query = db.query(BlogPost).filter(BlogPost.is_deleted == False)
+
+    if q:
+        search = f"%{q}%"
+        query = query.filter(BlogPost.title.ilike(search))
+
+    total = query.count()
+    total_pages = max(1, (total + page_size - 1) // page_size)
+
+    posts = (
+        query.order_by(BlogPost.created_at.desc())
+        .offset((page - 1) * page_size)
+        .limit(page_size)
+        .all()
+    )
+
+    items = []
+    for p in posts:
+        author_name = p.author.name if p.author else None
+        items.append({
+            "id": p.id,
+            "title": p.title,
+            "slug": p.slug,
+            "content": p.content,
+            "excerpt": p.excerpt,
+            "image_url": p.image_url,
+            "author_id": p.author_id,
+            "author_name": author_name,
+            "is_published": p.is_published,
+            "published_at": p.published_at.isoformat() if p.published_at else None,
+            "created_at": p.created_at.isoformat() if p.created_at else None,
+            "updated_at": p.updated_at.isoformat() if p.updated_at else None,
+        })
+
+    return PaginatedResponse(
+        items=items, total=total, page=page, page_size=page_size, total_pages=total_pages
+    )
+
+
+@router.post("/blog", response_model=BlogPostResponse)
+async def create_blog_post(
+    data: BlogPostCreate,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    """Create a new blog post."""
+    user = await require_admin(db, request)
+
+    base_slug = data.title.lower().replace(" ", "-").replace("'", "").replace('"', "")
+    slug = base_slug
+    counter = 1
+    while db.query(BlogPost).filter(BlogPost.slug == slug).first():
+        slug = f"{base_slug}-{counter}"
+        counter += 1
+
+    post = BlogPost(
+        id=str(uuid.uuid4()),
+        title=data.title,
+        slug=slug,
+        content=data.content,
+        excerpt=data.excerpt,
+        image_url=data.image_url,
+        author_id=user.id,
+        is_published=data.is_published,
+        published_at=datetime.now(timezone.utc) if data.is_published else None,
+        is_deleted=False,
+    )
+    db.add(post)
+    db.commit()
+    db.refresh(post)
+
+    return {
+        "id": post.id,
+        "title": post.title,
+        "slug": post.slug,
+        "content": post.content,
+        "excerpt": post.excerpt,
+        "image_url": post.image_url,
+        "author_id": post.author_id,
+        "author_name": post.author.name if post.author else None,
+        "is_published": post.is_published,
+        "published_at": post.published_at.isoformat() if post.published_at else None,
+        "created_at": post.created_at.isoformat() if post.created_at else None,
+        "updated_at": post.updated_at.isoformat() if post.updated_at else None,
+    }
+
+
+@router.put("/blog/{post_id}", response_model=BlogPostResponse)
+async def update_blog_post(
+    post_id: str,
+    data: BlogPostUpdate,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    """Update a blog post."""
+    user = await require_admin(db, request)
+
+    post = db.query(BlogPost).filter(BlogPost.id == post_id, BlogPost.is_deleted == False).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Blog post not found")
+
+    if data.title is not None:
+        post.title = data.title
+        base_slug = data.title.lower().replace(" ", "-").replace("'", "").replace('"', "")
+        slug = base_slug
+        counter = 1
+        while True:
+            existing = db.query(BlogPost).filter(BlogPost.slug == slug, BlogPost.id != post_id).first()
+            if not existing:
+                break
+            slug = f"{base_slug}-{counter}"
+            counter += 1
+        post.slug = slug
+
+    if data.content is not None:
+        post.content = data.content
+    if data.excerpt is not None:
+        post.excerpt = data.excerpt
+    if data.image_url is not None:
+        post.image_url = data.image_url
+    if data.is_published is not None:
+        was_draft = not post.is_published
+        post.is_published = data.is_published
+        if data.is_published and was_draft:
+            post.published_at = datetime.now(timezone.utc)
+
+    db.commit()
+    db.refresh(post)
+
+    return {
+        "id": post.id,
+        "title": post.title,
+        "slug": post.slug,
+        "content": post.content,
+        "excerpt": post.excerpt,
+        "image_url": post.image_url,
+        "author_id": post.author_id,
+        "author_name": post.author.name if post.author else None,
+        "is_published": post.is_published,
+        "published_at": post.published_at.isoformat() if post.published_at else None,
+        "created_at": post.created_at.isoformat() if post.created_at else None,
+        "updated_at": post.updated_at.isoformat() if post.updated_at else None,
+    }
+
+
+@router.delete("/blog/{post_id}")
+async def delete_blog_post(
+    post_id: str,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    """Soft delete a blog post."""
+    await require_admin(db, request)
+
+    post = db.query(BlogPost).filter(BlogPost.id == post_id, BlogPost.is_deleted == False).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Blog post not found")
+
+    post.is_deleted = True
+    db.commit()
+
+    return {"message": "Blog post deleted successfully"}
 
 
 # =============== REVIEWS MANAGEMENT ===============

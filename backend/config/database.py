@@ -42,7 +42,7 @@ def init_db():
     import logging
     logger = logging.getLogger(__name__)
     logger.info("Initializing database...")
-    from models.models import User, Category, Product, CartItem, Order, OrderItem, Address, RefreshToken, SiteSettings
+    from models.models import User, Category, Product, CartItem, Order, OrderItem, Address, RefreshToken, SiteSettings, BlogPost
     Base.metadata.create_all(bind=engine)
     logger.info("Database tables created")
     migrate_schema()

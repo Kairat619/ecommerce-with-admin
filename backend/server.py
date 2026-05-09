@@ -12,7 +12,7 @@ from utils.security import hash_password
 from utils.rate_limiter import RateLimiter
 from routers import (
     auth_router, categories_router, products_router,
-    cart_router, orders_router, admin_router, user_reviews_router
+    cart_router, orders_router, admin_router, user_reviews_router, blog_router
 )
 from routers.admin import public_router
 from routers.sitemap import router as sitemap_router
@@ -282,6 +282,7 @@ app.include_router(cart_router, prefix="/api")
 app.include_router(orders_router, prefix="/api")
 app.include_router(admin_router, prefix="/api")
 app.include_router(user_reviews_router, prefix="/api")
+app.include_router(blog_router, prefix="/api")
 app.include_router(public_router, prefix="/api")
 app.include_router(sitemap_router)
 

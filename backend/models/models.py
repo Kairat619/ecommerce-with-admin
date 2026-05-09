@@ -302,3 +302,27 @@ class ProductReview(Base):
         Index('ix_reviews_product_approved', 'product_id', 'is_approved'),
         Index('ix_reviews_user_product', 'user_id', 'product_id', unique=True),
     )
+
+
+class BlogPost(Base):
+    __tablename__ = "blog_posts"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    title = Column(String(255), nullable=False)
+    slug = Column(String(280), nullable=False, unique=True, index=True)
+    content = Column(Text, nullable=True)
+    excerpt = Column(String(500), nullable=True)
+    image_url = Column(String(500), nullable=True)
+    author_id = Column(String(36), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    is_published = Column(Boolean, default=False)
+    published_at = Column(DateTime(timezone=True), nullable=True)
+    is_deleted = Column(Boolean, default=False)
+
+    created_at = Column(DateTime(timezone=True), default=utc_now)
+    updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now)
+
+    author = relationship("User", backref="blog_posts")
+
+    __table_args__ = (
+        Index('ix_blog_posts_published', 'is_published', 'is_deleted'),
+    )

@@ -50,6 +50,33 @@ export const ProductSchema = ({ product }) => {
   );
 };
 
+export const ArticleSchema = ({ title, description, image, datePublished, authorName }) => {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description: description,
+    image: image,
+    datePublished: datePublished,
+    author: {
+      '@type': 'Person',
+      name: authorName,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_CONFIG.name,
+    },
+  };
+
+  return (
+    <Helmet>
+      <script type="application/ld+json">
+        {JSON.stringify(schema)}
+      </script>
+    </Helmet>
+  );
+};
+
 export const BreadcrumbSchema = ({ items }) => {
   if (!items || items.length === 0) return null;
 

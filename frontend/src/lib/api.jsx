@@ -141,11 +141,23 @@ export const adminAPI = {
   getSiteSettings: () => api.get('/admin/site-settings'),
   updateSiteSettings: (data) => api.put('/admin/site-settings', data),
   
+  // Blog
+  listBlogPosts: (params) => api.get('/admin/blog', { params }),
+  createBlogPost: (data) => api.post('/admin/blog', data),
+  updateBlogPost: (id, data) => api.put(`/admin/blog/${id}`, data),
+  deleteBlogPost: (id) => api.delete(`/admin/blog/${id}`),
+
   // Reviews
   listReviews: (params) => api.get('/admin/reviews', { params }),
   getReview: (id) => api.get(`/admin/reviews/${id}`),
   updateReviewStatus: (id, isApproved) => api.put(`/admin/reviews/${id}`, null, { params: { is_approved: isApproved } }),
   deleteReview: (id) => api.delete(`/admin/reviews/${id}`),
+};
+
+// Blog API (public)
+export const blogAPI = {
+  list: (params) => api.get('/blog', { params }),
+  getBySlug: (slug) => api.get(`/blog/${slug}`),
 };
 
 // Public API (no auth required)

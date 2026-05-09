@@ -372,6 +372,39 @@ class SiteSettingsResponse(BaseModel):
     updated_at: datetime
 
 
+# =============== BLOG SCHEMAS ===============
+class BlogPostBase(BaseModel):
+    title: str = Field(min_length=1, max_length=255)
+    content: Optional[str] = None
+    excerpt: Optional[str] = Field(None, max_length=500)
+    image_url: Optional[str] = None
+    is_published: bool = False
+
+
+class BlogPostCreate(BlogPostBase):
+    pass
+
+
+class BlogPostUpdate(BaseModel):
+    title: Optional[str] = Field(None, min_length=1, max_length=255)
+    content: Optional[str] = None
+    excerpt: Optional[str] = None
+    image_url: Optional[str] = None
+    is_published: Optional[bool] = None
+
+
+class BlogPostResponse(BlogPostBase):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: str
+    slug: str
+    author_id: Optional[str] = None
+    author_name: Optional[str] = None
+    published_at: Optional[datetime] = None
+    created_at: datetime
+    updated_at: datetime
+
+
 # =============== REVIEW SCHEMAS ===============
 class ReviewCreate(BaseModel):
     rating: int = Field(ge=1, le=5, description="Rating from 1 to 5 stars")

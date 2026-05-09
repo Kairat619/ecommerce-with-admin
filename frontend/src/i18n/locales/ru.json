@@ -18,7 +18,8 @@
     "fashion": "Мода",
     "home": "Главная",
     "allProducts": "Все товары",
-    "homeLiving": "Дом и быт"
+    "homeLiving": "Дом и быт",
+    "blog": "Блог"
   },
   "home": {
     "newCollection": "Новая коллекция 2024",
@@ -346,7 +347,20 @@
     "userLabelAdmin": "Пользователь",
     "ratingLabel": "Оценка",
     "reviewActions": "Действия",
-    "reviewsManagement": "Управление отзывами"
+    "reviewsManagement": "Управление отзывами",
+    "blog": "Блог",
+    "addBlogPost": "Добавить запись",
+    "addPostTitle": "Добавить запись в блог",
+    "editPostTitle": "Редактировать запись",
+    "deleteBlogPost": "Удалить запись",
+    "blogTitle": "Заголовок",
+    "blogContent": "Содержание",
+    "blogExcerpt": "Краткое описание",
+    "blogImage": "URL изображения",
+    "blogStatus": "Статус",
+    "blogDraft": "Черновик",
+    "confirmDeletePost": "Вы уверены, что хотите удалить \"{{title}}\"?",
+    "publishPost": "Опубликовано"
   },
   "footer": {
     "description": "Премиальные товары для современной жизни. Качество, которому можно доверять.",

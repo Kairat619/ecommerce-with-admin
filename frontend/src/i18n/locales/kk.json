@@ -18,7 +18,8 @@
     "fashion": "Сән",
     "home": "Басты бет",
     "allProducts": "Барлық өнімдер",
-    "homeLiving": "Үй және тұрмыс"
+    "homeLiving": "Үй және тұрмыс",
+    "blog": "Блог"
   },
   "home": {
     "newCollection": "Жаңа коллекция 2024",
@@ -346,7 +347,20 @@
     "userLabelAdmin": "Пайдаланушы",
     "ratingLabel": "Баға",
     "reviewActions": "Әрекеттер",
-    "reviewsManagement": "Пікірлерді басқару"
+    "reviewsManagement": "Пікірлерді басқару",
+    "blog": "Блог жазбалары",
+    "addBlogPost": "Жазба қосу",
+    "addPostTitle": "Блог жазбасын қосу",
+    "editPostTitle": "Блог жазбасын өңдеу",
+    "deleteBlogPost": "Жазбаны жою",
+    "blogTitle": "Тақырып",
+    "blogContent": "Мазмұны",
+    "blogExcerpt": "Үзінді",
+    "blogImage": "Сурет URL",
+    "blogStatus": "Күй",
+    "blogDraft": "Жоба",
+    "confirmDeletePost": "\"{{title}}\" жоюға сенімдісіз бе?",
+    "publishPost": "Жарияланды"
   },
   "footer": {
     "description": "Заманауи өмірге арналған премиум өнімдер. Сенуге болатын сапа.",

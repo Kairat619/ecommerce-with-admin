@@ -21,6 +21,8 @@ import { CheckoutPage } from './pages/CheckoutPage';
 import { LoginPage, RegisterPage, AuthCallback } from './pages/AuthPages';
 import { OrdersPage, OrderDetailPage } from './pages/OrdersPage';
 import { SitemapPage } from './pages/SitemapPage';
+import { BlogPage } from './pages/BlogPage';
+import { BlogDetailPage } from './pages/BlogDetailPage';
 
 // Admin Pages
 import { AdminDashboard } from './pages/admin/Dashboard';
@@ -30,6 +32,7 @@ import { AdminOrders } from './pages/admin/Orders';
 import { AdminUsers } from './pages/admin/Users';
 import { AdminSettings } from './pages/admin/Settings';
 import { AdminReviews } from './pages/admin/Reviews';
+import { AdminBlog } from './pages/admin/Blog';
 
 // Protected Route Component
 const ProtectedRoute = ({ children, adminOnly = false }) => {
@@ -94,6 +97,8 @@ function AppRouter() {
       <Route path="/register" element={<StoreLayout><RegisterPage /></StoreLayout>} />
       <Route path="/auth/callback" element={<AuthCallback />} />
       <Route path="/sitemap.xml" element={<SitemapPage />} />
+      <Route path="/blog" element={<StoreLayout><BlogPage /></StoreLayout>} />
+      <Route path="/blog/:slug" element={<StoreLayout><BlogDetailPage /></StoreLayout>} />
       
       {/* Admin Routes */}
       <Route path="/admin" element={
@@ -134,6 +139,11 @@ function AppRouter() {
       <Route path="/admin/settings" element={
         <ProtectedRoute adminOnly>
           <AdminLayout><AdminSettings /></AdminLayout>
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/blog" element={
+        <ProtectedRoute adminOnly>
+          <AdminLayout><AdminBlog /></AdminLayout>
         </ProtectedRoute>
       } />
 
