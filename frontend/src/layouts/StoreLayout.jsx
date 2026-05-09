@@ -26,16 +26,6 @@ export const StoreLayout = ({ children }) => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
@@ -66,9 +56,7 @@ export const StoreLayout = ({ children }) => {
       <header 
         className={cn(
           "fixed top-0 w-full z-50 transition-all duration-300",
-          scrolled 
-            ? "bg-white/95 backdrop-blur-md border-b border-zinc-100 h-16" 
-            : "bg-white border-b border-zinc-100 h-20"
+          "bg-white/95 backdrop-blur-md border-b border-zinc-100 h-16"
         )}
       >
         <div className="flex justify-between items-center px-4 md:px-8 h-full max-w-screen-2xl mx-auto">
