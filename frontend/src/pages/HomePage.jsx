@@ -145,7 +145,7 @@ export const HomePage = () => {
       <OrganizationSchema />
       <div className="min-h-screen bg-surface">
         {/* Hero Section */}
-        <section className="relative h-[80vh] md:h-[870px] overflow-hidden bg-zinc-900">
+        <section className="relative h-[80vh] md:h-screen overflow-hidden bg-zinc-900">
           {!settingsLoaded ? (
             <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-zinc-800 to-zinc-900" />
           ) : (
