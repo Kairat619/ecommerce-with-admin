@@ -89,7 +89,7 @@ export const StoreLayout = ({ children }) => {
             </form>
             <div className="flex items-center gap-2 md:gap-4">
               <LanguageSwitcher />
-              <Link to="/wishlist" className="hidden sm:block scale-100 active:scale-95 transition-transform">
+              <Link to="/wishlist" className="scale-100 active:scale-95 transition-transform">
                 <Button variant="ghost" size="icon" className="text-zinc-600 hover:text-zinc-900 relative">
                   <Heart className="h-5 w-5" />
                   {wishlistCount > 0 && (
@@ -138,7 +138,7 @@ export const StoreLayout = ({ children }) => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <Link to="/login" className="hidden sm:block">
+                <Link to="/login">
                   <Button variant="ghost" size="icon" className="text-zinc-600 hover:text-zinc-900 scale-100 active:scale-95 transition-transform">
                     <User className="h-5 w-5" />
                   </Button>
