@@ -209,7 +209,7 @@ export const HomePage = () => {
                             {slide.cta}
                           </Button>
                         </Link>
-                        <Link to="/products">
+                        <Link to="/blog">
                           <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10 px-8 py-4 font-label-lg">
                             {t('home.viewEditorial')}
                           </Button>
