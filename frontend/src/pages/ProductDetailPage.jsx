@@ -11,6 +11,7 @@ import { Minus, Plus, Heart, ChevronRight, Star, ShoppingBag } from 'lucide-reac
 import { cn } from '../lib/utils';
 import { SEO, ProductSchema, BreadcrumbSchema } from '../components/seo';
 import { ProductCard } from '../components/ProductCard';
+import { ReviewSection } from '../components/ReviewSection';
 
 export const ProductDetailPage = () => {
   const { t } = useTranslation();
@@ -235,6 +236,9 @@ export const ProductDetailPage = () => {
               </div>
             </div>
           </div>
+
+          {/* Reviews */}
+          <ReviewSection productId={product.id} productSlug={product.slug} />
 
           {/* Related Products */}
           {relatedProducts.length > 0 && (
