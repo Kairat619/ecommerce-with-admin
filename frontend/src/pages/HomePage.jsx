@@ -52,7 +52,7 @@ export const HomePage = () => {
       subtitle: t('home.heroNewCollection'),
       description: t('home.heroNewCollectionDesc'),
       cta: t('home.viewEditorial'),
-      ctaLink: '/products?category=fashion',
+      ctaLink: '/blog',
       image: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=1920&q=80',
     },
     {
