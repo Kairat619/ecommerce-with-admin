@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/ui/button';
@@ -8,6 +9,7 @@ import { Minus, Plus, X, ShoppingBag, ArrowRight, Lock, Truck, Clock } from 'luc
 import { cn } from '../lib/utils';
 
 export const CartPage = () => {
+  const { t } = useTranslation();
   const { cart, updateCartItem, removeFromCart, loading } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -17,22 +19,22 @@ export const CartPage = () => {
     try {
       await updateCartItem(itemId, newQuantity);
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to update cart');
+      toast.error(error.response?.data?.detail || t('cart.failedUpdateCart'));
     }
   };
 
   const handleRemove = async (itemId) => {
     try {
       await removeFromCart(itemId);
-      toast.success('Item removed');
+      toast.success(t('cart.itemRemoved'));
     } catch (error) {
-      toast.error('Failed to remove item');
+      toast.error(t('cart.failedRemoveItem'));
     }
   };
 
   const handleCheckout = () => {
     if (!isAuthenticated) {
-      toast.error('Please sign in to checkout');
+      toast.error(t('cart.signInToCheckout'));
       navigate('/login?redirect=/checkout');
       return;
     }
@@ -41,7 +43,7 @@ export const CartPage = () => {
 
   const handleApplyCoupon = () => {
     if (!couponCode.trim()) return;
-    toast.info('Coupon code applied!');
+    toast.info(t('cart.couponApplied'));
     setCouponCode('');
   };
 
@@ -50,16 +52,16 @@ export const CartPage = () => {
       <div className="min-h-screen bg-surface">
         <main className="pt-32 pb-20 px-4 md:px-8 max-w-screen-xl mx-auto">
           <div className="mb-16">
-            <h1 className="font-display-lg text-display-lg text-primary mb-2">Shopping Bag</h1>
-            <p className="font-body-md text-on-surface-variant">Your bag is empty.</p>
+            <h1 className="font-display-lg text-display-lg text-primary mb-2">{t('cart.shoppingBag')}</h1>
+            <p className="font-body-md text-on-surface-variant">{t('cart.yourBagIsEmpty')}.</p>
           </div>
           <div className="text-center py-16">
             <ShoppingBag className="h-16 w-16 mx-auto text-outline mb-6" />
-            <h2 className="font-display-md text-primary mb-2">Your bag is empty</h2>
-            <p className="text-on-surface-variant mb-8">Start adding some curated pieces to your collection.</p>
+            <h2 className="font-display-md text-primary mb-2">{t('cart.yourBagIsEmpty')}</h2>
+            <p className="text-on-surface-variant mb-8">{t('cart.emptyBagDescription')}</p>
             <Link to="/products">
               <Button size="lg" className="bg-primary text-white hover:bg-secondary px-8 font-label-lg">
-                Start Shopping
+                {t('home.startShopping')}
               </Button>
             </Link>
           </div>
@@ -81,8 +83,8 @@ export const CartPage = () => {
       <main className="pt-32 pb-20 px-4 md:px-8 max-w-screen-xl mx-auto">
         {/* Page Title */}
         <div className="mb-12">
-          <h1 className="font-display-lg text-display-lg text-primary mb-2">Shopping Bag</h1>
-          <p className="font-body-md text-on-surface-variant">Review your curated selection before checkout.</p>
+          <h1 className="font-display-lg text-display-lg text-primary mb-2">{t('cart.shoppingBag')}</h1>
+          <p className="font-body-md text-on-surface-variant">{t('cart.reviewSelection')}</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
@@ -151,13 +153,13 @@ export const CartPage = () => {
             {/* Promo Code */}
             <div className="mt-8">
               <label className="block font-label-lg text-label-lg text-primary mb-4" htmlFor="promo">
-                Promotional Code
+                {t('cart.promotionalCode')}
               </label>
               <div className="flex gap-4 max-w-md">
                 <input
                   className="flex-grow bg-white border-outline-variant focus:border-primary border-t-0 border-l-0 border-r-0 border-b-2 px-0 py-3 focus:ring-0 font-body-md"
                   id="promo"
-                  placeholder="Enter code"
+                  placeholder={t('cart.enterCode')}
                   value={couponCode}
                   onChange={(e) => setCouponCode(e.target.value)}
                   type="text"
@@ -166,7 +168,7 @@ export const CartPage = () => {
                   onClick={handleApplyCoupon}
                   className="bg-primary-container text-white font-label-lg uppercase tracking-widest hover:bg-secondary h-12 px-8"
                 >
-                  Apply
+                  {t('cart.apply')}
                 </Button>
               </div>
             </div>
@@ -176,33 +178,33 @@ export const CartPage = () => {
           <div className="lg:col-span-4">
             <div className="bg-surface-container-low p-8 border border-outline-variant">
               <h2 className="font-headline-lg text-headline-lg text-primary mb-8 border-b border-outline-variant pb-4">
-                Order Summary
+                {t('cart.orderSummary')}
               </h2>
               <div className="space-y-4 mb-8">
                 <div className="flex justify-between font-body-md text-on-surface-variant">
-                  <span>Subtotal</span>
+                  <span>{t('cart.subtotalLabel')}</span>
                   <span className="text-primary">${subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between font-body-md text-on-surface-variant">
-                  <span>Estimated Shipping</span>
+                  <span>{t('cart.estimatedShipping')}</span>
                   {shipping === 0 ? (
-                    <span className="bg-secondary px-2 py-0.5 text-[10px] uppercase font-bold text-white rounded">Free</span>
+                    <span className="bg-secondary px-2 py-0.5 text-[10px] uppercase font-bold text-white rounded">{t('cart.free')}</span>
                   ) : (
                     <span className="text-primary">${shipping.toFixed(2)}</span>
                   )}
                 </div>
                 <div className="flex justify-between font-body-md text-on-surface-variant">
-                  <span>Estimated Tax</span>
+                  <span>{t('cart.estimatedTax')}</span>
                   <span className="text-primary">${tax.toFixed(2)}</span>
                 </div>
               </div>
               <div className="border-t border-outline-variant pt-4 mb-8">
                 <div className="flex justify-between font-headline-md text-headline-md text-primary">
-                  <span>Total</span>
+                  <span>{t('cart.total')}</span>
                   <span>${total.toFixed(2)}</span>
                 </div>
                 <p className="font-label-sm text-label-sm text-on-surface-variant mt-2 italic">
-                  Currency in USD. Taxes calculated at checkout.
+                  {t('cart.currencyNote')}
                 </p>
               </div>
               <Button
@@ -210,12 +212,12 @@ export const CartPage = () => {
                 disabled={loading}
                 className="w-full bg-secondary text-white font-label-lg uppercase py-5 tracking-[0.2em] hover:bg-primary transition-all h-auto"
               >
-                Proceed to Checkout
+                {t('cart.proceedToCheckout')}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
               <div className="flex items-center justify-center gap-2 py-4">
                 <Lock className="h-5 w-5 text-on-surface-variant" />
-                <p className="font-label-sm text-label-sm text-on-surface-variant">Secure Checkout Guaranteed</p>
+                <p className="font-label-sm text-label-sm text-on-surface-variant">{t('cart.secureCheckout')}</p>
               </div>
             </div>
 
@@ -224,15 +226,15 @@ export const CartPage = () => {
               <div className="flex items-start gap-4">
                 <Truck className="h-6 w-6 text-secondary shrink-0" />
                 <div>
-                  <p className="font-label-lg text-label-lg text-primary">Complimentary Concierge Shipping</p>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant">Arrival within 3-5 business days.</p>
+                  <p className="font-label-lg text-label-lg text-primary">{t('cart.complimentaryShipping')}</p>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant">{t('cart.shippingTime')}</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <Clock className="h-6 w-6 text-secondary shrink-0" />
                 <div>
-                  <p className="font-label-lg text-label-lg text-primary">30-Day Curated Returns</p>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant">Effortless returns for your convenience.</p>
+                  <p className="font-label-lg text-label-lg text-primary">{t('cart.returnsTitle')}</p>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant">{t('cart.returnsDesc')}</p>
                 </div>
               </div>
             </div>

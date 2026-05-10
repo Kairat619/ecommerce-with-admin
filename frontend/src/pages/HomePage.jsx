@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, ShoppingBag, ArrowRight, Heart, Star, Shield, Truck, RotateCcw, Users } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { productsAPI, categoriesAPI, publicAPI } from '../lib/api';
@@ -11,6 +12,7 @@ import { ProductCard, CategoryCard } from '../components/ProductCard';
 import { SEO, WebSiteSchema, OrganizationSchema } from '../components/seo';
 
 export const HomePage = () => {
+  const { t } = useTranslation();
   const { updateTrigger } = useProductUpdates();
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [newArrivals, setNewArrivals] = useState([]);
@@ -38,26 +40,26 @@ export const HomePage = () => {
 
   const defaultHeroSlides = [
     {
-      title: 'The Art of Refined Living',
-      subtitle: 'SEASONAL CURATION',
-      description: 'Discover our exclusive Spring/Summer collection featuring sustainable fabrics and timeless silhouettes designed for the modern minimalist.',
-      cta: 'Shop Collection',
+      title: t('home.heroSlideTitle1'),
+      subtitle: t('home.heroSeasonalCuration'),
+      description: t('home.heroSeasonalDesc'),
+      cta: t('home.shopCollection'),
       ctaLink: '/products',
       image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80',
     },
     {
-      title: 'Elevated Essentials',
-      subtitle: 'NEW COLLECTION',
-      description: 'Curated pieces that define modern elegance. Quality over quantity, always.',
-      cta: 'View Editorial',
+      title: t('home.heroSlideTitle2'),
+      subtitle: t('home.heroNewCollection'),
+      description: t('home.heroNewCollectionDesc'),
+      cta: t('home.viewEditorial'),
       ctaLink: '/products?category=fashion',
       image: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=1920&q=80',
     },
     {
-      title: 'Timeless Sophistication',
-      subtitle: 'EDITORIAL PICKS',
-      description: 'Hand-selected pieces for the discerning individual who values craftsmanship.',
-      cta: 'Browse Collection',
+      title: t('home.heroSlideTitle3'),
+      subtitle: t('home.heroEditorialPicks'),
+      description: t('home.heroEditorialDesc'),
+      cta: t('home.browseCollection'),
       ctaLink: '/products?category=home-living',
       image: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=1920&q=80',
     },
@@ -71,20 +73,20 @@ export const HomePage = () => {
 
   const heroSlides = settingsLoaded && siteSettings.hero_slides?.length > 0
     ? siteSettings.hero_slides.map(slide => ({
-      title: slide.title || 'Discover Our Collection',
-      subtitle: slide.subtitle || 'NEW ARRIVALS',
+      title: slide.title || t('home.discoverOurCollection'),
+      subtitle: slide.subtitle || t('home.heroNewArrivals'),
       description: '',
-      cta: slide.link ? 'Shop Now' : 'Explore',
+      cta: slide.link ? t('home.shopNow') : t('home.explore'),
       ctaLink: slide.link || '/products',
       image: slide.image_url,
     }))
     : settingsLoaded ? defaultHeroSlides : [];
 
   const benefits = [
-    { icon: RotateCcw, title: '30-Day Return', desc: 'Hassle-free returns for your peace of mind.' },
-    { icon: Truck, title: 'Complimentary Shipping', desc: 'On all orders above $200. Always tracked.' },
-    { icon: Users, title: '24/7 Support', desc: 'Our concierge is here to assist your journey.' },
-    { icon: Shield, title: 'Member Rewards', desc: 'Exclusive access to drops and member pricing.' },
+    { icon: RotateCcw, title: t('home.benefitReturn'), desc: t('home.benefitReturnDesc') },
+    { icon: Truck, title: t('home.benefitShipping'), desc: t('home.benefitShippingDesc') },
+    { icon: Users, title: t('home.benefitSupport'), desc: t('home.benefitSupportDesc') },
+    { icon: Shield, title: t('home.benefitRewards'), desc: t('home.benefitRewardsDesc') },
   ];
 
   const brands = ['ARC\'TERYX', 'LEMAIRE', 'JIL SANDER', 'THE ROW', 'TOTEME', 'LOEWE'];
@@ -166,8 +168,8 @@ export const HomePage = () => {
   return (
     <>
       <SEO
-        title="ShopNest - Curated Fashion & Lifestyle"
-        description="Discover our exclusive collection featuring sustainable fabrics and timeless silhouettes designed for the modern minimalist."
+        title={t('home.seoTitle')}
+        description={t('home.seoDescription')}
         ogImage="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200"
       />
       <WebSiteSchema />
@@ -209,7 +211,7 @@ export const HomePage = () => {
                         </Link>
                         <Link to="/products">
                           <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10 px-8 py-4 font-label-lg">
-                            View Editorial
+                            {t('home.viewEditorial')}
                           </Button>
                         </Link>
                       </div>
@@ -240,7 +242,7 @@ export const HomePage = () => {
         {/* Curated Categories */}
         <section className="py-16 md:py-24 px-4 md:px-8 max-w-screen-2xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-display-md text-primary mb-2">Curated Categories</h2>
+            <h2 className="font-display-md text-primary mb-2">{t('home.curatedCategories')}</h2>
             <div className="w-12 h-0.5 bg-secondary mx-auto"></div>
           </div>
          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 place-items-center">
@@ -264,11 +266,11 @@ export const HomePage = () => {
           <div className="max-w-screen-2xl mx-auto">
             <div className="flex justify-between items-end mb-12">
               <div>
-                <h2 className="font-display-md text-primary mb-2">Editor's Choice</h2>
-                <p className="font-body-md text-zinc-500">Hand-picked selections for the discerning eye.</p>
+                <h2 className="font-display-md text-primary mb-2">{t('home.editorsChoice')}</h2>
+                <p className="font-body-md text-zinc-500">{t('home.editorsChoiceDesc')}</p>
               </div>
               <Link to="/products?badge=hot_offer" className="font-label-lg text-primary border-b border-primary pb-1 hover:text-secondary hover:border-secondary transition-colors hidden md:block">
-                View All Selection
+                {t('home.viewAllSelection')}
               </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 lg:gap-x-8 gap-y-12">
@@ -296,10 +298,10 @@ export const HomePage = () => {
               <div className="z-10 flex-1">
                 <div className="flex items-center gap-2 mb-6">
                   <span className="w-2 h-2 rounded-full bg-secondary-fixed animate-pulse"></span>
-                  <span className="font-label-lg tracking-widest text-secondary-fixed">LAST CHANCE • FLASH SALE</span>
+                  <span className="font-label-lg tracking-widest text-secondary-fixed">{t('home.lastChanceFlashSale')}</span>
                 </div>
                 <div className="flex items-center gap-4 mb-6">
-                  <span className="font-label-lg text-secondary-fixed">Ends in</span>
+                  <span className="font-label-lg text-secondary-fixed">{t('home.endsIn')}</span>
                   <span className="font-display-md text-3xl tracking-widest tabular-nums">{formatCountdown(countdown)}</span>
                 </div>
                 <h2 className="font-display-lg mb-4">{lastChanceProduct.name}</h2>
@@ -312,7 +314,7 @@ export const HomePage = () => {
                 </div>
                 <Link to={`/products/${lastChanceProduct.slug}`}>
                   <Button size="lg" className="bg-secondary text-white hover:bg-secondary-fixed-dim px-10 py-4 font-label-lg">
-                    Shop Now
+                    {t('home.shopNow')}
                   </Button>
                 </Link>
               </div>
@@ -331,7 +333,7 @@ export const HomePage = () => {
         {/* Brand Partners */}
         <section className="py-16 border-y border-zinc-100 bg-white">
           <div className="px-4 md:px-8 max-w-screen-2xl mx-auto overflow-hidden">
-            <p className="font-label-lg text-center text-zinc-400 mb-12 tracking-widest">GLOBAL BRAND PARTNERS</p>
+            <p className="font-label-lg text-center text-zinc-400 mb-12 tracking-widest">{t('home.globalBrandPartners')}</p>
             <div className="flex flex-wrap justify-center md:justify-between items-center gap-8 md:gap-12 opacity-50 grayscale hover:grayscale-0 transition-all">
               {brands.map((brand, index) => (
                 <span key={index} className="text-xl md:text-3xl font-serif font-bold text-zinc-800">{brand}</span>
@@ -344,11 +346,11 @@ export const HomePage = () => {
         <section className="py-16 md:py-24 px-4 md:px-8 max-w-screen-2xl mx-auto">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h2 className="font-display-md text-primary mb-2">New Arrivals</h2>
-              <p className="font-body-md text-zinc-500">Fresh additions to our curated collection.</p>
+              <h2 className="font-display-md text-primary mb-2">{t('home.newArrivals')}</h2>
+              <p className="font-body-md text-zinc-500">{t('home.freshArrivalsDesc')}</p>
             </div>
             <Link to="/products?badge=new_arrival" className="font-label-lg text-primary border-b border-primary pb-1 hover:text-secondary hover:border-secondary transition-colors hidden md:block">
-              View All
+              {t('home.viewAll')}
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 lg:gap-x-8 gap-y-12">
@@ -371,8 +373,8 @@ export const HomePage = () => {
         {/* Shop The Feed */}
         <section className="py-16 md:py-24 px-4 md:px-8 max-w-screen-2xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-display-md text-primary mb-2">Shop The Feed</h2>
-            <p className="font-body-md text-zinc-500">Tag @ShopNest for a chance to be featured in our curation.</p>
+            <h2 className="font-display-md text-primary mb-2">{t('home.shopTheFeed')}</h2>
+            <p className="font-body-md text-zinc-500">{t('home.shopTheFeedDesc')}</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2">
             {instagramImages.map((img, index) => (

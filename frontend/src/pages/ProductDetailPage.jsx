@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { productsAPI, userReviewsAPI } from '../lib/api';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -12,6 +13,7 @@ import { SEO, ProductSchema, BreadcrumbSchema } from '../components/seo';
 import { ProductCard } from '../components/ProductCard';
 
 export const ProductDetailPage = () => {
+  const { t } = useTranslation();
   const { slug } = useParams();
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
@@ -41,7 +43,7 @@ export const ProductDetailPage = () => {
         setRelatedProducts(relatedResponse.data.filter(p => p.id !== response.data.id).slice(0, 4));
       } catch (error) {
         console.error('Failed to load product:', error);
-        toast.error('Product not found');
+        toast.error(t('product.notFound'));
       } finally {
         setLoading(false);
       }
@@ -52,16 +54,16 @@ export const ProductDetailPage = () => {
 
   const handleAddToCart = () => {
     addToCart(product.id, quantity);
-    toast.success('Added to bag');
+    toast.success(t('product.addedToBag'));
   };
 
   const handleWishlist = () => {
     if (inWishlist) {
       removeFromWishlist(product.id);
-      toast.info('Removed from wishlist');
+      toast.info(t('product.removedFromWishlist'));
     } else {
       addToWishlist(product);
-      toast.success('Added to wishlist');
+      toast.success(t('product.addedToWishlist'));
     }
   };
 
@@ -86,8 +88,8 @@ export const ProductDetailPage = () => {
   }
 
   const breadcrumbs = [
-    { name: 'Home', path: '/' },
-    { name: 'New Arrivals', path: '/products' },
+    { name: t('breadcrumb.home'), path: '/' },
+    { name: t('product.newArrivals'), path: '/products' },
     { name: product.name, path: `/products/${product.slug}` },
   ];
 
@@ -107,9 +109,9 @@ export const ProductDetailPage = () => {
         <main className="pt-32 pb-20 max-w-screen-2xl mx-auto px-4 md:px-8 lg:px-12">
           {/* Breadcrumbs */}
           <nav className="flex items-center gap-2 mb-8 text-label-sm text-outline">
-            <Link to="/" className="hover:text-primary">Home</Link>
+            <Link to="/" className="hover:text-primary">{t('breadcrumb.home')}</Link>
             <ChevronRight className="h-4 w-4" />
-            <Link to="/products" className="hover:text-primary">New Arrivals</Link>
+            <Link to="/products" className="hover:text-primary">{t('product.newArrivals')}</Link>
             <ChevronRight className="h-4 w-4" />
             <span className="text-on-surface truncate">{product.name}</span>
           </nav>
@@ -145,7 +147,7 @@ export const ProductDetailPage = () => {
             <div className="lg:col-span-5 flex flex-col gap-8">
               <header className="flex flex-col gap-2">
                 <span className="text-secondary font-label-lg uppercase tracking-widest">
-                  {product.is_featured ? 'New Collection' : product.category?.name || 'ShopNest'}
+                  {product.is_featured ? t('product.newCollection') : product.category?.name || 'ShopNest'}
                 </span>
                 <h1 className="font-display-md text-on-surface tracking-tighter">{product.name}</h1>
                 <div className="flex items-center gap-4 mt-2">
@@ -162,7 +164,7 @@ export const ProductDetailPage = () => {
               </header>
 
               <p className="font-body-md text-on-surface-variant leading-relaxed">
-                {product.description || 'A masterfully crafted piece designed for the discerning individual who seeks quality without compromising on style.'}
+                {product.description || t('product.placeholderDesc')}
               </p>
 
               {/* Actions */}
@@ -189,7 +191,7 @@ export const ProductDetailPage = () => {
                     className="flex-1 bg-secondary h-14 text-white font-label-lg uppercase tracking-widest hover:bg-secondary-container hover:text-on-secondary-container transition-all"
                   >
                     <ShoppingBag className="h-5 w-5 mr-2" />
-                    Add to Bag
+                    {t('product.addToBag')}
                   </Button>
                 </div>
                 <Button
@@ -198,7 +200,7 @@ export const ProductDetailPage = () => {
                   className="w-full border-primary h-14 text-primary font-label-lg uppercase tracking-widest hover:bg-primary hover:text-white transition-all"
                 >
                   <Heart className={cn("h-5 w-5 mr-2", inWishlist && "fill-current")} />
-                  Add to Wishlist
+                  {t('product.addToWishlist')}
                 </Button>
               </div>
 
@@ -209,7 +211,7 @@ export const ProductDetailPage = () => {
                   className="group py-4"
                 >
                   <summary className="flex justify-between items-center cursor-pointer list-none">
-                    <span className="font-label-lg uppercase tracking-wider">Product Details</span>
+                    <span className="font-label-lg uppercase tracking-wider">{t('product.productDetails')}</span>
                     <ChevronRight className="h-5 w-5 transition-transform group-open:rotate-90" />
                   </summary>
                   <div className="pt-4 text-body-sm text-on-surface-variant space-y-2">
@@ -223,11 +225,11 @@ export const ProductDetailPage = () => {
                   className="group py-4"
                 >
                   <summary className="flex justify-between items-center cursor-pointer list-none">
-                    <span className="font-label-lg uppercase tracking-wider">Shipping & Returns</span>
+                    <span className="font-label-lg uppercase tracking-wider">{t('product.shippingReturns')}</span>
                     <ChevronRight className="h-5 w-5 transition-transform group-open:rotate-90" />
                   </summary>
                   <div className="pt-4 text-body-sm text-on-surface-variant">
-                    <p>Complimentary standard shipping on orders over $200. Returns accepted within 30 days of delivery.</p>
+                    <p>{t('product.shippingReturnsDesc')}</p>
                   </div>
                 </details>
               </div>
@@ -238,9 +240,9 @@ export const ProductDetailPage = () => {
           {relatedProducts.length > 0 && (
             <section className="mt-20">
               <div className="flex justify-between items-end mb-8">
-                <h2 className="font-display-md tracking-tighter">You May Also Like</h2>
+                <h2 className="font-display-md tracking-tighter">{t('product.youMayLike')}</h2>
                 <Link to="/products" className="text-label-lg border-b border-primary pb-1 hover:text-secondary hover:border-secondary transition-all">
-                  Explore All
+                  {t('product.exploreAll')}
                 </Link>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
