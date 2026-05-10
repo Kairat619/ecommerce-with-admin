@@ -22,7 +22,9 @@
     "blog": "Блог",
     "newArrivals": "Новинки",
     "hotOffer": "Хиты продаж",
-    "lastChance": "Скидки"
+    "lastChance": "Скидки",
+    "editorial": "Редакция",
+    "searchPlaceholder": "Поиск кураторских стилей..."
   },
   "home": {
     "newCollection": "Новая коллекция 2024",
@@ -290,6 +292,7 @@
     "users": "Пользователи",
     "settings": "Настройки",
     "backToStore": "Вернуться в магазин",
+    "adminLabel": "Администратор",
     "totalRevenue": "Общий доход",
     "totalOrders": "Всего заказов",
     "customers": "Клиенты",
@@ -448,6 +451,20 @@
     "helpCenter": "Центр помощи",
     "shippingInfo": "Информация о доставке",
     "returns": "Возврат",
-    "copyright": "© 2024 SHOP. Все права защищены."
+    "copyright": "© 2024 ShopNest. Все права защищены.",
+    "brandDescription": "Курируем лучшие минималистичные модные товары и товары для образа жизни с 2024 года.",
+    "company": "Компания",
+    "aboutUs": "О нас",
+    "sustainability": "Устойчивость",
+    "journal": "Журнал",
+    "shippingReturns": "Доставка и возврат",
+    "contact": "Контакты",
+    "newsletter": "Рассылка",
+    "newsletterDescription": "Присоединяйтесь для раннего доступа и сезонных подборок.",
+    "emailAddress": "Электронная почта",
+    "join": "Подписаться",
+    "privacyPolicy": "Политика конфиденциальности",
+    "termsOfService": "Условия использования",
+    "accessibility": "Доступность"
   }
 }

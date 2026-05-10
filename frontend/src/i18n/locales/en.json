@@ -22,7 +22,9 @@
     "blog": "Blog",
     "newArrivals": "New Arrivals",
     "hotOffer": "Hot Offer",
-    "lastChance": "Last Chance"
+    "lastChance": "Last Chance",
+    "editorial": "Editorial",
+    "searchPlaceholder": "Search curated styles..."
   },
   "home": {
     "newCollection": "New Collection 2024",
@@ -466,6 +468,20 @@
     "helpCenter": "Help Center",
     "shippingInfo": "Shipping Info",
     "returns": "Returns",
-    "copyright": "© 2024 SHOP. All rights reserved."
+    "copyright": "© 2024 ShopNest. The Luxury of Space and Curation.",
+    "brandDescription": "Curating the world's finest minimalist fashion and lifestyle goods since 2024.",
+    "company": "Company",
+    "aboutUs": "About Us",
+    "sustainability": "Sustainability",
+    "journal": "Journal",
+    "shippingReturns": "Shipping & Returns",
+    "contact": "Contact",
+    "newsletter": "Newsletter",
+    "newsletterDescription": "Join for early access and seasonal curations.",
+    "emailAddress": "Email Address",
+    "join": "Join",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "accessibility": "Accessibility"
   }
 }

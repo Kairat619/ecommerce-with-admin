@@ -44,10 +44,10 @@ export const StoreLayout = ({ children }) => {
   };
 
   const navLinks = [
-    { href: '/products?badge=new_arrival', label: 'New Arrivals' },
-    { href: '/products?badge=hot_offer', label: 'Hot Offer' },
-    { href: '/products?badge=last_chance', label: 'Last Chance' },
-    { href: '/blog', label: 'Editorial' },
+    { href: '/products?badge=new_arrival', label: t('nav.newArrivals') },
+    { href: '/products?badge=hot_offer', label: t('nav.hotOffer') },
+    { href: '/products?badge=last_chance', label: t('nav.lastChance') },
+    { href: '/blog', label: t('nav.editorial') },
   ];
 
   return (
@@ -80,7 +80,7 @@ export const StoreLayout = ({ children }) => {
             <form onSubmit={handleSearch} className="hidden lg:block relative">
               <Input
                 type="search"
-                placeholder="Search curated styles..."
+                placeholder={t('nav.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-zinc-50 border-none rounded-full px-6 py-2 text-sm w-56 lg:w-64 focus:ring-1 focus:ring-primary focus:outline-none"
@@ -175,7 +175,7 @@ export const StoreLayout = ({ children }) => {
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
                   <Input
                     type="search"
-                    placeholder="Search curated styles..."
+                    placeholder={t('nav.searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10 w-full bg-zinc-50 border-none rounded-full"
@@ -209,7 +209,7 @@ export const StoreLayout = ({ children }) => {
           <div className="max-w-xs">
             <Link to="/" className="text-lg font-bold text-white mb-6 block font-serif">ShopNest</Link>
             <p className="font-serif text-sm text-gray-400 mb-8 leading-relaxed">
-              Curating the world's finest minimalist fashion and lifestyle goods since 2024.
+              {t('footer.brandDescription')}
             </p>
             <div className="flex gap-4">
               <a href="#" className="w-8 h-8 flex items-center justify-center text-gray-300 hover:text-white transition-colors border border-zinc-700 rounded-full text-xs">IG</a>
@@ -219,32 +219,32 @@ export const StoreLayout = ({ children }) => {
           </div>
           <div className="grid grid-cols-2 gap-8 lg:gap-24">
             <div className="flex flex-col gap-4">
-              <h5 className="font-label-lg text-primary uppercase text-xs text-white tracking-widest mb-2">Company</h5>
-              <Link to="/products" className="font-serif text-sm text-gray-300 hover:text-white transition-all">About Us</Link>
-              <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">Sustainability</a>
-              <Link to="/blog" className="font-serif text-sm text-gray-300 hover:text-white transition-all">Journal</Link>
+              <h5 className="font-label-lg text-primary uppercase text-xs text-white tracking-widest mb-2">{t('footer.company')}</h5>
+              <Link to="/products" className="font-serif text-sm text-gray-300 hover:text-white transition-all">{t('footer.aboutUs')}</Link>
+              <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">{t('footer.sustainability')}</a>
+              <Link to="/blog" className="font-serif text-sm text-gray-300 hover:text-white transition-all">{t('footer.journal')}</Link>
             </div>
             <div className="flex flex-col gap-4">
-              <h5 className="font-label-lg text-primary uppercase text-xs text-white tracking-widest mb-2">Support</h5>
-              <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">Shipping & Returns</a>
-              <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">Contact</a>
+              <h5 className="font-label-lg text-primary uppercase text-xs text-white tracking-widest mb-2">{t('footer.support')}</h5>
+              <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">{t('footer.shippingReturns')}</a>
+              <a href="#" className="font-serif text-sm text-gray-300 hover:text-white transition-all">{t('footer.contact')}</a>
             </div>
           </div>
           <div className="max-w-xs">
-            <h5 className="font-label-lg text-primary uppercase text-xs text-white tracking-widest mb-6">Newsletter</h5>
-            <p className="font-serif text-sm text-gray-300 mb-4">Join for early access and seasonal curations.</p>
+            <h5 className="font-label-lg text-primary uppercase text-xs text-white tracking-widest mb-6">{t('footer.newsletter')}</h5>
+            <p className="font-serif text-sm text-gray-300 mb-4">{t('footer.newsletterDescription')}</p>
             <form className="flex border-b border-zinc-700 pb-2">
-              <input className="bg-transparent border-none p-0 focus:ring-0 text-sm w-full text-white font-body-md" placeholder="Email Address" type="email" />
-              <button className="text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white transition-colors font-label-lg" type="submit">Join</button>
+              <input className="bg-transparent border-none p-0 focus:ring-0 text-sm w-full text-white font-body-md" placeholder={t('footer.emailAddress')} type="email" />
+              <button className="text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white transition-colors font-label-lg" type="submit">{t('footer.join')}</button>
             </form>
           </div>
         </div>
         <div className="px-4 md:px-12 py-8 border-t border-zinc-800 flex flex-col md:flex-row justify-between items-center gap-4 max-w-screen-2xl mx-auto">
-          <p className="font-serif text-sm text-gray-400">© 2024 ShopNest. The Luxury of Space and Curation.</p>
+          <p className="font-serif text-sm text-gray-400">{t('footer.copyright')}</p>
           <div className="flex gap-8 text-xs font-label-lg text-gray-400">
-            <a href="#" className="text-gray-300 hover:text-white transition-colors uppercase">Privacy Policy</a>
-            <a href="#" className="text-gray-300 hover:text-white transition-colors uppercase">Terms of Service</a>
-            <a href="#" className="text-gray-300 hover:text-white transition-colors uppercase">Accessibility</a>
+            <a href="#" className="text-gray-300 hover:text-white transition-colors uppercase">{t('footer.privacyPolicy')}</a>
+            <a href="#" className="text-gray-300 hover:text-white transition-colors uppercase">{t('footer.termsOfService')}</a>
+            <a href="#" className="text-gray-300 hover:text-white transition-colors uppercase">{t('footer.accessibility')}</a>
           </div>
         </div>
       </footer>

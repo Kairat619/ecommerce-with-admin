@@ -22,7 +22,9 @@
     "blog": "Блог",
     "newArrivals": "Жаңа өнімдер",
     "hotOffer": "Таңдаулылар",
-    "lastChance": "Жеңілдіктер"
+    "lastChance": "Жеңілдіктер",
+    "editorial": "Редакция",
+    "searchPlaceholder": "Кураторлық стильдерді іздеу..."
   },
   "home": {
     "newCollection": "Жаңа коллекция 2024",
@@ -290,6 +292,7 @@
     "users": "Пайдаланушылар",
     "settings": "Параметрлер",
     "backToStore": "Дүкенге оралу",
+    "adminLabel": "Әкімші",
     "totalRevenue": "Жалпы кіріс",
     "totalOrders": "Барлық тапсырыстар",
     "customers": "Тұтынушылар",
@@ -448,6 +451,20 @@
     "helpCenter": "Анықтама орталығы",
     "shippingInfo": "Жеткізу ақпараты",
     "returns": "Қайтару",
-    "copyright": "© 2024 SHOP. Барлық құқықтар қорғалған."
+    "copyright": "© 2024 ShopNest. Барлық құқықтар қорғалған.",
+    "brandDescription": "2024 жылдан бастап әлемдегі ең жақсы минималистік сән және өмір салты тауарларын ұсынамыз.",
+    "company": "Компания",
+    "aboutUs": "Біз туралы",
+    "sustainability": "Тұрақтылық",
+    "journal": "Журнал",
+    "shippingReturns": "Жеткізу және қайтару",
+    "contact": "Байланыс",
+    "newsletter": "Жаңалықтар",
+    "newsletterDescription": "Ерте қол жеткізу және маусымдық іріктемелер үшін қосылыңыз.",
+    "emailAddress": "Электрондық пошта",
+    "join": "Жазылу",
+    "privacyPolicy": "Құпиялылық саясаты",
+    "termsOfService": "Қолдану шарттары",
+    "accessibility": "Қолжетімділік"
   }
 }

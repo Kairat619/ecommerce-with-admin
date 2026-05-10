@@ -50,7 +50,7 @@ export const AdminLayout = ({ children }) => {
           <div className="flex items-center justify-between h-16 px-6 border-b border-slate-800">
             <Link to="/admin" className="flex items-center gap-2">
               <span className="text-xl font-bold text-white font-outfit">{t('common.shop')}</span>
-              <span className="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded-full">Admin</span>
+              <span className="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded-full">{t('admin.adminLabel')}</span>
             </Link>
             <Button
               variant="ghost"
@@ -137,7 +137,7 @@ export const AdminLayout = ({ children }) => {
 
               {/* Breadcrumb */}
               <nav className="hidden sm:flex items-center text-sm text-muted-foreground">
-                <Link to="/admin" className="hover:text-primary">Admin</Link>
+                <Link to="/admin" className="hover:text-primary">{t('admin.adminLabel')}</Link>
                 {location.pathname !== '/admin' && (
                   <>
                     <ChevronRight className="h-4 w-4 mx-2" />
